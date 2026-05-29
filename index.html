@@ -278,22 +278,38 @@
   // LOAD CSV
   // ============================================================
   function loadCSV() {
-    setStatus('Loading data...', 'loading');
-    // Use allorigins proxy to bypass CORS
-    var proxyUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent(CSV_URL);
-    fetch(proxyUrl)
-      .then(function(r) { return r.json(); })
-      .then(function(json) {
-        parseCSV(json.contents);
+    setStatus('⏳ Loading data, please wait (~10s)...', 'loading');
+    // 直接 fetch，Google 公开 CSV 支持跨域
+    fetch(CSV_URL)
+      .then(function(r) {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.text();
+      })
+      .then(function(text) {
+        parseCSV(text);
         dataLoaded = true;
-        setStatus('', '');
+        setStatus('✅ Data loaded! Please select filters.', '');
         populateL1();
       })
       .catch(function(err) {
-        setStatus('Failed to load data: ' + err.message, 'error');
+        // 备用代理
+        setStatus('⏳ Trying backup proxy...', 'loading');
+        fetch('https://corsproxy.io/?' + encodeURIComponent(CSV_URL))
+          .then(function(r) {
+            if (!r.ok) throw new Error('HTTP ' + r.status);
+            return r.text();
+          })
+          .then(function(text) {
+            parseCSV(text);
+            dataLoaded = true;
+            setStatus('✅ Data loaded! Please select filters.', '');
+            populateL1();
+          })
+          .catch(function(err2) {
+            setStatus('❌ Failed to load data. Please refresh and try again.', 'error');
+          });
       });
   }
-
   function parseCSV(text) {
     var lines = text.split('\n');
     headers = parseCSVRow(lines[0]);
