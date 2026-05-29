@@ -9,46 +9,49 @@
     body {
       font-family: 'Segoe UI', sans-serif;
       background: #f5f7fa;
-      display: flex;
-      justify-content: center;
-      align-items: center;
       min-height: 100vh;
       padding: 20px;
     }
-    .card {
+    .top-bar {
       background: white;
       border-radius: 16px;
       box-shadow: 0 4px 24px rgba(0,0,0,0.10);
-      padding: 36px 40px;
-      width: 100%;
-      max-width: 520px;
+      padding: 28px 32px;
+      max-width: 1200px;
+      margin: 0 auto 24px auto;
     }
     h2 {
       font-size: 22px;
       font-weight: 700;
       color: #ee4d2d;
-      margin-bottom: 28px;
+      margin-bottom: 20px;
       text-align: center;
-      letter-spacing: 0.5px;
+    }
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      align-items: flex-end;
     }
     .form-group {
-      margin-bottom: 18px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-width: 140px;
     }
     label {
-      display: block;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 600;
       color: #555;
-      margin-bottom: 6px;
+      margin-bottom: 5px;
       text-transform: uppercase;
       letter-spacing: 0.4px;
     }
     select {
-      width: 100%;
-      padding: 10px 14px;
+      padding: 9px 12px;
       border: 1.5px solid #e0e0e0;
       border-radius: 8px;
-      font-size: 15px;
+      font-size: 14px;
       color: #333;
       background: #fafafa;
       outline: none;
@@ -56,247 +59,491 @@
       appearance: none;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24'%3E%3Cpath fill='%23aaa' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
       background-repeat: no-repeat;
-      background-position: right 12px center;
+      background-position: right 10px center;
     }
     select:focus { border-color: #ee4d2d; background: #fff; }
     select:disabled { background: #f0f0f0; color: #aaa; cursor: not-allowed; }
     .btn {
-      width: 100%;
-      padding: 13px;
+      padding: 10px 28px;
       background: #ee4d2d;
       color: white;
       border: none;
       border-radius: 8px;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 700;
       cursor: pointer;
-      margin-top: 10px;
-      transition: background 0.2s, transform 0.1s;
-      letter-spacing: 0.3px;
+      transition: background 0.2s;
+      white-space: nowrap;
+      height: 40px;
     }
     .btn:hover { background: #d44227; }
-    .btn:active { transform: scale(0.98); }
     .btn:disabled { background: #ccc; cursor: not-allowed; }
-    .status {
-      margin-top: 18px;
-      text-align: center;
-      font-size: 15px;
-      min-height: 24px;
+
+    .result-area {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .result-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      font-size: 14px;
+      color: #666;
+    }
+    .result-count { font-weight: 600; color: #333; }
+/* Table */
+    .table-wrap {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    thead tr {
+      background: #ee4d2d;
+      color: white;
+    }
+    thead th {
+      padding: 12px 14px;
+      text-align: left;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    tbody tr { border-bottom: 1px solid #f0f0f0; }
+    tbody tr:hover { background: #fff8f7; }
+    tbody td {
+      padding: 10px 14px;
+      vertical-align: middle;
+      color: #333;
+    }
+    .product-img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid #eee;
+    }
+    .product-link {
+      color: #ee4d2d;
+      text-decoration: none;
       font-weight: 500;
     }
-    .status.success { color: #27ae60; }
-    .status.error { color: #e74c3c; }
-    .status.loading { color: #f39c12; }
+    .product-link:hover { text-decoration: underline; }
+    .rank-badge {
+      display: inline-block;
+      background: #ee4d2d;
+      color: white;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      line-height: 28px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 13px;
+    }
+    .tag {
+      display: inline-block;
+      background: #fff0ed;
+      color: #ee4d2d;
+      border-radius: 4px;
+      padding: 2px 8px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    /* Pagination */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .page-btn {
+      padding: 7px 14px;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 6px;
+      background: white;
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.2s;
+    }
+    .page-btn:hover { border-color: #ee4d2d; color: #ee4d2d; }
+    .page-btn.active { background: #ee4d2d; color: white; border-color: #ee4d2d; }
+
+    /* Loading & status */
+    .loading-wrap {
+      text-align: center;
+      padding: 40px;
+      color: #f39c12;
+      font-size: 16px;
+      font-weight: 600;
+    }
+    .empty-wrap {
+      text-align: center;
+      padding: 40px;
+      color: #999;
+      font-size: 15px;
+    }
+    .status-bar {
+      text-align: center;
+      margin-top: 14px;
+      font-size: 14px;
+      font-weight: 500;
+      min-height: 20px;
+    }
+    .status-bar.error { color: #e74c3c; }
+    .status-bar.loading { color: #f39c12; }
   </style>
 </head>
 <body>
-<div class="card">
-  <h2>Shopee EL选品指南</h2>
-  <div class="form-group">
-    <label>L1 Category</label>
-    <select id="l1">
-      <option value="">-- Select L1 --</option>
-    </select>
-  </div>
-  <div class="form-group">
-    <label>L2 Category</label>
-    <select id="l2" disabled>
-      <option value="">-- Select L2 --</option>
-    </select>
-  </div>
-  <div class="form-group">
-    <label>L3 Category</label>
-    <select id="l3" disabled>
-      <option value="">-- Select L3 (optional) --</option>
-    </select>
-  </div>
-  <div class="form-group">
-    <label>Ranked By</label>
-    <select id="ranked_by">
-      <option value="">-- Select --</option>
-      <option value="ADO">ADO</option>
-      <option value="ADGMV">ADGMV</option>
-    </select>
-  </div>
-  <div class="form-group">
-    <label>Site</label>
-    <select id="site">
-      <option value="">-- Select --</option>
-      <option value="BR">BR</option>
-      <option value="MX">MX</option>
-      <option value="MY">MY</option>
-      <option value="PH">PH</option>
-      <option value="SG">SG</option>
-      <option value="TH">TH</option>
-      <option value="TW">TW</option>
-      <option value="VN">VN</option>
-      <option value="ID">ID</option>
-    </select>
-  </div>
-  <button class="btn" id="submitBtn">Apply Filter</button>
-  <div class="status" id="status"></div>
-</div>
-<script>
-  var APPS_SCRIPT_URL = 'YOUR_APPS_SCRIPT_URL_HERE';
-  var categoryData = {
-    "Audio": {
-      "Amplifiers & Mixers": [],
-      "Audio & Video Cables & Converters": [],
-      "Earphones, Headphones & Headsets": [],
-      "Home Audio & Speakers": ["AV Receivers","Home Theater Systems","Others","Speakers"],
-      "Media Players": ["MP3 & MP4 Players","Others","Radio & Cassette Players","Voice Recorders"],
-      "Microphones": [],
-      "Others": []
-    },
-    "Cameras & Drones": {
-      "Camera Accessories": ["Batteries & Battery Grips","Battery Chargers","Camera Cases & Bags","Flashes","Gimbals & Stabilizers","Lighting & Studio Equipments","Others","Photo Films & Papers","Photo Printers","Tripods, Monopods, & Accessories"],
-      "Camera Care": ["Cleaning Kit","Lenspens & Brushes"],
-      "Cameras": ["Action Cameras","Mirrorless Cameras","Others","Point & Shoot","Video Camcorders"],
-      "Drone Accessories": [],
-      "Drones": [],
-      "Lens Accessories": ["Filters","Lens Caps","Lens Hoods"],
-      "Security Cameras & Systems": ["CCTV Security Cameras","Others"]
-    },
-    "Computers & Accessories": {
-      "Data Storage": ["Flash Drives & OTG","Hard Disk Casings & Dockings","Hard Drives","Others","SSD"],
-      "Desktop & Laptop Components": ["Fans & Heatsinks","Graphics Cards","Motherboards","Others","PC Cases","Power Supply Units","Processors","RAM","Sound Cards","Thermal Paste","UPS & Stabilizers"],
-      "Keyboards & Mice": ["Drawing Tablets","Keyboards","Mice","Others"],
-      "Monitors": [],
-      "Network Components": ["Modems & Wireless Routers","Network Cables & Connectors","Network Switches & PoE","Others","Repeaters","Wireless Adapters & Network Cards"],
-      "Office Equipment": ["Others"],
-      "Others": [],
-      "Peripherals & Accessories": ["Cooling Pads","Keyboard & Trackpad Covers","Laptop Chargers & Adaptors","Laptop Skins & Covers","Laptop Stands & Foldable Laptop Desks","Mouse Pads","Others","USB Hubs & Card Readers","Video Conference Devices"],
-      "Printers & Scanners": ["Inks & Toners","Others","Thermal & Barcode Printers"],
-      "Softwares": []
-    },
-    "Gaming & Consoles": {
-      "Console Accessories": [],
-      "Console Machines": ["Gameboy","Others","Playstation","PSP"],
-      "Others": [],
-      "Video Games": ["Others"]
-    },
-    "Home Appliances": {
-      "Batteries": [],
-      "Electrical Circuitry & Parts": ["Doorbells","Electric Sockets & Extension Cords","Electrical Safety","Electricity Savers","House Alarms","Others","Switches"],
-      "Kitchen Appliances": ["Air Fryers","Coffee Machines & Accessories","Food Processors & Meat Grinders","Hoods","Juicers, Blenders & Soya Bean Machines","Kettles","Mixers","Multi-function Cookers","Others","Ovens","Pressure Cookers","Refrigerators","Rice Cookers","Slow Cookers & Sous Vide Machines","Specialty Cookware","Stoves, Hobs & Gas Regulators","Toasters","Water Filters, Coolers & Dispensers"],
-      "Large Household Appliances": ["Cooling","Others","Washing Machines & Dryers"],
-      "Others": [],
-      "Projectors & Accessories": ["Pointers","Projectors & Projector Screens"],
-      "Remote Controls": [],
-      "Small Household Appliances": ["Air Treatment","Foot Baths & Spas","Irons & Steamers","Others","Sewing Machines & Accessories","Vacuum Cleaners & Floor Care Appliances","Water Flossers"],
-      "TVs & Accessories": ["Others","TV Antennas","TV Boxes & Receivers","TV Brackets","TVs"]
-    },
-    "Mobile & Gadgets": {
-      "Accessories": ["Cables, Chargers & Converters","Cases, Covers, & Skins","Casting Devices","Memory Cards","Mobile Flashes & Selfie Lights","Mobile Lens","Mobile Pouches","Others","Phone Grips","Phone Straps & Keychains","Pocket Wifi","Powerbanks & Batteries","Screen Protectors","Selfie Accessories","Stylus","USB & Mobile Fans","USB & Mobile Lights","Wearable Accessories"],
-      "Mobile Phones": [],
-      "Others": [],
-      "Sim Cards": [],
-      "Tablets": [],
-      "Walkie Talkies": [],
-      "Wearable Devices": ["GPS Trackers","Others","Smartwatches & Fitness Trackers","VR Devices"]
-    }
-  };
- // Populate L1 on page load
-  window.onload = function() {
-    var l1Select = document.getElementById('l1');
-    var l1Keys = Object.keys(categoryData).sort();
-    for (var i = 0; i < l1Keys.length; i++) {
-      var opt = document.createElement('option');
-      opt.value = l1Keys[i];
-      opt.textContent = l1Keys[i];
-      l1Select.appendChild(opt);
-    }
-    l1Select.addEventListener('change', updateL2);
-    document.getElementById('l2').addEventListener('change', updateL3);
-    document.getElementById('submitBtn').addEventListener('click', submitFilter);
-  };
-  function updateL2() {
-    var l1 = document.getElementById('l1').value;
-    var l2Select = document.getElementById('l2');
-    var l3Select = document.getElementById('l3');
 
-    l2Select.innerHTML = '<option value="">-- Select L2 --</option>';
-    l3Select.innerHTML = '<option value="">-- Select L3 (optional) --</option>';
-    l3Select.disabled = true;
-    if (!l1) {
-      l2Select.disabled = true;
-      return;
-    }
-    l2Select.disabled = false;
-    var l2Keys = Object.keys(categoryData[l1]).sort();
-    for (var i = 0; i < l2Keys.length; i++) {
-      var opt = document.createElement('option');
-      opt.value = l2Keys[i];
-      opt.textContent = l2Keys[i];
-      l2Select.appendChild(opt);
+<div class="top-bar">
+  <h2>🛒 Shopee EL Hot SKU Bible</h2>
+  <div class="filters">
+    <div class="form-group">
+      <label>Site *</label>
+      <select id="site">
+        <option value="">-- Select --</option>
+        <option value="BR">BR</option>
+        <option value="MX">MX</option>
+        <option value="MY">MY</option>
+        <option value="PH">PH</option>
+        <option value="SG">SG</option>
+        <option value="TH">TH</option>
+        <option value="TW">TW</option>
+        <option value="VN">VN</option>
+        <option value="ID">ID</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>L1 Category</label>
+      <select id="l1" disabled>
+        <option value="">-- Select L1 --</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>L2 Category</label>
+      <select id="l2" disabled>
+        <option value="">-- Select L2 --</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>L3 Category</label>
+      <select id="l3" disabled>
+        <option value="">-- All L3 --</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Ranked By *</label>
+      <select id="ranked_by">
+        <option value="">-- Select --</option>
+        <option value="ADO">ADO</option>
+        <option value="ADGMV">ADGMV</option>
+      </select>
+    </div>
+    <button class="btn" id="applyBtn" onclick="applyFilter()">Apply Filter</button>
+  </div>
+  <div class="status-bar" id="statusBar"></div>
+</div>
+
+<div class="result-area" id="resultArea"></div>
+<script>
+  // ============================================================
+  // CONFIG
+  // ============================================================
+  var CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSB2EcZUgsN_bSgD9eFaK5T_MQZ752gJ7VzY6pDjGk2OWLGNtlLxsPg-a92P43U0wRDStstjMFK6ze3/pub?gid=777557624&single=true&output=csv';
+  var PAGE_SIZE = 50;
+
+  // ============================================================
+  // STATE
+  // ============================================================
+  var allData = [];       // raw CSV rows (objects)
+  var filteredData = [];  // after filter
+  var currentPage = 1;
+  var headers = [];
+  var dataLoaded = false;
+
+  // ============================================================
+  // COLUMN INDEX MAP (will be set after CSV load)
+  // ============================================================
+  var COL = {};
+
+  // ============================================================
+  // LOAD CSV
+  // ============================================================
+  function loadCSV() {
+    setStatus('Loading data...', 'loading');
+    // Use allorigins proxy to bypass CORS
+    var proxyUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent(CSV_URL);
+    fetch(proxyUrl)
+      .then(function(r) { return r.json(); })
+      .then(function(json) {
+        parseCSV(json.contents);
+        dataLoaded = true;
+        setStatus('', '');
+        populateL1();
+      })
+      .catch(function(err) {
+        setStatus('Failed to load data: ' + err.message, 'error');
+      });
+  }
+
+  function parseCSV(text) {
+    var lines = text.split('\n');
+    headers = parseCSVRow(lines[0]);
+    // Build column index map
+    headers.forEach(function(h, i) { COL[h.trim()] = i; });
+
+    allData = [];
+    for (var i = 1; i < lines.length; i++) {
+      var row = parseCSVRow(lines[i]);
+      if (row.length < 3) continue;
+      var obj = {};
+      headers.forEach(function(h, idx) { obj[h.trim()] = (row[idx] || '').trim(); });
+      allData.push(obj);
     }
   }
-  function updateL3() {
+
+  function parseCSVRow(row) {
+    var result = [];
+    var inQuotes = false;
+    var cur = '';
+    for (var i = 0; i < row.length; i++) {
+      var c = row[i];
+      if (c === '"') { inQuotes = !inQuotes; }
+      else if (c === ',' && !inQuotes) { result.push(cur); cur = ''; }
+      else { cur += c; }
+    }
+    result.push(cur);
+    return result;
+  }
+
+  // ============================================================
+  // POPULATE DROPDOWNS from CSV data
+  // ============================================================
+  function populateL1() {
+    var site = document.getElementById('site').value;
+    var rows = site ? allData.filter(function(r) { return r['grass_region'] === site; }) : allData;
+    var l1Set = {};
+    rows.forEach(function(r) { var v = r['cb_level1_global_be_category']; if (v) l1Set[v] = 1; });
+    var l1Keys = Object.keys(l1Set).sort();
+    var l1El = document.getElementById('l1');
+    l1El.innerHTML = '<option value="">-- Select L1 --</option>';
+    l1Keys.forEach(function(k) {
+      var o = document.createElement('option');
+      o.value = k; o.textContent = k;
+      l1El.appendChild(o);
+    });
+    l1El.disabled = false;
+    // Reset L2/L3
+    document.getElementById('l2').innerHTML = '<option value="">-- Select L2 --</option>';
+    document.getElementById('l2').disabled = true;
+    document.getElementById('l3').innerHTML = '<option value="">-- All L3 --</option>';
+    document.getElementById('l3').disabled = true;
+  }
+  function populateL2() {
+    var site = document.getElementById('site').value;
+    var l1 = document.getElementById('l1').value;
+    var rows = allData.filter(function(r) {
+      return (!site || r['grass_region'] === site) &&
+             (!l1 || r['cb_level1_global_be_category'] === l1);
+    });
+    var l2Set = {};
+    rows.forEach(function(r) { var v = r['level2_global_be_category']; if (v) l2Set[v] = 1; });
+    var l2Keys = Object.keys(l2Set).sort();
+    var l2El = document.getElementById('l2');
+    l2El.innerHTML = '<option value="">-- Select L2 --</option>';
+    l2Keys.forEach(function(k) {
+      var o = document.createElement('option');
+      o.value = k; o.textContent = k;
+      l2El.appendChild(o);
+    });
+    l2El.disabled = false;
+    document.getElementById('l3').innerHTML = '<option value="">-- All L3 --</option>';
+    document.getElementById('l3').disabled = true;
+  }
+
+  function populateL3() {
+    var site = document.getElementById('site').value;
     var l1 = document.getElementById('l1').value;
     var l2 = document.getElementById('l2').value;
-    var l3Select = document.getElementById('l3');
-    l3Select.innerHTML = '<option value="">-- Select L3 (optional) --</option>';
-    if (!l1 || !l2) {
-      l3Select.disabled = true;
-      return;
-    }
-    var l3Options = categoryData[l1][l2];
-    if (!l3Options || l3Options.length === 0) {
-      l3Select.disabled = true;
-      return;
-    }
-
-    l3Select.disabled = false;
-    for (var i = 0; i < l3Options.length; i++) {
-      var opt = document.createElement('option');
-      opt.value = l3Options[i];
-      opt.textContent = l3Options[i];
-      l3Select.appendChild(opt);
+    var rows = allData.filter(function(r) {
+      return (!site || r['grass_region'] === site) &&
+             (!l1 || r['cb_level1_global_be_category'] === l1) &&
+             (!l2 || r['level2_global_be_category'] === l2);
+    });
+    var l3Set = {};
+    rows.forEach(function(r) { var v = r['level3_global_be_category']; if (v) l3Set[v] = 1; });
+    var l3Keys = Object.keys(l3Set).sort();
+    var l3El = document.getElementById('l3');
+    l3El.innerHTML = '<option value="">-- All L3 --</option>';
+    if (l3Keys.length > 0) {
+      l3Keys.forEach(function(k) {
+        var o = document.createElement('option');
+        o.value = k; o.textContent = k;
+        l3El.appendChild(o);
+      });
+      l3El.disabled = false;
+    } else {
+      l3El.disabled = true;
     }
   }
 
-  function submitFilter() {
+  // ============================================================
+  // FILTER & SORT
+  // ============================================================
+  function applyFilter() {
+    if (!dataLoaded) { setStatus('Data not loaded yet, please wait...', 'error'); return; }
+    var site = document.getElementById('site').value;
     var l1 = document.getElementById('l1').value;
     var l2 = document.getElementById('l2').value;
     var l3 = document.getElementById('l3').value;
-    var ranked_by = document.getElementById('ranked_by').value;
-    var site = document.getElementById('site').value;
-    var statusEl = document.getElementById('status');
-    var btn = document.getElementById('submitBtn');
+    var rankedBy = document.getElementById('ranked_by').value;
 
-    if (!l1 || !l2 || !ranked_by || !site) {
-      statusEl.className = 'status error';
-      statusEl.textContent = 'Please fill in L1, L2, Ranked By, and Site';
+    if (!site || !rankedBy) {
+      setStatus('Please select Site and Ranked By', 'error');
       return;
     }
 
-    statusEl.className = 'status loading';
-    statusEl.textContent = 'Applying filter...';
-    btn.disabled = true;
-
-    fetch(APPS_SCRIPT_URL, {
-      method: 'POST',
-      body: JSON.stringify({ l1: l1, l2: l2, l3: l3, ranked_by: ranked_by, site: site }),
-      headers: { 'Content-Type': 'text/plain' }
-    })
-    .then(function(resp) { return resp.json(); })
-    .then(function(json) {
-      if (json.success) {
-        statusEl.className = 'status success';
-        statusEl.textContent = 'Filter applied successfully!';
-      } else {
-        statusEl.className = 'status error';
-        statusEl.textContent = 'Error: ' + json.error;
-      }
-    })
-    .catch(function(err) {
-      statusEl.className = 'status error';
-      statusEl.textContent = 'Network error: ' + err.message;
-    })
-    .finally(function() {
-      btn.disabled = false;
+    filteredData = allData.filter(function(r) {
+      return r['grass_region'] === site &&
+             (!l1 || r['cb_level1_global_be_category'] === l1) &&
+             (!l2 || r['level2_global_be_category'] === l2) &&
+             (!l3 || r['level3_global_be_category'] === l3);
     });
+
+    // Sort by ranked field
+    var sortKey = rankedBy === 'ADO' ? 'ADO(SUM)' : 'ADG_usd(SUM)';
+    filteredData.sort(function(a, b) {
+      return (parseFloat(b[sortKey]) || 0) - (parseFloat(a[sortKey]) || 0);
+    });
+
+    currentPage = 1;
+    renderResults();
   }
+
+  // ============================================================
+  // RENDER TABLE
+  // ============================================================
+  function renderResults() {
+    var area = document.getElementById('resultArea');
+    if (filteredData.length === 0) {
+      area.innerHTML = '<div class="empty-wrap">No results found. Try adjusting your filters.</div>';
+      return;
+    }
+
+    var totalPages = Math.ceil(filteredData.length / PAGE_SIZE);
+    var start = (currentPage - 1) * PAGE_SIZE;
+    var pageData = filteredData.slice(start, start + PAGE_SIZE);
+    var html = '<div class="result-header">';
+    html += '<span class="result-count">Found ' + filteredData.length + ' SKUs</span>';
+    html += '<span>Page ' + currentPage + ' / ' + totalPages + '</span>';
+    html += '</div>';
+    html += '<div class="table-wrap"><table>';
+    html += '<thead><tr>';
+    html += '<th>#</th>';
+    html += '<th>Image</th>';
+    html += '<th>Item Name</th>';
+    html += '<th>L1</th><th>L2</th><th>L3</th>';
+    html += '<th>Site</th>';
+    html += '<th>Price (USD)</th>';
+    html += '<th>ADO</th>';
+    html += '<th>ADGMV (USD)</th>';
+    html += '<th>Ads ADO</th>';
+    html += '<th>Ads ROI</th>';
+    html += '<th>Classification</th>';
+    html += '<th>Seller</th>';
+    html += '</tr></thead>';
+    html += '<tbody>';
+
+    pageData.forEach(function(r, idx) {
+      var rank = start + idx + 1;
+      var imgSrc = r['product_image'] || '';
+      var link = r['product_link'] || '';
+      var name = r['item_name'] || '-';
+      var classification = r['classification'] || '';
+
+      html += '<tr>';
+      html += '<td><span class="rank-badge">' + rank + '</span></td>';
+      html += '<td>';
+      if (imgSrc) {
+        html += '<img class="product-img" src="' + imgSrc + '" onerror="this.style.display=\'none\'" />';
+      } else { html += '-'; }
+      html += '</td>';
+      html += '<td>';
+      if (link) {
+        html += '<a class="product-link" href="' + link + '" target="_blank">' + name + '</a>';
+      } else { html += name; }
+      html += '</td>';
+      html += '<td>' + (r['cb_level1_global_be_category'] || '-') + '</td>';
+      html += '<td>' + (r['level2_global_be_category'] || '-') + '</td>';
+      html += '<td>' + (r['level3_global_be_category'] || '-') + '</td>';
+      html += '<td>' + (r['grass_region'] || '-') + '</td>';
+      html += '<td>' + (r['price_usd'] ? '$' + parseFloat(r['price_usd']).toFixed(2) : '-') + '</td>';
+      html += '<td>' + (r['ADO(SUM)'] ? parseFloat(r['ADO(SUM)']).toFixed(0) : '-') + '</td>';
+      html += '<td>' + (r['ADG_usd(SUM)'] ? '$' + parseFloat(r['ADG_usd(SUM)']).toFixed(2) : '-') + '</td>';
+      html += '<td>' + (r['Ads_ADO(SUM)'] ? parseFloat(r['Ads_ADO(SUM)']).toFixed(0) : '-') + '</td>';
+      html += '<td>' + (r['Ads_ROI(RAW)'] ? parseFloat(r['Ads_ROI(RAW)']).toFixed(2) : '-') + '</td>';
+      html += '<td>' + (classification ? '<span class="tag">' + classification + '</span>' : '-') + '</td>';
+      html += '<td>' + (r['seller_name'] || '-') + '</td>';
+      html += '</tr>';
+    });
+
+    html += '</tbody></table></div>';
+
+    // Pagination
+    if (totalPages > 1) {
+      html += '<div class="pagination">';
+      if (currentPage > 1) html += '<button class="page-btn" onclick="goPage(' + (currentPage-1) + ')">← Prev</button>';
+      var startP = Math.max(1, currentPage - 2);
+      var endP = Math.min(totalPages, currentPage + 2);
+      for (var p = startP; p <= endP; p++) {
+        html += '<button class="page-btn' + (p === currentPage ? ' active' : '') + '" onclick="goPage(' + p + ')">' + p + '</button>';
+      }
+      if (currentPage < totalPages) html += '<button class="page-btn" onclick="goPage(' + (currentPage+1) + ')">Next →</button>';
+      html += '</div>';
+    }
+
+    area.innerHTML = html;
+  }
+
+  function goPage(p) {
+    currentPage = p;
+    renderResults();
+    window.scrollTo(0, 0);
+  }
+
+  // ============================================================
+  // UTILS
+  // ============================================================
+  function setStatus(msg, type) {
+    var el = document.getElementById('statusBar');
+    el.textContent = msg;
+    el.className = 'status-bar' + (type ? ' ' + type : '');
+  }
+ // ============================================================
+  // EVENT LISTENERS
+  // ============================================================
+  document.getElementById('site').addEventListener('change', function() {
+    if (dataLoaded) populateL1();
+  });
+  document.getElementById('l1').addEventListener('change', function() {
+    if (dataLoaded) populateL2();
+  });
+  document.getElementById('l2').addEventListener('change', function() {
+    if (dataLoaded) populateL3();
+  });
+
+  // ============================================================
+  // INIT
+  // ============================================================
+  loadCSV();
 </script>
 </body>
 </html> 
