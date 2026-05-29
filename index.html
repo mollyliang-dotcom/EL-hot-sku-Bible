@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EL Hot SKU Filter</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f5f7fa;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+      padding: 36px 40px;
+      width: 100%;
+      max-width: 520px;
+    }
+    h2 {
+      font-size: 22px;
+      font-weight: 700;
+      color: #ee4d2d;
+      margin-bottom: 28px;
+      text-align: center;
+      letter-spacing: 0.5px;
+    }
+    .form-group {
+      margin-bottom: 18px;
+    }
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #555;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+    select {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 15px;
+      color: #333;
+      background: #fafafa;
+      outline: none;
+      transition: border 0.2s;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24'%3E%3Cpath fill='%23aaa' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+    }
+    select:focus { border-color: #ee4d2d; background: #fff; }
+    select:disabled { background: #f0f0f0; color: #aaa; cursor: not-allowed; }
+    .btn {
+      width: 100%;
+      padding: 13px;
+      background: #ee4d2d;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background 0.2s, transform 0.1s;
+      letter-spacing: 0.3px;
+    }
+    .btn:hover { background: #d44227; }
+    .btn:active { transform: scale(0.98); }
+    .btn:disabled { background: #ccc; cursor: not-allowed; }
+    .status {
+      margin-top: 18px;
+      text-align: center;
+      font-size: 15px;
+      min-height: 24px;
+      font-weight: 500;
+    }
+    .status.success { color: #27ae60; }
+    .status.error { color: #e74c3c; }
+    .status.loading { color: #f39c12; }
+  </style>
+</head>
+<body>
+<div class="card">
+  <h2>🔍 EL Hot SKU Filter</h2>
+  <div class="form-group">
+    <label>L1 Category</label>
+    <select id="l1" onchange="updateL2()">
+      <option value="">-- Select L1 --</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label>L2 Category</label>
+    <select id="l2" onchange="updateL3()" disabled>
+      <option value="">-- Select L2 --</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label>L3 Category</label>
+    <select id="l3" disabled>
+      <option value="">-- Select L3 (optional) --</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label>Ranked By</label>
+    <select id="ranked_by">
+      <option value="">-- Select --</option>
+      <option value="ADO">ADO</option>
+      <option value="ADGMV">ADGMV</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label>Site</label>
+    <select id="site">
+      <option value="">-- Select --</option>
+      <option value="BR">🇧🇷 BR</option>
+      <option value="MX">🇲🇽 MX</option>
+      <option value="MY">🇲🇾 MY</option>
+      <option value="PH">🇵🇭 PH</option>
+      <option value="SG">🇸🇬 SG</option>
+      <option value="TH">🇹🇭 TH</option>
+      <option value="TW">🇹🇼 TW</option>
+      <option value="VN">🇻🇳 VN</option>
+      <option value="ID">🇮🇩 ID</option>
+    </select>
+  </div>
+  <button class="btn" onclick="submitFilter()">✅ Apply Filter</button>
+  <div class="status" id="status"></div>
+</div>
+<script>
+  const APPS_SCRIPT_URL = 'YOUR_APPS_SCRIPT_URL_HERE';
+  const categoryData = {
+    "Audio": {
+      "Amplifiers & Mixers": [],
+      "Audio & Video Cables & Converters": [],
+      "Earphones, Headphones & Headsets": [],
+      "Home Audio & Speakers": ["AV Receivers","Home Theater Systems","Others","Speakers"],
+      "Media Players": ["MP3 & MP4 Players","Others","Radio & Cassette Players","Voice Recorders"],
+      "Microphones": [],
+      "Others": []
+    },
+    "Cameras & Drones": {
+      "Camera Accessories": ["Batteries & Battery Grips","Battery Chargers","Camera Cases & Bags","Flashes","Gimbals & Stabilizers","Lighting & Studio Equipments","Others","Photo Films & Papers","Photo Printers","Tripods, Monopods, & Accessories"],
+      "Camera Care": ["Cleaning Kit","Lenspens & Brushes"],
+      "Cameras": ["Action Cameras","Mirrorless Cameras","Others","Point & Shoot","Video Camcorders"],
+      "Drone Accessories": [],
+      "Drones": [],
+      "Lens Accessories": ["Filters","Lens Caps","Lens Hoods"],
+      "Security Cameras & Systems": ["CCTV Security Cameras","Others"]
+    },
+    "Computers & Accessories": {
+      "Data Storage": ["Flash Drives & OTG","Hard Disk Casings & Dockings","Hard Drives","Others","SSD"],
+      "Desktop & Laptop Components": ["Fans & Heatsinks","Graphics Cards","Motherboards","Others","PC Cases","Power Supply Units","Processors","RAM","Sound Cards","Thermal Paste","UPS & Stabilizers"],
+      "Keyboards & Mice": ["Drawing Tablets","Keyboards","Mice","Others"],
+      "Monitors": [],
+      "Network Components": ["Modems & Wireless Routers","Network Cables & Connectors","Network Switches & PoE","Others","Repeaters","Wireless Adapters & Network Cards"],
+      "Office Equipment": ["Others"],
+      "Others": [],
+      "Peripherals & Accessories": ["Cooling Pads","Keyboard & Trackpad Covers","Laptop Chargers & Adaptors","Laptop Skins & Covers","Laptop Stands & Foldable Laptop Desks","Mouse Pads","Others","USB Hubs & Card Readers","Video Conference Devices"],
+      "Printers & Scanners": ["Inks & Toners","Others","Thermal & Barcode Printers"],
+      "Softwares": []
+    },
+    "Gaming & Consoles": {
+      "Console Accessories": [],
+      "Console Machines": ["Gameboy","Others","Playstation","PSP"],
+      "Others": [],
+      "Video Games": ["Others"]
+    },
+    "Home Appliances": {
+      "Batteries": [],
+      "Electrical Circuitry & Parts": ["Doorbells","Electric Sockets & Extension Cords","Electrical Safety","Electricity Savers","House Alarms","Others","Switches"],
+      "Kitchen Appliances": ["Air Fryers","Coffee Machines & Accessories","Food Processors & Meat Grinders","Hoods","Juicers, Blenders & Soya Bean Machines","Kettles","Mixers","Multi-function Cookers","Others","Ovens","Pressure Cookers","Refrigerators","Rice Cookers","Slow Cookers & Sous Vide Machines","Specialty Cookware","Stoves, Hobs & Gas Regulators","Toasters","Water Filters, Coolers & Dispensers"],
+      "Large Household Appliances": ["Cooling","Others","Washing Machines & Dryers"],
+      "Others": [],
+      "Projectors & Accessories": ["Pointers","Projectors & Projector Screens"],
+      "Remote Controls": [],
+      "Small Household Appliances": ["Air Treatment","Foot Baths & Spas","Irons & Steamers","Others","Sewing Machines & Accessories","Vacuum Cleaners & Floor Care Appliances","Water Flossers"],
+      "TVs & Accessories": ["Others","TV Antennas","TV Boxes & Receivers","TV Brackets","TVs"]
+    },
+    "Mobile & Gadgets": {
+      "Accessories": ["Cables, Chargers & Converters","Cases, Covers, & Skins","Casting Devices","Memory Cards","Mobile Flashes & Selfie Lights","Mobile Lens","Mobile Pouches","Others","Phone Grips","Phone Straps & Keychains","Pocket Wifi","Powerbanks & Batteries","Screen Protectors","Selfie Accessories","Stylus","USB & Mobile Fans","USB & Mobile Lights","Wearable Accessories"],
+      "Mobile Phones": [],
+      "Others": [],
+      "Sim Cards": [],
+      "Tablets": [],
+      "Walkie Talkies": [],
+      "Wearable Devices": ["GPS Trackers","Others","Smartwatches & Fitness Trackers","VR Devices"]
+    }
+  };
+  Populate L1
+  const l1Select = document.getElementById('l1');
+  Object.keys(categoryData).sort().forEach(function(l1) {
+    const opt = document.createElement('option');
+    opt.value = l1;
+    opt.textContent = l1;
+    l1Select.appendChild(opt);
+  });
+
+  function updateL2() {
+    const l1 = document.getElementById('l1').value;
+    const l2Select = document.getElementById('l2');
+    const l3Select = document.getElementById('l3');
+    l2Select.innerHTML = '<option value="">-- Select L2 --</option>';
+    l3Select.innerHTML = '<option value="">-- Select L3 (optional) --</option>';
+    l3Select.disabled = true;
+    if (!l1) {
+      l2Select.disabled = true;
+      return;
+    }
+    l2Select.disabled = false;
+    Object.keys(categoryData[l1]).sort().forEach(function(l2) {
+      const opt = document.createElement('option');
+      opt.value = l2;
+      opt.textContent = l2;
+      l2Select.appendChild(opt);
+    });
+  }
+
+  function updateL3() {
+    const l1 = document.getElementById('l1').value;
+    const l2 = document.getElementById('l2').value;
+    const l3Select = document.getElementById('l3');
+    l3Select.innerHTML = '<option value="">-- Select L3 (optional) --</option>';
+    if (!l1 || !l2) {
+      l3Select.disabled = true;
+      return;
+    }
+    const l3Options = categoryData[l1][l2];
+    if (!l3Options || l3Options.length === 0) {
+      l3Select.disabled = true;
+      return;
+    }
+    l3Select.disabled = false;
+    l3Options.forEach(function(l3) {
+      const opt = document.createElement('option');
+      opt.value = l3;
+      opt.textContent = l3;
+      l3Select.appendChild(opt);
+    });
+  }
+
+  async function submitFilter() {
+    const l1 = document.getElementById('l1').value;
+    const l2 = document.getElementById('l2').value;
+    const l3 = document.getElementById('l3').value;
+    const ranked_by = document.getElementById('ranked_by').value;
+    const site = document.getElementById('site').value;
+    const statusEl = document.getElementById('status');
+
+    if (!l1 || !l2 || !ranked_by || !site) {
+      statusEl.className = 'status error';
+      statusEl.textContent = '⚠️ Please fill in L1, L2, Ranked By, and Site';
+      return;
+    }
+
+    statusEl.className = 'status loading';
+    statusEl.textContent = '⏳ Applying filter...';
+    document.querySelector('.btn').disabled = true;
+
+    try {
+      const resp = await fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify({ l1: l1, l2: l2, l3: l3, ranked_by: ranked_by, site: site }),
+        headers: { 'Content-Type': 'text/plain' }
+      });
+      const json = await resp.json();
+      if (json.success) {
+        statusEl.className = 'status success';
+        statusEl.textContent = '✅ Filter applied successfully!';
+      } else {
+        statusEl.className = 'status error';
+        statusEl.textContent = '❌ Error: ' + json.error;
+      }
+    } catch(err) {
+      statusEl.className = 'status error';
+      statusEl.textContent = '❌ Network error: ' + err.message;
+    } finally {
+      document.querySelector('.btn').disabled = false;
+    }
+  }
+</script>
+</body>
+</html>
