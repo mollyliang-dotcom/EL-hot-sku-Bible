@@ -91,16 +91,16 @@
 </head>
 <body>
 <div class="card">
-  <h2>🔍 EL Hot SKU Filter</h2>
+  <h2>Shopee EL选品指南</h2>
   <div class="form-group">
     <label>L1 Category</label>
-    <select id="l1" onchange="updateL2()">
+    <select id="l1">
       <option value="">-- Select L1 --</option>
     </select>
   </div>
   <div class="form-group">
     <label>L2 Category</label>
-    <select id="l2" onchange="updateL3()" disabled>
+    <select id="l2" disabled>
       <option value="">-- Select L2 --</option>
     </select>
   </div>
@@ -122,23 +122,23 @@
     <label>Site</label>
     <select id="site">
       <option value="">-- Select --</option>
-      <option value="BR">🇧🇷 BR</option>
-      <option value="MX">🇲🇽 MX</option>
-      <option value="MY">🇲🇾 MY</option>
-      <option value="PH">🇵🇭 PH</option>
-      <option value="SG">🇸🇬 SG</option>
-      <option value="TH">🇹🇭 TH</option>
-      <option value="TW">🇹🇼 TW</option>
-      <option value="VN">🇻🇳 VN</option>
-      <option value="ID">🇮🇩 ID</option>
+      <option value="BR">BR</option>
+      <option value="MX">MX</option>
+      <option value="MY">MY</option>
+      <option value="PH">PH</option>
+      <option value="SG">SG</option>
+      <option value="TH">TH</option>
+      <option value="TW">TW</option>
+      <option value="VN">VN</option>
+      <option value="ID">ID</option>
     </select>
   </div>
-  <button class="btn" onclick="submitFilter()">✅ Apply Filter</button>
+  <button class="btn" id="submitBtn">Apply Filter</button>
   <div class="status" id="status"></div>
 </div>
 <script>
-  const APPS_SCRIPT_URL = 'YOUR_APPS_SCRIPT_URL_HERE';
-  const categoryData = {
+  var APPS_SCRIPT_URL = 'YOUR_APPS_SCRIPT_URL_HERE';
+  var categoryData = {
     "Audio": {
       "Amplifiers & Mixers": [],
       "Audio & Video Cables & Converters": [],
@@ -196,19 +196,25 @@
       "Wearable Devices": ["GPS Trackers","Others","Smartwatches & Fitness Trackers","VR Devices"]
     }
   };
-  Populate L1
-  const l1Select = document.getElementById('l1');
-  Object.keys(categoryData).sort().forEach(function(l1) {
-    const opt = document.createElement('option');
-    opt.value = l1;
-    opt.textContent = l1;
-    l1Select.appendChild(opt);
-  });
-
+ // Populate L1 on page load
+  window.onload = function() {
+    var l1Select = document.getElementById('l1');
+    var l1Keys = Object.keys(categoryData).sort();
+    for (var i = 0; i < l1Keys.length; i++) {
+      var opt = document.createElement('option');
+      opt.value = l1Keys[i];
+      opt.textContent = l1Keys[i];
+      l1Select.appendChild(opt);
+    }
+    l1Select.addEventListener('change', updateL2);
+    document.getElementById('l2').addEventListener('change', updateL3);
+    document.getElementById('submitBtn').addEventListener('click', submitFilter);
+  };
   function updateL2() {
-    const l1 = document.getElementById('l1').value;
-    const l2Select = document.getElementById('l2');
-    const l3Select = document.getElementById('l3');
+    var l1 = document.getElementById('l1').value;
+    var l2Select = document.getElementById('l2');
+    var l3Select = document.getElementById('l3');
+
     l2Select.innerHTML = '<option value="">-- Select L2 --</option>';
     l3Select.innerHTML = '<option value="">-- Select L3 (optional) --</option>';
     l3Select.disabled = true;
@@ -217,76 +223,80 @@
       return;
     }
     l2Select.disabled = false;
-    Object.keys(categoryData[l1]).sort().forEach(function(l2) {
-      const opt = document.createElement('option');
-      opt.value = l2;
-      opt.textContent = l2;
+    var l2Keys = Object.keys(categoryData[l1]).sort();
+    for (var i = 0; i < l2Keys.length; i++) {
+      var opt = document.createElement('option');
+      opt.value = l2Keys[i];
+      opt.textContent = l2Keys[i];
       l2Select.appendChild(opt);
-    });
+    }
   }
-
   function updateL3() {
-    const l1 = document.getElementById('l1').value;
-    const l2 = document.getElementById('l2').value;
-    const l3Select = document.getElementById('l3');
+    var l1 = document.getElementById('l1').value;
+    var l2 = document.getElementById('l2').value;
+    var l3Select = document.getElementById('l3');
     l3Select.innerHTML = '<option value="">-- Select L3 (optional) --</option>';
     if (!l1 || !l2) {
       l3Select.disabled = true;
       return;
     }
-    const l3Options = categoryData[l1][l2];
+    var l3Options = categoryData[l1][l2];
     if (!l3Options || l3Options.length === 0) {
       l3Select.disabled = true;
       return;
     }
+
     l3Select.disabled = false;
-    l3Options.forEach(function(l3) {
-      const opt = document.createElement('option');
-      opt.value = l3;
-      opt.textContent = l3;
+    for (var i = 0; i < l3Options.length; i++) {
+      var opt = document.createElement('option');
+      opt.value = l3Options[i];
+      opt.textContent = l3Options[i];
       l3Select.appendChild(opt);
-    });
+    }
   }
 
-  async function submitFilter() {
-    const l1 = document.getElementById('l1').value;
-    const l2 = document.getElementById('l2').value;
-    const l3 = document.getElementById('l3').value;
-    const ranked_by = document.getElementById('ranked_by').value;
-    const site = document.getElementById('site').value;
-    const statusEl = document.getElementById('status');
+  function submitFilter() {
+    var l1 = document.getElementById('l1').value;
+    var l2 = document.getElementById('l2').value;
+    var l3 = document.getElementById('l3').value;
+    var ranked_by = document.getElementById('ranked_by').value;
+    var site = document.getElementById('site').value;
+    var statusEl = document.getElementById('status');
+    var btn = document.getElementById('submitBtn');
 
     if (!l1 || !l2 || !ranked_by || !site) {
       statusEl.className = 'status error';
-      statusEl.textContent = '⚠️ Please fill in L1, L2, Ranked By, and Site';
+      statusEl.textContent = 'Please fill in L1, L2, Ranked By, and Site';
       return;
     }
 
     statusEl.className = 'status loading';
-    statusEl.textContent = '⏳ Applying filter...';
-    document.querySelector('.btn').disabled = true;
+    statusEl.textContent = 'Applying filter...';
+    btn.disabled = true;
 
-    try {
-      const resp = await fetch(APPS_SCRIPT_URL, {
-        method: 'POST',
-        body: JSON.stringify({ l1: l1, l2: l2, l3: l3, ranked_by: ranked_by, site: site }),
-        headers: { 'Content-Type': 'text/plain' }
-      });
-      const json = await resp.json();
+    fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      body: JSON.stringify({ l1: l1, l2: l2, l3: l3, ranked_by: ranked_by, site: site }),
+      headers: { 'Content-Type': 'text/plain' }
+    })
+    .then(function(resp) { return resp.json(); })
+    .then(function(json) {
       if (json.success) {
         statusEl.className = 'status success';
-        statusEl.textContent = '✅ Filter applied successfully!';
+        statusEl.textContent = 'Filter applied successfully!';
       } else {
         statusEl.className = 'status error';
-        statusEl.textContent = '❌ Error: ' + json.error;
+        statusEl.textContent = 'Error: ' + json.error;
       }
-    } catch(err) {
+    })
+    .catch(function(err) {
       statusEl.className = 'status error';
-      statusEl.textContent = '❌ Network error: ' + err.message;
-    } finally {
-      document.querySelector('.btn').disabled = false;
-    }
+      statusEl.textContent = 'Network error: ' + err.message;
+    })
+    .finally(function() {
+      btn.disabled = false;
+    });
   }
 </script>
 </body>
-</html>
+</html> 
