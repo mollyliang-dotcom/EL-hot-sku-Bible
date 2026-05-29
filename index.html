@@ -223,31 +223,31 @@
           .catch(onError);
       });
   }
-
   // ── 下拉联动 ──
+ var L1_OPTIONS = [
+    'Audio',
+    'Cameras & Drones',
+    'Computers & Accessories',
+    'Gaming & Consoles',
+    'Home Appliances',
+    'Mobile & Gadgets'
+  ];
   function populateL1FromSite() {
     var site = document.getElementById('site').value;
     if (!site) return;
-    // L1 选项先写死（从数据动态生成需要先加载，改为按需加载后从数据生成）
-    // 这里先 enable，让用户手动选
     var l1El = document.getElementById('l1');
     l1El.innerHTML = '<option value="">-- Select L1 --</option>';
+    L1_OPTIONS.forEach(function(k) {
+      var o = document.createElement('option');
+      o.value = k; o.textContent = k;
+      l1El.appendChild(o);
+    });
     l1El.disabled = false;
-    // 如果数据已加载，动态填充
-    if (dataLoaded) {
-      var rows = allData.filter(function(r){ return r[COL_SITE] === site; });
-      var set = {};
-      rows.forEach(function(r){ var v = r[COL_L1]; if(v) set[v]=1; });
-      Object.keys(set).sort().forEach(function(k){
-        var o = document.createElement('option'); o.value=k; o.textContent=k; l1El.appendChild(o);
-      });
-    }
     document.getElementById('l2').innerHTML = '<option value="">-- All L2 --</option>';
     document.getElementById('l2').disabled = true;
     document.getElementById('l3').innerHTML = '<option value="">-- All L3 --</option>';
     document.getElementById('l3').disabled = true;
   }
-
   function populateL2() {
     if (!dataLoaded) return;
     var site = document.getElementById('site').value;
