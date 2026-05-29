@@ -3,202 +3,53 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>EL Hot SKU Filter</title>
+  <title>EL Hot SKU Bible</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #f5f7fa;
-      min-height: 100vh;
-      padding: 20px;
-    }
-    .top-bar {
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.10);
-      padding: 28px 32px;
-      max-width: 1200px;
-      margin: 0 auto 24px auto;
-    }
-    h2 {
-      font-size: 22px;
-      font-weight: 700;
-      color: #ee4d2d;
-      margin-bottom: 20px;
-      text-align: center;
-    }
-    .filters {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 14px;
-      align-items: flex-end;
-    }
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-      min-width: 140px;
-    }
-    label {
-      font-size: 12px;
-      font-weight: 600;
-      color: #555;
-      margin-bottom: 5px;
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-    }
-    select {
-      padding: 9px 12px;
-      border: 1.5px solid #e0e0e0;
-      border-radius: 8px;
-      font-size: 14px;
-      color: #333;
-      background: #fafafa;
-      outline: none;
-      transition: border 0.2s;
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24'%3E%3Cpath fill='%23aaa' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 10px center;
-    }
+    body { font-family: 'Segoe UI', sans-serif; background: #f5f7fa; min-height: 100vh; padding: 20px; }
+    .top-bar { background: white; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.10); padding: 28px 32px; max-width: 1200px; margin: 0 auto 24px auto; }
+    h2 { font-size: 22px; font-weight: 700; color: #ee4d2d; margin-bottom: 20px; text-align: center; }
+    .filters { display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-end; }
+    .form-group { display: flex; flex-direction: column; flex: 1; min-width: 140px; }
+    label { font-size: 12px; font-weight: 600; color: #555; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.4px; }
+    select { padding: 9px 12px; border: 1.5px solid #e0e0e0; border-radius: 8px; font-size: 14px; color: #333; background: #fafafa; outline: none; transition: border 0.2s; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24'%3E%3Cpath fill='%23aaa' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; }
     select:focus { border-color: #ee4d2d; background: #fff; }
     select:disabled { background: #f0f0f0; color: #aaa; cursor: not-allowed; }
-    .btn {
-      padding: 10px 28px;
-      background: #ee4d2d;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 15px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background 0.2s;
-      white-space: nowrap;
-      height: 40px;
-    }
+    .btn { padding: 10px 28px; background: #ee4d2d; color: white; border: none; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; transition: background 0.2s; white-space: nowrap; height: 40px; }
     .btn:hover { background: #d44227; }
     .btn:disabled { background: #ccc; cursor: not-allowed; }
-
-    .result-area {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-    .result-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 14px;
-      font-size: 14px;
-      color: #666;
-    }
+    .required-note { font-size: 11px; color: #ee4d2d; margin-top: 4px; }
+    .progress-wrap { margin-top: 16px; display: none; }
+    .progress-bar-bg { background: #f0f0f0; border-radius: 99px; height: 8px; overflow: hidden; }
+    .progress-bar { height: 8px; background: #ee4d2d; border-radius: 99px; width: 0%; transition: width 0.3s; }
+    .progress-text { font-size: 12px; color: #888; margin-top: 6px; text-align: center; }
+    .result-area { max-width: 1200px; margin: 0 auto; }
+    .result-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; font-size: 14px; color: #666; }
     .result-count { font-weight: 600; color: #333; }
-/* Table */
-    .table-wrap {
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-      overflow-x: auto;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-    }
-    thead tr {
-      background: #ee4d2d;
-      color: white;
-    }
-    thead th {
-      padding: 12px 14px;
-      text-align: left;
-      font-weight: 600;
-      white-space: nowrap;
-    }
+    .table-wrap { background: white; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    thead tr { background: #ee4d2d; color: white; }
+    thead th { padding: 12px 14px; text-align: left; font-weight: 600; white-space: nowrap; }
     tbody tr { border-bottom: 1px solid #f0f0f0; }
     tbody tr:hover { background: #fff8f7; }
-    tbody td {
-      padding: 10px 14px;
-      vertical-align: middle;
-      color: #333;
-    }
-    .product-img {
-      width: 60px;
-      height: 60px;
-      object-fit: cover;
-      border-radius: 8px;
-      border: 1px solid #eee;
-    }
-    .product-link {
-      color: #ee4d2d;
-      text-decoration: none;
-      font-weight: 500;
-    }
+    tbody td { padding: 10px 14px; vertical-align: middle; color: #333; }
+    .product-img { width: 60px; height: 60px; object-fit: cover; border-radius: 8px; border: 1px solid #eee; }
+    .product-link { color: #ee4d2d; text-decoration: none; font-weight: 500; }
     .product-link:hover { text-decoration: underline; }
-    .rank-badge {
-      display: inline-block;
-      background: #ee4d2d;
-      color: white;
-      border-radius: 50%;
-      width: 28px;
-      height: 28px;
-      line-height: 28px;
-      text-align: center;
-      font-weight: 700;
-      font-size: 13px;
-    }
-    .tag {
-      display: inline-block;
-      background: #fff0ed;
-      color: #ee4d2d;
-      border-radius: 4px;
-      padding: 2px 8px;
-      font-size: 11px;
-      font-weight: 600;
-    }
-
-    /* Pagination */
-    .pagination {
-      display: flex;
-      justify-content: center;
-      gap: 8px;
-      margin-top: 20px;
-      flex-wrap: wrap;
-    }
-    .page-btn {
-      padding: 7px 14px;
-      border: 1.5px solid #e0e0e0;
-      border-radius: 6px;
-      background: white;
-      cursor: pointer;
-      font-size: 13px;
-      transition: all 0.2s;
-    }
+    .rank-badge { display: inline-block; background: #ee4d2d; color: white; border-radius: 50%; width: 28px; height: 28px; line-height: 28px; text-align: center; font-weight: 700; font-size: 13px; }
+    .rank-badge.gold { background: #f1c40f; color: #333; }
+    .rank-badge.silver { background: #bdc3c7; color: #333; }
+    .rank-badge.bronze { background: #e67e22; }
+    .tag { display: inline-block; background: #fff0ed; color: #ee4d2d; border-radius: 4px; padding: 2px 8px; font-size: 11px; font-weight: 600; }
+    .pagination { display: flex; justify-content: center; gap: 8px; margin-top: 20px; flex-wrap: wrap; }
+    .page-btn { padding: 7px 14px; border: 1.5px solid #e0e0e0; border-radius: 6px; background: white; cursor: pointer; font-size: 13px; transition: all 0.2s; }
     .page-btn:hover { border-color: #ee4d2d; color: #ee4d2d; }
     .page-btn.active { background: #ee4d2d; color: white; border-color: #ee4d2d; }
-
-    /* Loading & status */
-    .loading-wrap {
-      text-align: center;
-      padding: 40px;
-      color: #f39c12;
-      font-size: 16px;
-      font-weight: 600;
-    }
-    .empty-wrap {
-      text-align: center;
-      padding: 40px;
-      color: #999;
-      font-size: 15px;
-    }
-    .status-bar {
-      text-align: center;
-      margin-top: 14px;
-      font-size: 14px;
-      font-weight: 500;
-      min-height: 20px;
-    }
+    .empty-wrap { text-align: center; padding: 60px; color: #999; font-size: 15px; background: white; border-radius: 12px; }
+    .status-bar { text-align: center; margin-top: 14px; font-size: 14px; font-weight: 500; min-height: 20px; }
     .status-bar.error { color: #e74c3c; }
     .status-bar.loading { color: #f39c12; }
+    .status-bar.success { color: #27ae60; }
   </style>
 </head>
 <body>
@@ -207,7 +58,7 @@
   <h2>🛒 Shopee EL Hot SKU Bible</h2>
   <div class="filters">
     <div class="form-group">
-      <label>Site *</label>
+      <label>Site <span style="color:#ee4d2d">*</span></label>
       <select id="site">
         <option value="">-- Select --</option>
         <option value="BR">BR</option>
@@ -222,7 +73,7 @@
       </select>
     </div>
     <div class="form-group">
-      <label>L1 Category</label>
+      <label>L1 Category <span style="color:#ee4d2d">*</span></label>
       <select id="l1" disabled>
         <option value="">-- Select L1 --</option>
       </select>
@@ -230,7 +81,7 @@
     <div class="form-group">
       <label>L2 Category</label>
       <select id="l2" disabled>
-        <option value="">-- Select L2 --</option>
+        <option value="">-- All L2 --</option>
       </select>
     </div>
     <div class="form-group">
@@ -240,7 +91,7 @@
       </select>
     </div>
     <div class="form-group">
-      <label>Ranked By *</label>
+      <label>Ranked By <span style="color:#ee4d2d">*</span></label>
       <select id="ranked_by">
         <option value="">-- Select --</option>
         <option value="ADO">ADO</option>
@@ -249,87 +100,58 @@
     </div>
     <button class="btn" id="applyBtn" onclick="applyFilter()">Apply Filter</button>
   </div>
-  <div class="status-bar" id="statusBar"></div>
+  <div class="status-bar" id="statusBar">👆 Please select Site + L1 Category + Ranked By to load data</div>
+  <div class="progress-wrap" id="progressWrap">
+    <div class="progress-bar-bg"><div class="progress-bar" id="progressBar"></div></div>
+    <div class="progress-text" id="progressText">Loading...</div>
+  </div>
 </div>
 
 <div class="result-area" id="resultArea"></div>
+
 <script>
-  // ============================================================
-  // CONFIG
-  // ============================================================
   var CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSB2EcZUgsN_bSgD9eFaK5T_MQZ752gJ7VzY6pDjGk2OWLGNtlLxsPg-a92P43U0wRDStstjMFK6ze3/pub?gid=777557624&single=true&output=csv';
   var PAGE_SIZE = 50;
-
-  // ============================================================
-  // STATE
-  // ============================================================
-  var allData = [];       // raw CSV rows (objects)
-  var filteredData = [];  // after filter
+  var allData = [];
+  var filteredData = [];
   var currentPage = 1;
-  var headers = [];
   var dataLoaded = false;
+  var isLoading = false;
 
-  // ============================================================
-  // COLUMN INDEX MAP (will be set after CSV load)
-  // ============================================================
-  var COL = {};
+  // ── 列名映射（根据你的 Web Data 实际列名）──
+  var COL_SITE = 'grass_region';
+  var COL_L1 = 'cb_level1_global_be_category';
+  var COL_L2 = 'level2_global_be_category';
+  var COL_L3 = 'level3_global_be_category';
+  var COL_NAME = 'item_name';
+  var COL_SELLER = 'seller_name';
+  var COL_IMAGE = 'product_image';
+  var COL_LINK = 'product_link';
+  var COL_PRICE = 'price_usd';
+  var COL_ADO = 'ADO(SUM)';
+  var COL_ADG = 'ADG_usd(SUM)';
+  var COL_CLASS = 'classification';
+  var COL_SHOP_TYPE = 'shop_wh_type_with_hybrid';
 
-  // ============================================================
-  // LOAD CSV
-  // ============================================================
-  function loadCSV() {
-    setStatus('⏳ Loading data, please wait (~10s)...', 'loading');
-    // 直接 fetch，Google 公开 CSV 支持跨域
-    fetch(CSV_URL)
-      .then(function(r) {
-        if (!r.ok) throw new Error('HTTP ' + r.status);
-        return r.text();
-      })
-      .then(function(text) {
-        parseCSV(text);
-        dataLoaded = true;
-        setStatus('✅ Data loaded! Please select filters.', '');
-        populateL1();
-      })
-      .catch(function(err) {
-        // 备用代理
-        setStatus('⏳ Trying backup proxy...', 'loading');
-        fetch('https://corsproxy.io/?' + encodeURIComponent(CSV_URL))
-          .then(function(r) {
-            if (!r.ok) throw new Error('HTTP ' + r.status);
-            return r.text();
-          })
-          .then(function(text) {
-            parseCSV(text);
-            dataLoaded = true;
-            setStatus('✅ Data loaded! Please select filters.', '');
-            populateL1();
-          })
-          .catch(function(err2) {
-            setStatus('❌ Failed to load data. Please refresh and try again.', 'error');
-          });
-      });
-  }
-  function parseCSV(text) {
-    var lines = text.split('\n');
-    headers = parseCSVRow(lines[0]);
-    // Build column index map
-    headers.forEach(function(h, i) { COL[h.trim()] = i; });
-
-    allData = [];
-    for (var i = 1; i < lines.length; i++) {
-      var row = parseCSVRow(lines[i]);
-      if (row.length < 3) continue;
-      var obj = {};
-      headers.forEach(function(h, idx) { obj[h.trim()] = (row[idx] || '').trim(); });
-      allData.push(obj);
-    }
+  // ── 进度条 ──
+  function setProgress(pct, text) {
+    var wrap = document.getElementById('progressWrap');
+    var bar = document.getElementById('progressBar');
+    var txt = document.getElementById('progressText');
+    wrap.style.display = 'block';
+    bar.style.width = pct + '%';
+    txt.textContent = text;
+    if (pct >= 100) { setTimeout(function(){ wrap.style.display = 'none'; }, 800); }
   }
 
+  function setStatus(msg, type) {
+    var el = document.getElementById('statusBar');
+    el.textContent = msg;
+    el.className = 'status-bar' + (type ? ' ' + type : '');
+  }
+  // ── CSV 解析 ──
   function parseCSVRow(row) {
-    var result = [];
-    var inQuotes = false;
-    var cur = '';
+    var result = [], inQuotes = false, cur = '';
     for (var i = 0; i < row.length; i++) {
       var c = row[i];
       if (c === '"') { inQuotes = !inQuotes; }
@@ -340,226 +162,241 @@
     return result;
   }
 
-  // ============================================================
-  // POPULATE DROPDOWNS from CSV data
-  // ============================================================
-  function populateL1() {
+  function parseCSV(text) {
+    setProgress(60, 'Parsing data...');
+    var lines = text.split('\n');
+    var headers = parseCSVRow(lines[0]);
+    allData = [];
+    for (var i = 1; i < lines.length; i++) {
+      if (!lines[i].trim()) continue;
+      var row = parseCSVRow(lines[i]);
+      var obj = {};
+      headers.forEach(function(h, idx) { obj[h.trim()] = (row[idx] || '').trim(); });
+      allData.push(obj);
+    }
+    setProgress(80, 'Building filters...');
+  }
+
+  // ── 加载 CSV（点 Apply 才触发）──
+  function loadAndFilter() {
+    if (isLoading) return;
+    isLoading = true;
+    document.getElementById('applyBtn').disabled = true;
+    setProgress(10, 'Connecting to data source...');
+    setStatus('⏳ Loading data, please wait...', 'loading');
+
+    function onSuccess(text) {
+      parseCSV(text);
+      dataLoaded = true;
+      isLoading = false;
+      setProgress(100, 'Done!');
+      document.getElementById('applyBtn').disabled = false;
+      doFilter();
+    }
+
+    function onError(err) {
+      setStatus('❌ Failed to load: ' + err + '. Please refresh and try again.', 'error');
+      setProgress(0, '');
+      document.getElementById('progressWrap').style.display = 'none';
+      document.getElementById('applyBtn').disabled = false;
+      isLoading = false;
+    }
+
+    // 先直接 fetch，失败再用代理
+    setProgress(20, 'Fetching data...');
+    fetch(CSV_URL)
+      .then(function(r) {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        setProgress(40, 'Downloading (~8MB)...');
+        return r.text();
+      })
+      .then(onSuccess)
+      .catch(function() {
+        setProgress(20, 'Trying proxy...');
+        fetch('https://corsproxy.io/?' + encodeURIComponent(CSV_URL))
+          .then(function(r) {
+            if (!r.ok) throw new Error('HTTP ' + r.status);
+            setProgress(40, 'Downloading via proxy...');
+            return r.text();
+          })
+          .then(onSuccess)
+          .catch(onError);
+      });
+  }
+
+  // ── 下拉联动 ──
+  function populateL1FromSite() {
     var site = document.getElementById('site').value;
-    var rows = site ? allData.filter(function(r) { return r['grass_region'] === site; }) : allData;
-    var l1Set = {};
-    rows.forEach(function(r) { var v = r['cb_level1_global_be_category']; if (v) l1Set[v] = 1; });
-    var l1Keys = Object.keys(l1Set).sort();
+    if (!site) return;
+    // L1 选项先写死（从数据动态生成需要先加载，改为按需加载后从数据生成）
+    // 这里先 enable，让用户手动选
     var l1El = document.getElementById('l1');
     l1El.innerHTML = '<option value="">-- Select L1 --</option>';
-    l1Keys.forEach(function(k) {
-      var o = document.createElement('option');
-      o.value = k; o.textContent = k;
-      l1El.appendChild(o);
-    });
     l1El.disabled = false;
-    // Reset L2/L3
-    document.getElementById('l2').innerHTML = '<option value="">-- Select L2 --</option>';
+    // 如果数据已加载，动态填充
+    if (dataLoaded) {
+      var rows = allData.filter(function(r){ return r[COL_SITE] === site; });
+      var set = {};
+      rows.forEach(function(r){ var v = r[COL_L1]; if(v) set[v]=1; });
+      Object.keys(set).sort().forEach(function(k){
+        var o = document.createElement('option'); o.value=k; o.textContent=k; l1El.appendChild(o);
+      });
+    }
+    document.getElementById('l2').innerHTML = '<option value="">-- All L2 --</option>';
     document.getElementById('l2').disabled = true;
     document.getElementById('l3').innerHTML = '<option value="">-- All L3 --</option>';
     document.getElementById('l3').disabled = true;
   }
+
   function populateL2() {
+    if (!dataLoaded) return;
     var site = document.getElementById('site').value;
     var l1 = document.getElementById('l1').value;
-    var rows = allData.filter(function(r) {
-      return (!site || r['grass_region'] === site) &&
-             (!l1 || r['cb_level1_global_be_category'] === l1);
+    var rows = allData.filter(function(r){
+      return r[COL_SITE]===site && r[COL_L1]===l1;
     });
-    var l2Set = {};
-    rows.forEach(function(r) { var v = r['level2_global_be_category']; if (v) l2Set[v] = 1; });
-    var l2Keys = Object.keys(l2Set).sort();
+    var set = {};
+    rows.forEach(function(r){ var v=r[COL_L2]; if(v) set[v]=1; });
     var l2El = document.getElementById('l2');
-    l2El.innerHTML = '<option value="">-- Select L2 --</option>';
-    l2Keys.forEach(function(k) {
-      var o = document.createElement('option');
-      o.value = k; o.textContent = k;
-      l2El.appendChild(o);
+    l2El.innerHTML = '<option value="">-- All L2 --</option>';
+    Object.keys(set).sort().forEach(function(k){
+      var o=document.createElement('option'); o.value=k; o.textContent=k; l2El.appendChild(o);
     });
     l2El.disabled = false;
     document.getElementById('l3').innerHTML = '<option value="">-- All L3 --</option>';
     document.getElementById('l3').disabled = true;
   }
-
   function populateL3() {
+    if (!dataLoaded) return;
     var site = document.getElementById('site').value;
     var l1 = document.getElementById('l1').value;
     var l2 = document.getElementById('l2').value;
-    var rows = allData.filter(function(r) {
-      return (!site || r['grass_region'] === site) &&
-             (!l1 || r['cb_level1_global_be_category'] === l1) &&
-             (!l2 || r['level2_global_be_category'] === l2);
+    var rows = allData.filter(function(r){
+      return r[COL_SITE]===site && r[COL_L1]===l1 && (!l2||r[COL_L2]===l2);
     });
-    var l3Set = {};
-    rows.forEach(function(r) { var v = r['level3_global_be_category']; if (v) l3Set[v] = 1; });
-    var l3Keys = Object.keys(l3Set).sort();
+    var set = {};
+    rows.forEach(function(r){ var v=r[COL_L3]; if(v) set[v]=1; });
     var l3El = document.getElementById('l3');
     l3El.innerHTML = '<option value="">-- All L3 --</option>';
-    if (l3Keys.length > 0) {
-      l3Keys.forEach(function(k) {
-        var o = document.createElement('option');
-        o.value = k; o.textContent = k;
-        l3El.appendChild(o);
-      });
-      l3El.disabled = false;
+    Object.keys(set).sort().forEach(function(k){
+      var o=document.createElement('option'); o.value=k; o.textContent=k; l3El.appendChild(o);
+    });
+    l3El.disabled = Object.keys(set).length === 0;
+  }
+
+  // ── Apply Filter ──
+  function applyFilter() {
+    var site = document.getElementById('site').value;
+    var l1 = document.getElementById('l1').value;
+    var rankedBy = document.getElementById('ranked_by').value;
+    if (!site || !l1 || !rankedBy) {
+      setStatus('⚠️ Please select Site, L1 Category and Ranked By', 'error');
+      return;
+    }
+    if (!dataLoaded) {
+      loadAndFilter();
     } else {
-      l3El.disabled = true;
+      doFilter();
     }
   }
 
-  // ============================================================
-  // FILTER & SORT
-  // ============================================================
-  function applyFilter() {
-    if (!dataLoaded) { setStatus('Data not loaded yet, please wait...', 'error'); return; }
+  function doFilter() {
     var site = document.getElementById('site').value;
     var l1 = document.getElementById('l1').value;
     var l2 = document.getElementById('l2').value;
     var l3 = document.getElementById('l3').value;
     var rankedBy = document.getElementById('ranked_by').value;
-
-    if (!site || !rankedBy) {
-      setStatus('Please select Site and Ranked By', 'error');
-      return;
-    }
+    var sortKey = rankedBy === 'ADO' ? COL_ADO : COL_ADG;
 
     filteredData = allData.filter(function(r) {
-      return r['grass_region'] === site &&
-             (!l1 || r['cb_level1_global_be_category'] === l1) &&
-             (!l2 || r['level2_global_be_category'] === l2) &&
-             (!l3 || r['level3_global_be_category'] === l3);
+      return r[COL_SITE] === site &&
+             r[COL_L1] === l1 &&
+             (!l2 || r[COL_L2] === l2) &&
+             (!l3 || r[COL_L3] === l3);
     });
 
-    // Sort by ranked field
-    var sortKey = rankedBy === 'ADO' ? 'ADO(SUM)' : 'ADG_usd(SUM)';
-    filteredData.sort(function(a, b) {
-      return (parseFloat(b[sortKey]) || 0) - (parseFloat(a[sortKey]) || 0);
+    filteredData.sort(function(a,b){
+      return (parseFloat(b[sortKey])||0) - (parseFloat(a[sortKey])||0);
     });
 
+    // 数据加载后填充 L1/L2/L3 下拉
+    populateL1FromSite();
+    document.getElementById('l1').value = l1;
+    if (l2) { populateL2(); document.getElementById('l2').value = l2; }
+    if (l3) { populateL3(); document.getElementById('l3').value = l3; }
+
+    setStatus('✅ ' + filteredData.length + ' SKUs found', 'success');
     currentPage = 1;
     renderResults();
   }
 
-  // ============================================================
-  // RENDER TABLE
-  // ============================================================
+  // ── 渲染表格 ──
   function renderResults() {
     var area = document.getElementById('resultArea');
     if (filteredData.length === 0) {
-      area.innerHTML = '<div class="empty-wrap">No results found. Try adjusting your filters.</div>';
+      area.innerHTML = '<div class="empty-wrap">😕 No results found. Try adjusting your filters.</div>';
       return;
     }
-
     var totalPages = Math.ceil(filteredData.length / PAGE_SIZE);
-    var start = (currentPage - 1) * PAGE_SIZE;
-    var pageData = filteredData.slice(start, start + PAGE_SIZE);
+    var start = (currentPage-1)*PAGE_SIZE;
+    var pageData = filteredData.slice(start, start+PAGE_SIZE);
+    var rankedBy = document.getElementById('ranked_by').value;
+
     var html = '<div class="result-header">';
-    html += '<span class="result-count">Found ' + filteredData.length + ' SKUs</span>';
+    html += '<span class="result-count">📦 ' + filteredData.length + ' SKUs found</span>';
     html += '<span>Page ' + currentPage + ' / ' + totalPages + '</span>';
     html += '</div>';
-    html += '<div class="table-wrap"><table>';
-    html += '<thead><tr>';
-    html += '<th>#</th>';
-    html += '<th>Image</th>';
-    html += '<th>Item Name</th>';
-    html += '<th>L1</th><th>L2</th><th>L3</th>';
-    html += '<th>Site</th>';
+    html += '<div class="table-wrap"><table><thead><tr>';
+    html += '<th>#</th><th>Image</th><th>Item Name</th>';
+    html += '<th>L2</th><th>L3</th><th>Seller</th>';
     html += '<th>Price (USD)</th>';
-    html += '<th>ADO</th>';
-    html += '<th>ADGMV (USD)</th>';
-    html += '<th>Ads ADO</th>';
-    html += '<th>Ads ROI</th>';
+    html += '<th>' + (rankedBy==='ADO'?'⭐ ADO':'ADO') + '</th>';
+    html += '<th>' + (rankedBy==='ADGMV'?'⭐ ADGMV (USD)':'ADGMV (USD)') + '</th>';
     html += '<th>Classification</th>';
-    html += '<th>Seller</th>';
-    html += '</tr></thead>';
-    html += '<tbody>';
+    html += '</tr></thead><tbody>';
 
     pageData.forEach(function(r, idx) {
-      var rank = start + idx + 1;
-      var imgSrc = r['product_image'] || '';
-      var link = r['product_link'] || '';
-      var name = r['item_name'] || '-';
-      var classification = r['classification'] || '';
-
+      var rank = start+idx+1;
+      var badgeClass = rank===1?'gold':rank===2?'silver':rank===3?'bronze':'';
+      var name = r[COL_NAME]||'-';
+      var link = r[COL_LINK]||'';
+      var img = r[COL_IMAGE]||'';
       html += '<tr>';
-      html += '<td><span class="rank-badge">' + rank + '</span></td>';
-      html += '<td>';
-      if (imgSrc) {
-        html += '<img class="product-img" src="' + imgSrc + '" onerror="this.style.display=\'none\'" />';
-      } else { html += '-'; }
-      html += '</td>';
-      html += '<td>';
-      if (link) {
-        html += '<a class="product-link" href="' + link + '" target="_blank">' + name + '</a>';
-      } else { html += name; }
-      html += '</td>';
-      html += '<td>' + (r['cb_level1_global_be_category'] || '-') + '</td>';
-      html += '<td>' + (r['level2_global_be_category'] || '-') + '</td>';
-      html += '<td>' + (r['level3_global_be_category'] || '-') + '</td>';
-      html += '<td>' + (r['grass_region'] || '-') + '</td>';
-      html += '<td>' + (r['price_usd'] ? '$' + parseFloat(r['price_usd']).toFixed(2) : '-') + '</td>';
-      html += '<td>' + (r['ADO(SUM)'] ? parseFloat(r['ADO(SUM)']).toFixed(0) : '-') + '</td>';
-      html += '<td>' + (r['ADG_usd(SUM)'] ? '$' + parseFloat(r['ADG_usd(SUM)']).toFixed(2) : '-') + '</td>';
-      html += '<td>' + (r['Ads_ADO(SUM)'] ? parseFloat(r['Ads_ADO(SUM)']).toFixed(0) : '-') + '</td>';
-      html += '<td>' + (r['Ads_ROI(RAW)'] ? parseFloat(r['Ads_ROI(RAW)']).toFixed(2) : '-') + '</td>';
-      html += '<td>' + (classification ? '<span class="tag">' + classification + '</span>' : '-') + '</td>';
-      html += '<td>' + (r['seller_name'] || '-') + '</td>';
+      html += '<td><span class="rank-badge '+badgeClass+'">'+rank+'</span></td>';
+      html += '<td>'+(img?'<img class="product-img" src="'+img+'" onerror="this.style.display=\'none\'"/>':'-')+'</td>';
+      html += '<td>'+(link?'<a class="product-link" href="'+link+'" target="_blank">'+name+'</a>':name)+'</td>';
+      html += '<td>'+(r[COL_L2]||'-')+'</td>';
+      html += '<td>'+(r[COL_L3]||'-')+'</td>';
+      html += '<td>'+(r[COL_SELLER]||'-')+'</td>';
+      html += '<td>'+(r[COL_PRICE]?'$'+parseFloat(r[COL_PRICE]).toFixed(2):'-')+'</td>';
+      html += '<td>'+(r[COL_ADO]?parseFloat(r[COL_ADO]).toFixed(0):'-')+'</td>';
+      html += '<td>'+(r[COL_ADG]?'$'+parseFloat(r[COL_ADG]).toFixed(2):'-')+'</td>';
+      html += '<td>'+(r[COL_CLASS]?'<span class="tag">'+r[COL_CLASS]+'</span>':'-')+'</td>';
       html += '</tr>';
     });
 
     html += '</tbody></table></div>';
 
-    // Pagination
     if (totalPages > 1) {
       html += '<div class="pagination">';
-      if (currentPage > 1) html += '<button class="page-btn" onclick="goPage(' + (currentPage-1) + ')">← Prev</button>';
-      var startP = Math.max(1, currentPage - 2);
-      var endP = Math.min(totalPages, currentPage + 2);
-      for (var p = startP; p <= endP; p++) {
-        html += '<button class="page-btn' + (p === currentPage ? ' active' : '') + '" onclick="goPage(' + p + ')">' + p + '</button>';
+      if (currentPage>1) html += '<button class="page-btn" onclick="goPage('+(currentPage-1)+')">← Prev</button>';
+      var s=Math.max(1,currentPage-2), e=Math.min(totalPages,currentPage+2);
+      for(var p=s;p<=e;p++){
+        html += '<button class="page-btn'+(p===currentPage?' active':'')+'" onclick="goPage('+p+')">'+p+'</button>';
       }
-      if (currentPage < totalPages) html += '<button class="page-btn" onclick="goPage(' + (currentPage+1) + ')">Next →</button>';
+      if (currentPage<totalPages) html += '<button class="page-btn" onclick="goPage('+(currentPage+1)+')">Next →</button>';
       html += '</div>';
     }
 
     area.innerHTML = html;
   }
 
-  function goPage(p) {
-    currentPage = p;
-    renderResults();
-    window.scrollTo(0, 0);
-  }
+  function goPage(p) { currentPage=p; renderResults(); window.scrollTo(0,0); }
 
-  // ============================================================
-  // UTILS
-  // ============================================================
-  function setStatus(msg, type) {
-    var el = document.getElementById('statusBar');
-    el.textContent = msg;
-    el.className = 'status-bar' + (type ? ' ' + type : '');
-  }
- // ============================================================
-  // EVENT LISTENERS
-  // ============================================================
-  document.getElementById('site').addEventListener('change', function() {
-    if (dataLoaded) populateL1();
-  });
-  document.getElementById('l1').addEventListener('change', function() {
-    if (dataLoaded) populateL2();
-  });
-  document.getElementById('l2').addEventListener('change', function() {
-    if (dataLoaded) populateL3();
-  });
-
-  // ============================================================
-  // INIT
-  // ============================================================
-  loadCSV();
+  // ── 事件绑定 ──
+  document.getElementById('site').addEventListener('change', function(){ populateL1FromSite(); });
+  document.getElementById('l1').addEventListener('change', function(){ if(dataLoaded) populateL2(); });
+  document.getElementById('l2').addEventListener('change', function(){ if(dataLoaded) populateL3(); });
 </script>
 </body>
-</html> 
+</html>
