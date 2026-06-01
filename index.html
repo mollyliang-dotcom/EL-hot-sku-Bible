@@ -221,7 +221,6 @@
     let products = [], filteredData = [], currentPage = 1;
     const pageSize = 40;
 
-    // 国旗图片：flagcdn.com，绕开 Windows emoji 不渲染问题
     function getFlagImgHtml(countryCode) {
         if (!countryCode || countryCode.length !== 2) return '';
         const code = countryCode.toLowerCase();
@@ -234,11 +233,9 @@
         setTimeout(function() { t.classList.remove('show'); }, 2000);
     }
 
-    // ✅ 修复1：toNum 先去掉千位分隔符逗号，再 parseFloat
-    // 解决 "3,284.23" → parseFloat 只读到 3 的问题
     const clean = function(s) { return (s || '').toString().replace(/[\t"]/g, '').trim(); };
     const toNum = function(s) {
-        const str = clean(s).replace(/,/g, '');   // 去掉千位分隔符，如 "3,284.23" → "3284.23"
+        const str = clean(s).replace(/,/g, '');
         return parseFloat(str) || 0;
     };
 
@@ -263,8 +260,8 @@
             imgUrl:      clean(arr[8]),
             price_usd:   toNum(arr[10]),
             ado:         toNum(arr[11]),
-            ado_mom:     toNum(arr[12]),   // 原表已是百分比格式，直接使用
-            adg_usd:     toNum(arr[13])    // ✅ 修复1生效：千位逗号已去除，3284.23 正确读取
+            ado_mom:     toNum(arr[12]),
+            adg_usd:     toNum(arr[13])
         };
     }
 
@@ -290,7 +287,18 @@
         if (n >= 0) { const lo = Math.floor(n/step)*step; return lo + '~' + (lo+step); }
         else { const hi = Math.ceil(n/step)*step; return (hi-step) + '~' + hi; }
     }
-    function adoRange(v) { return toRangeStr(v, 10); }
+
+    // ✅ ADO 区间脱敏规则：
+    // ADO < 100   → step 10  （如 45 → 40~50）
+    // ADO 100~999 → step 50  （如 340 → 300~350）
+    // ADO >= 1000 → step 100 （如 1580 → 1500~1600）
+    function adoRange(v) {
+        const n = parseFloat(v); if (isNaN(n) || n === 0) return null;
+        let step = n < 100 ? 10 : n < 1000 ? 50 : 100;
+        return toRangeStr(n, step);
+    }
+
+    // ADG 区间脱敏规则（不变）
     function adgRange(v) {
         const n = parseFloat(v); if (isNaN(n) || n === 0) return null;
         let step = n < 100 ? 10 : n < 500 ? 50 : n < 2000 ? 100 : n < 10000 ? 500 : 1000;
@@ -303,7 +311,6 @@
         const color = isZero ? '#9b8fa0' : (isPos ? '#27ae60' : '#eb4d4b');
         const fill  = isZero ? 'rgba(155,143,160,0.08)' : (isPos ? 'rgba(39,174,96,0.10)' : 'rgba(235,77,75,0.10)');
         const W = 64, H = 28, mid = 0.5;
-        // ✅ 修复2：原表已是百分比值（如12.3），用50作为基准振幅而非0.5
         const amp  = Math.min(0.45, Math.max(0.05, Math.abs(momVal) / 50 * 0.3));
         const endY = isZero ? mid : (isPos ? mid - amp : mid + amp);
         const ys   = [mid, mid+(endY-mid)*0.1, mid+(endY-mid)*0.35, mid+(endY-mid)*0.7, endY];
@@ -379,7 +386,6 @@
         vals.sort().forEach(function(v) { el.innerHTML += '<option value="' + v + '">' + v + '</option>'; });
     }
 
-    // Top New SKU：item_create_date 距今 <= 30 天（近30天）
     function isNewSku(arr) {
         const dateStr = clean(arr[7]);
         if (!dateStr) return false;
@@ -417,9 +423,6 @@
             const momVal   = item.ado_mom;
             const adoClass = momVal > 0 ? 'pos' : momVal < 0 ? 'neg' : 'zero';
             const adoIcon  = momVal > 0 ? '▲' : momVal < 0 ? '▼' : '–';
-
-            // ✅ 修复2：原表已是百分比格式，直接展示，不再 ×100
-            // 例：原值 12.3 → 展示 "+12.3%"；原值 -5.6 → 展示 "-5.6%"
             const momDisplay = (momVal > 0 ? '+' : '') + momVal.toFixed(1) + '%';
             const sparkSvg   = buildSparkline(momVal);
 
