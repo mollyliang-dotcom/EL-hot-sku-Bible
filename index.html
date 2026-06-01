@@ -98,11 +98,19 @@
         .site-tag .flag { font-size: 16px; line-height: 1; }
         .site-tag .code { font-size: 11px; font-weight: 700; letter-spacing: 0.5px; }
 
+        /* New SKU 角标 */
+        .new-badge {
+            position: absolute; top: 10px; right: 10px;
+            background: #F4A855; color: white;
+            font-size: 10px; font-weight: 700; padding: 3px 8px;
+            border-radius: 20px; z-index: 10; letter-spacing: 0.5px;
+        }
+
         .img-container {
             width: 100%; height: 220px; background: #fffafa; overflow: hidden;
             border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: center; cursor: zoom-in;
         }
-        .img-container img { max-width: 100%; max-height: 100%; object-fit: contain; transition: transform 0.4s ease; }
+        .img-container img { max-width: 100%; max-height: 100%; object-fit: contain; }
 
         .info { padding: 14px 16px; flex-grow: 1; display: flex; flex-direction: column; gap: 8px; }
         .item-title { font-weight: 600; font-size: 14px; line-height: 1.45; height: 40px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; color: var(--text); }
@@ -168,7 +176,7 @@
             <span class="filter-label">&#128202; &#25490;&#24207;</span>
             <select id="sortOrder" onchange="applyFilters()">
                 <option value="adoDesc" selected>&#21333;&#37327; (ADO) &#8595;</option>
-                <option value="adgDesc">&#38144;&#sellertag_&#38144;&#552;&#38989; (ADG) &#8595;</option>
+                <option value="adgDesc">&#38144;&#21806;&#39069; (ADG) &#8595;</option>
                 <option value="priceDesc">&#20215;&#26684; &#8595;</option>
             </select>
             <button class="btn-clear" onclick="clearFilters()">&#10005; &#37325;&#32622;</button>
@@ -189,7 +197,7 @@
             </select>
             <label class="switch-container">
                 <input type="checkbox" id="topNewFilter" onchange="applyFilters()">
-                <span style="font-size:13px;font-weight:500;">&#128293; Top New SKU</span>
+                <span style="font-size:13px;font-weight:500;">&#128293; Top New SKU&#160;<small style="font-weight:400;color:var(--text-muted);">&#8203;(&#36827;30&#22825;&#19978;&#26032;)</small></span>
             </label>
         </div>
     </div>
@@ -210,12 +218,7 @@
     let products = [], filteredData = [], currentPage = 1;
     const pageSize = 40;
 
-    /**
-     * 国旗 emoji 生成函数 —— 用 Unicode 区域指示符码点动态拼合
-     * 原理：每个字母 X 对应码点 0x1F1E6 + (X.charCodeAt(0) - 65)
-     * 例：P = 0x1F1F5, H = 0x1F1ED → 组合为 PH 国旗 🇵🇭
-     * 此方案完全不依赖 emoji 字符存储，任何编码环境均可正确渲染
-     */
+    // 国旗 emoji：Unicode 区域指示符码点动态拼合，不依赖字符存储
     function getFlagEmoji(countryCode) {
         if (!countryCode || countryCode.length !== 2) return '';
         const base = 0x1F1E6;
@@ -332,7 +335,7 @@
             initFilters(); applyFilters();
         } catch(e) {
             document.getElementById('productGrid').innerHTML =
-                `<div class="loading-state">⚠️ 数据加载失败：${e.message}</div>`;
+                `<div class="loading-state">&#9888;&#65039; 数据加载失败：${e.message}</div>`;
         }
     }
 
@@ -359,6 +362,26 @@
             .forEach(v => el.innerHTML += `<option value="${v}">${v}</option>`);
     }
 
+    /**
+     * ✅ Top New SKU 判断逻辑（修复版）
+     * 条件：item_create_date（arr[7]）距今 <= 30 天
+     * 页面加载时缓存「今天0点」时间戳，避免每次 filter 重复计算
+     */
+    function isNewSku(arr) {
+        const dateStr = clean(arr[7]);
+        if (!dateStr) return false;
+        const createTime = new Date(dateStr).getTime();
+        if (isNaN(createTime)) return false;
+        // 缓存今天 0 点时间戳
+        if (!window._todayMs) {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            window._todayMs = today.getTime();
+        }
+        const diffDays = (window._todayMs - createTime) / (1000 * 60 * 60 * 24);
+        return diffDays >= 0 && diffDays <= 30;
+    }
+
     function render(dataList, page = 1) {
         currentPage = page;
         const grid = document.getElementById('productGrid');
@@ -371,12 +394,12 @@
 
         pageData.forEach(arr => {
             const item = mapData(arr);
-
-            // ✅ 核心修复：用 Unicode 码点动态生成国旗 emoji，不依赖字符编码存储
-            const flag      = getFlagEmoji(item.site);   // e.g. "🇵🇭"
-            const siteCode  = item.site;                 // e.g. "PH"
-            // 卡片标签：flag 和 code 分开两个 span，CSS 控制字号，互不干扰
+            const flag     = getFlagEmoji(item.site);
+            const siteCode = item.site;
             const siteTagHtml = `<span class="flag">${flag}</span><span class="code">${siteCode}</span>`;
+
+            // New SKU 角标
+            const newBadge = isNewSku(arr) ? `<div class="new-badge">&#127381; NEW</div>` : '';
 
             const priceDisplay = item.price_usd ? `$${item.price_usd.toFixed(2)}` : '—';
             const adoRangeStr  = adoRange(item.ado);
@@ -400,6 +423,7 @@
             card.className = 'card';
             card.innerHTML = `
                 <div class="site-tag">${siteTagHtml}</div>
+                ${newBadge}
                 <div class="img-container" onclick="openModal('${item.imgUrl}')">
                     <img src="${item.imgUrl}" loading="lazy" onerror="this.src='https://via.placeholder.com/200?text=No+Image'">
                 </div>
@@ -443,34 +467,26 @@
     function changePage(d) { render(filteredData, currentPage+d); window.scrollTo(0,0); }
 
     function applyFilters() {
-        const q = document.getElementById('searchInput').value.toLowerCase();
-        const l1 = document.getElementById('l1Filter').value;
-        const l2 = document.getElementById('l2Filter').value;
-        const l3 = document.getElementById('l3Filter').value;
-        const site = document.getElementById('siteFilter').value;
+        const q        = document.getElementById('searchInput').value.toLowerCase();
+        const l1       = document.getElementById('l1Filter').value;
+        const l2       = document.getElementById('l2Filter').value;
+        const l3       = document.getElementById('l3Filter').value;
+        const site     = document.getElementById('siteFilter').value;
         const isTopNew = document.getElementById('topNewFilter').checked;
-        const sort = document.getElementById('sortOrder').value;
+        const sort     = document.getElementById('sortOrder').value;
 
         const filtered = products.filter(arr => {
             const i = mapData(arr);
-            return (!q    || i.title.toLowerCase().includes(q) || i.itemid.includes(q)) &&
-                   (!l1   || i.l1 === l1) &&
-                   (!l2   || i.l2 === l2) &&
-                   (!l3   || i.l3 === l3) &&
-                   (!site || i.site === site) &&
-                   (!isTopNew || isTopNewItem(arr));
+            return (!q       || i.title.toLowerCase().includes(q) || i.itemid.includes(q)) &&
+                   (!l1      || i.l1 === l1) &&
+                   (!l2      || i.l2 === l2) &&
+                   (!l3      || i.l3 === l3) &&
+                   (!site    || i.site === site) &&
+                   (!isTopNew || isNewSku(arr));   // ✅ 使用新的30天判断逻辑
         });
         filteredData = sortData(filtered, sort);
         document.getElementById('countDisplay').textContent = `共 ${filteredData.length} 款`;
         render(filteredData, 1);
-    }
-
-    function isTopNewItem(arr) {
-        if (!window._latestMonth) {
-            const months = products.map(p => clean(p[1])).filter(Boolean).sort();
-            window._latestMonth = months[months.length - 1];
-        }
-        return clean(arr[1]) === window._latestMonth;
     }
 
     function clearFilters() {
@@ -478,7 +494,7 @@
         ['l1Filter','l2Filter','l3Filter','siteFilter'].forEach(id => document.getElementById(id).value = '');
         document.getElementById('sortOrder').value = 'adoDesc';
         document.getElementById('topNewFilter').checked = false;
-        window._latestMonth = null;
+        window._todayMs = null;   // 重置今日时间戳缓存
         updateL2(); applyFilters();
     }
 
