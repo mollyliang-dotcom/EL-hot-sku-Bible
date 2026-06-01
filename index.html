@@ -90,7 +90,6 @@
         }
         .card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); border-color: #ffd6cc; }
 
-        /* 站点标签：左上角，使用图片国旗 */
         .site-tag {
             position: absolute; top: 10px; left: 10px;
             background: var(--primary); color: white;
@@ -98,15 +97,11 @@
             display: flex; align-items: center; gap: 5px;
         }
         .site-tag img.flag-img {
-            width: 18px; height: 13px;
-            border-radius: 2px;
-            object-fit: cover;
-            display: block;
-            flex-shrink: 0;
+            width: 18px; height: 13px; border-radius: 2px;
+            object-fit: cover; display: block; flex-shrink: 0;
         }
         .site-tag .code { font-size: 11px; font-weight: 700; letter-spacing: 0.5px; line-height: 1; }
 
-        /* New SKU 角标：右上角 */
         .new-badge {
             position: absolute; top: 10px; right: 10px;
             background: #F4A855; color: white;
@@ -163,37 +158,37 @@
 
 <header>
     <div class="header-inner">
-        <h1>Shopee EL &#36873;&#21697;&#25351;&#21335; <span class="badge">Internal</span></h1>
+        <h1>Shopee EL 选品指南 <span class="badge">Internal</span></h1>
         <div class="header-desc">
-            &#10024; <strong>&#31934;&#36873;&#28909;&#38144;&#21697;&#26032;&#21697;</strong> &middot; &#28020;&#30418;&#22810;&#31449;&#28857;&#65292;&#24110;&#20320;&#24555;&#36895;&#38145;&#23450;&#29190;&#27454;&#36873;&#21697;<br>
-            &#128202; ADO &#19982; ADG &#37319;&#29992;&#21306;&#38388;&#33073;&#25654;&#23637;&#31034;&#65292;&#20215;&#26684;&#20197; USD &#21407;&#20385;&#23637;&#31034;<br>
-            &#128274; &#25552;&#31034;&#65306;&#24403;&#21069;&#39029;&#38754;&#20165;&#20379;&#20869;&#37096;&#36873;&#21697;&#21442;&#32771;&#65292;&#19981;&#25552;&#20379;&#22806;&#37096;&#21830;&#21697;&#36339;&#36716;&#38142;&#25509;&#12290;
+            ✨ <strong>精选热销品新品</strong> · 涵盖多站点，帮你快速锁定爆款选品<br>
+            📊 ADO 与 ADG 采用区间脱敏展示，价格以 USD 原价展示<br>
+            🔒 提示：当前页面仅供内部选品参考，不提供外部商品跳转链接。
         </div>
-        <div class="last-update-tag" id="lastUpdateDisplay">&#25968;&#25454;&#26356;&#26032;&#20013;...</div>
+        <div class="last-update-tag" id="lastUpdateDisplay">数据更新中...</div>
     </div>
 </header>
 
 <div class="container">
     <div class="filter-section">
         <div class="filter-row">
-            <span class="filter-label">&#128269;</span>
-            <input type="text" id="searchInput" placeholder="&#25628;&#32034;&#26631;&#39064; / ID..." oninput="debouncedFilter()">
-            <select id="l1Filter" onchange="updateL2(); applyFilters()"><option value="">L1 &#31867;&#30446;</option></select>
-            <select id="l2Filter" onchange="updateL3(); applyFilters()"><option value="">L2 &#31867;&#30446;</option></select>
-            <select id="l3Filter" onchange="applyFilters()"><option value="">L3 &#31867;&#30446;</option></select>
-            <span class="filter-label">&#128202; &#25490;&#24207;</span>
+            <span class="filter-label">🔍</span>
+            <input type="text" id="searchInput" placeholder="搜索标题 / ID..." oninput="debouncedFilter()">
+            <select id="l1Filter" onchange="updateL2(); applyFilters()"><option value="">L1 类目</option></select>
+            <select id="l2Filter" onchange="updateL3(); applyFilters()"><option value="">L2 类目</option></select>
+            <select id="l3Filter" onchange="applyFilters()"><option value="">L3 类目</option></select>
+            <span class="filter-label">📊 排序</span>
             <select id="sortOrder" onchange="applyFilters()">
-                <option value="adoDesc" selected>&#21333;&#37327; (ADO) &#8595;</option>
-                <option value="adgDesc">&#38144;&#21806;&#39069; (ADG) &#8595;</option>
-                <option value="priceDesc">&#20215;&#26684; &#8595;</option>
+                <option value="adoDesc" selected>单量 (ADO) ↓</option>
+                <option value="adgDesc">销售额 (ADG) ↓</option>
+                <option value="priceDesc">价格 ↓</option>
             </select>
-            <button class="btn-clear" onclick="clearFilters()">&#10005; &#37325;&#32622;</button>
-            <span class="count-badge" id="countDisplay">&#8212;</span>
+            <button class="btn-clear" onclick="clearFilters()">✕ 重置</button>
+            <span class="count-badge" id="countDisplay">—</span>
         </div>
         <div class="filter-row">
-            <span class="filter-label">&#127759; &#31449;&#28857;</span>
+            <span class="filter-label">🌏 站点</span>
             <select id="siteFilter" onchange="applyFilters()">
-                <option value="">&#20840;&#37096;&#31449;&#28857;</option>
+                <option value="">全部站点</option>
                 <option value="BR">BR</option>
                 <option value="MX">MX</option>
                 <option value="MY">MY</option>
@@ -205,20 +200,20 @@
             </select>
             <label class="switch-container">
                 <input type="checkbox" id="topNewFilter" onchange="applyFilters()">
-                <span style="font-size:13px;font-weight:500;">&#128293; Top New SKU <small style="font-weight:400;color:var(--text-muted);">(&#36827;30&#22825;&#19978;&#26032;)</small></span>
+                <span style="font-size:13px;font-weight:500;">🔥 Top New SKU <small style="font-weight:400;color:var(--text-muted);">(近30天上新)</small></span>
             </label>
         </div>
     </div>
 
     <div class="product-grid" id="productGrid">
-        <div class="loading-state"><div class="loading-spinner"></div><div>&#25968;&#25454;&#21152;&#36733;&#20013;&#65292;&#35831;&#31295;&#20505;...</div></div>
+        <div class="loading-state"><div class="loading-spinner"></div><div>数据加载中，请稍候...</div></div>
     </div>
     <div class="pagination" id="pagination"></div>
 </div>
 
 <div id="imageModal" onclick="this.style.display='none'"><img id="modalImg" src=""></div>
 <div id="toast"></div>
-<footer>Shopee EL &#36873;&#21697;&#25351;&#21335;</footer>
+<footer>Shopee EL 选品指南</footer>
 
 <script>
     const DATA_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT2Z61Z0LxqcTmhjJe5KS_PimpDY4bM-aODeY0CuL9z3EX233KOqWMkXWJteyXQkexOMSqIO3O3rMI-/pub?gid=990111578&single=true&output=csv';
@@ -226,55 +221,52 @@
     let products = [], filteredData = [], currentPage = 1;
     const pageSize = 40;
 
-    /**
-     * 国旗方案：改用 flagcdn.com 图片，彻底绕开 emoji 字体渲染问题
-     * 用法：https://flagcdn.com/w40/{小写国家代码}.png
-     * 例：PH → https://flagcdn.com/w40/ph.png
-     * 该 CDN 免费、公开、无跨域限制，支持所有 ISO 3166-1 alpha-2 国家代码
-     */
+    // 国旗图片：flagcdn.com CDN，绕开 Windows emoji 不渲染问题
     function getFlagImgHtml(countryCode) {
         if (!countryCode || countryCode.length !== 2) return '';
         const code = countryCode.toLowerCase();
-        const url  = `https://flagcdn.com/w40/${code}.png`;
-        return `<img class="flag-img" src="${url}" alt="${countryCode}" onerror="this.style.display='none'">`;
+        return '<img class="flag-img" src="https://flagcdn.com/w40/' + code + '.png" alt="' + countryCode + '" onerror="this.style.display=\'none\'">';
     }
 
     function showToast(msg) {
         const t = document.getElementById('toast');
         t.textContent = msg; t.classList.add('show');
-        setTimeout(() => t.classList.remove('show'), 2000);
+        setTimeout(function() { t.classList.remove('show'); }, 2000);
     }
 
-    const clean = (s) => (s || '').toString().replace(/[\t"]/g, '').trim();
-    const toNum = (s) => parseFloat(clean(s)) || 0;
+    const clean = function(s) { return (s || '').toString().replace(/[\t"]/g, '').trim(); };
+    const toNum = function(s) { return parseFloat(clean(s)) || 0; };
 
     const KNOWN_SITES = ['BR', 'MX', 'MY', 'PH', 'SG', 'TH', 'TW', 'VN'];
     function normalizeSite(raw) {
         const s = clean(raw).toUpperCase();
-        for (const site of KNOWN_SITES) { if (s === site) return site; }
-        for (const site of KNOWN_SITES) { if (s.includes(site)) return site; }
+        for (let i = 0; i < KNOWN_SITES.length; i++) { if (s === KNOWN_SITES[i]) return KNOWN_SITES[i]; }
+        for (let i = 0; i < KNOWN_SITES.length; i++) { if (s.indexOf(KNOWN_SITES[i]) !== -1) return KNOWN_SITES[i]; }
         return s;
     }
 
-    const mapData = (arr) => ({
-        itemid:      clean(arr[0]),
-        year_month:  clean(arr[1]),
-        site:        normalizeSite(arr[2]),
-        title:       clean(arr[3]),
-        l1:          clean(arr[4]),
-        l2:          clean(arr[5]),
-        l3:          clean(arr[6]),
-        create_date: clean(arr[7]),
-        imgUrl:      clean(arr[8]),
-        price_usd:   toNum(arr[10]),
-        ado:         toNum(arr[11]),
-        ado_mom:     toNum(arr[12]),
-        adg_usd:     toNum(arr[13]),
-    });
+    function mapData(arr) {
+        return {
+            itemid:      clean(arr[0]),
+            year_month:  clean(arr[1]),
+            site:        normalizeSite(arr[2]),
+            title:       clean(arr[3]),
+            l1:          clean(arr[4]),
+            l2:          clean(arr[5]),
+            l3:          clean(arr[6]),
+            create_date: clean(arr[7]),
+            imgUrl:      clean(arr[8]),
+            price_usd:   toNum(arr[10]),
+            ado:         toNum(arr[11]),
+            ado_mom:     toNum(arr[12]),
+            adg_usd:     toNum(arr[13])
+        };
+    }
 
     function parseCSV(text) {
         const rows = [], lines = text.split(/\r?\n/);
-        for (const line of lines) {
+        for (let li = 0; li < lines.length; li++) {
+            const line = lines[li];
             if (!line.trim()) continue;
             const row = []; let cur = '', inQuote = false;
             for (let i = 0; i < line.length; i++) {
@@ -290,10 +282,10 @@
 
     function toRangeStr(val, step) {
         const n = parseFloat(val); if (isNaN(n)) return null;
-        if (n >= 0) { const lo = Math.floor(n/step)*step; return `${lo}~${lo+step}`; }
-        else { const hi = Math.ceil(n/step)*step; return `${hi-step}~${hi}`; }
+        if (n >= 0) { const lo = Math.floor(n/step)*step; return lo + '~' + (lo+step); }
+        else { const hi = Math.ceil(n/step)*step; return (hi-step) + '~' + hi; }
     }
-    const adoRange = (v) => toRangeStr(v, 10);
+    function adoRange(v) { return toRangeStr(v, 10); }
     function adgRange(v) {
         const n = parseFloat(v); if (isNaN(n) || n === 0) return null;
         let step = n < 100 ? 10 : n < 500 ? 50 : n < 2000 ? 100 : n < 10000 ? 500 : 1000;
@@ -309,72 +301,79 @@
         const amp  = Math.min(0.45, Math.max(0.05, Math.abs(momVal) / 0.5 * 0.3));
         const endY = isZero ? mid : (isPos ? mid - amp : mid + amp);
         const ys   = [mid, mid+(endY-mid)*0.1, mid+(endY-mid)*0.35, mid+(endY-mid)*0.7, endY];
-        const coords = ys.map((y,i) => ({ x: +((i*W/(ys.length-1)).toFixed(1)), y: +(y*H).toFixed(1) }));
-        let d = `M${coords[0].x},${coords[0].y}`;
+        const coords = ys.map(function(y,i) { return { x: +((i*W/(ys.length-1)).toFixed(1)), y: +(y*H).toFixed(1) }; });
+        let d = 'M' + coords[0].x + ',' + coords[0].y;
         for (let i = 1; i < coords.length; i++) {
             const cx = (coords[i-1].x + coords[i].x) / 2;
-            d += ` C${cx},${coords[i-1].y} ${cx},${coords[i].y} ${coords[i].x},${coords[i].y}`;
+            d += ' C' + cx + ',' + coords[i-1].y + ' ' + cx + ',' + coords[i].y + ' ' + coords[i].x + ',' + coords[i].y;
         }
         const last = coords[coords.length-1];
-        const fillD = `${d} L${last.x},${H} L${coords[0].x},${H} Z`;
-        return `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
-            <path d="${fillD}" fill="${fill}" stroke="none"/>
-            <path d="${d}" fill="none" stroke="${color}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-            <circle cx="${last.x}" cy="${last.y}" r="2.2" fill="${color}"/>
-        </svg>`;
+        const fillD = d + ' L' + last.x + ',' + H + ' L' + coords[0].x + ',' + H + ' Z';
+        return '<svg width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '" xmlns="http://www.w3.org/2000/svg">'
+            + '<path d="' + fillD + '" fill="' + fill + '" stroke="none"/>'
+            + '<path d="' + d + '" fill="none" stroke="' + color + '" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>'
+            + '<circle cx="' + last.x + '" cy="' + last.y + '" r="2.2" fill="' + color + '"/>'
+            + '</svg>';
     }
 
     function sortData(data, key) {
-        const s = [...data];
-        if (key === 'adoDesc')   s.sort((a,b) => toNum(b[11]) - toNum(a[11]));
-        if (key === 'adgDesc')   s.sort((a,b) => toNum(b[13]) - toNum(a[13]));
-        if (key === 'priceDesc') s.sort((a,b) => toNum(b[10]) - toNum(a[10]));
+        const s = data.slice();
+        if (key === 'adoDesc')   s.sort(function(a,b) { return toNum(b[11]) - toNum(a[11]); });
+        if (key === 'adgDesc')   s.sort(function(a,b) { return toNum(b[13]) - toNum(a[13]); });
+        if (key === 'priceDesc') s.sort(function(a,b) { return toNum(b[10]) - toNum(a[10]); });
         return s;
     }
 
     async function loadData() {
         try {
             const res = await fetch(DATA_URL);
-            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            if (!res.ok) throw new Error('HTTP ' + res.status);
             const rows = parseCSV(await res.text());
             if (rows.length < 2) throw new Error('数据为空');
-            products = rows.slice(1).filter(a => a[0] && a[0].trim());
-            const dates = products.map(p => new Date(clean(p[7]))).filter(d => !isNaN(d));
+            products = rows.slice(1).filter(function(a) { return a[0] && a[0].trim(); });
+            const dates = products.map(function(p) { return new Date(clean(p[7])); }).filter(function(d) { return !isNaN(d); });
             if (dates.length) {
                 document.getElementById('lastUpdateDisplay').textContent =
-                    `数据最后更新: ${new Date(Math.max(...dates)).toLocaleDateString('zh-CN')}`;
+                    '数据最后更新: ' + new Date(Math.max.apply(null, dates)).toLocaleDateString('zh-CN');
             }
             initFilters(); applyFilters();
         } catch(e) {
             document.getElementById('productGrid').innerHTML =
-                `<div class="loading-state">数据加载失败：${e.message}</div>`;
+                '<div class="loading-state">数据加载失败：' + e.message + '</div>';
         }
     }
 
     function initFilters() {
-        const l1s = [...new Set(products.map(p => clean(p[4])))].filter(Boolean).sort();
-        const el  = document.getElementById('l1Filter');
+        const l1s = []; const seen = {};
+        products.forEach(function(p) { const v = clean(p[4]); if (v && !seen[v]) { seen[v] = 1; l1s.push(v); } });
+        l1s.sort();
+        const el = document.getElementById('l1Filter');
         el.innerHTML = '<option value="">L1 类目</option>';
-        l1s.forEach(v => el.innerHTML += `<option value="${v}">${v}</option>`);
+        l1s.forEach(function(v) { el.innerHTML += '<option value="' + v + '">' + v + '</option>'; });
         updateL2();
     }
     function updateL2() {
         const l1 = document.getElementById('l1Filter').value;
         const el = document.getElementById('l2Filter');
         el.innerHTML = '<option value="">L2 类目</option>';
-        [...new Set(products.filter(p => !l1 || clean(p[4])===l1).map(p => clean(p[5])))].filter(Boolean).sort()
-            .forEach(v => el.innerHTML += `<option value="${v}">${v}</option>`);
+        const seen = {}, vals = [];
+        products.filter(function(p) { return !l1 || clean(p[4]) === l1; })
+            .forEach(function(p) { const v = clean(p[5]); if (v && !seen[v]) { seen[v] = 1; vals.push(v); } });
+        vals.sort().forEach(function(v) { el.innerHTML += '<option value="' + v + '">' + v + '</option>'; });
         updateL3();
     }
     function updateL3() {
-        const l1 = document.getElementById('l1Filter').value, l2 = document.getElementById('l2Filter').value;
+        const l1 = document.getElementById('l1Filter').value;
+        const l2 = document.getElementById('l2Filter').value;
         const el = document.getElementById('l3Filter');
         el.innerHTML = '<option value="">L3 类目</option>';
-        [...new Set(products.filter(p => (!l1||clean(p[4])===l1)&&(!l2||clean(p[5])===l2)).map(p => clean(p[6])))].filter(Boolean).sort()
-            .forEach(v => el.innerHTML += `<option value="${v}">${v}</option>`);
+        const seen = {}, vals = [];
+        products.filter(function(p) { return (!l1 || clean(p[4]) === l1) && (!l2 || clean(p[5]) === l2); })
+            .forEach(function(p) { const v = clean(p[6]); if (v && !seen[v]) { seen[v] = 1; vals.push(v); } });
+        vals.sort().forEach(function(v) { el.innerHTML += '<option value="' + v + '">' + v + '</option>'; });
     }
 
-    // Top New SKU：item_create_date 距今 <= 30 天
+    // Top New SKU：item_create_date 距今 <= 30 天（近30天）
     function isNewSku(arr) {
         const dateStr = clean(arr[7]);
         if (!dateStr) return false;
@@ -388,87 +387,78 @@
         return diffDays >= 0 && diffDays <= 30;
     }
 
-    function render(dataList, page = 1) {
+    function render(dataList, page) {
+        page = page || 1;
         currentPage = page;
         const grid = document.getElementById('productGrid');
         grid.innerHTML = '';
         const pageData = dataList.slice((page-1)*pageSize, page*pageSize);
         if (!pageData.length) {
-            grid.innerHTML = `<div class="loading-state">没有找到符合条件的商品</div>`;
+            grid.innerHTML = '<div class="loading-state">没有找到符合条件的商品</div>';
             renderPagination(0); return;
         }
 
-        pageData.forEach(arr => {
+        pageData.forEach(function(arr) {
             const item = mapData(arr);
+            const flagHtml    = getFlagImgHtml(item.site);
+            const siteTagHtml = flagHtml + '<span class="code">' + item.site + '</span>';
+            const newBadge    = isNewSku(arr) ? '<div class="new-badge">NEW</div>' : '';
 
-            // ✅ 国旗：使用 flagcdn.com 图片，完全绕开 emoji 字体渲染问题
-            const flagHtml  = getFlagImgHtml(item.site);   // <img src="https://flagcdn.com/w40/ph.png">
-            const siteTagHtml = `${flagHtml}<span class="code">${item.site}</span>`;
-
-            const newBadge     = isNewSku(arr) ? `<div class="new-badge">NEW</div>` : '';
-            const priceDisplay = item.price_usd ? `$${item.price_usd.toFixed(2)}` : '—';
+            const priceDisplay = item.price_usd ? '$' + item.price_usd.toFixed(2) : '—';
             const adoRangeStr  = adoRange(item.ado);
             const adgRangeStr  = adgRange(item.adg_usd);
             const momVal       = item.ado_mom;
             const adoClass     = momVal > 0 ? 'pos' : momVal < 0 ? 'neg' : 'zero';
-            const adoIcon      = momVal > 0 ? '&#9650;' : momVal < 0 ? '&#9660;' : '&ndash;';
-            const momDisplay   = `${momVal > 0 ? '+' : ''}${(momVal * 100).toFixed(1)}%`;
+            const adoIcon      = momVal > 0 ? '▲' : momVal < 0 ? '▼' : '–';
+            const momDisplay   = (momVal > 0 ? '+' : '') + (momVal * 100).toFixed(1) + '%';
             const sparkSvg     = buildSparkline(momVal);
 
-            const adoBlock = adoRangeStr ? `
-                <div class="ado-block">
-                    <span class="ado-label">ADO MoM</span>
-                    <span class="ado-range ${adoClass}">${adoIcon} ${momDisplay}</span>
-                    <div class="sparkline-wrap">${sparkSvg}</div>
-                </div>` : '';
+            const adoBlock = adoRangeStr ? (
+                '<div class="ado-block">'
+                + '<span class="ado-label">ADO MoM</span>'
+                + '<span class="ado-range ' + adoClass + '">' + adoIcon + ' ' + momDisplay + '</span>'
+                + '<div class="sparkline-wrap">' + sparkSvg + '</div>'
+                + '</div>'
+            ) : '';
 
-            const l3Html = item.l3 ? `<span class="pill pill-cat">${item.l3}</span>` : '';
+            const l3Html = item.l3 ? '<span class="pill pill-cat">' + item.l3 + '</span>' : '';
 
             const card = document.createElement('div');
             card.className = 'card';
-            card.innerHTML = `
-                <div class="site-tag">${siteTagHtml}</div>
-                ${newBadge}
-                <div class="img-container" onclick="openModal('${item.imgUrl}')">
-                    <img src="${item.imgUrl}" loading="lazy" onerror="this.src='https://via.placeholder.com/200?text=No+Image'">
-                </div>
-                <div class="info">
-                    <div class="item-title" title="${item.title}">${item.title}</div>
-                    <div class="price-row">
-                        <span class="price-label">价格</span>
-                        <span class="price-value">${priceDisplay}</span>
-                    </div>
-                    ${l3Html ? `<div class="meta-row">${l3Html}</div>` : ''}
-                    ${adoBlock}
-                    <div class="stats-row">
-                        <div class="stat-box">
-                            <div class="stat-label">ADO (件/日)</div>
-                            <div class="stat-value ado-val">${adoRangeStr || '—'}</div>
-                        </div>
-                        <div class="stat-box">
-                            <div class="stat-label">ADG (USD/日)</div>
-                            <div class="stat-value adg-val">${adgRangeStr ? '$'+adgRangeStr : '—'}</div>
-                        </div>
-                    </div>
-                    <div class="footer-row">
-                        <span>&#128197; ${item.create_date || item.year_month}</span>
-                        <span class="itemid-box" onclick="copyId('${item.itemid}')">ID: ${item.itemid}</span>
-                    </div>
-                </div>`;
+            card.innerHTML =
+                '<div class="site-tag">' + siteTagHtml + '</div>'
+                + newBadge
+                + '<div class="img-container" onclick="openModal(\'' + item.imgUrl + '\')">'
+                +   '<img src="' + item.imgUrl + '" loading="lazy" onerror="this.src=\'https://via.placeholder.com/200?text=No+Image\'">'
+                + '</div>'
+                + '<div class="info">'
+                +   '<div class="item-title" title="' + item.title + '">' + item.title + '</div>'
+                +   '<div class="price-row"><span class="price-label">价格</span><span class="price-value">' + priceDisplay + '</span></div>'
+                +   (l3Html ? '<div class="meta-row">' + l3Html + '</div>' : '')
+                +   adoBlock
+                +   '<div class="stats-row">'
+                +     '<div class="stat-box"><div class="stat-label">ADO (件/日)</div><div class="stat-value ado-val">' + (adoRangeStr || '—') + '</div></div>'
+                +     '<div class="stat-box"><div class="stat-label">ADG (USD/日)</div><div class="stat-value adg-val">' + (adgRangeStr ? '$' + adgRangeStr : '—') + '</div></div>'
+                +   '</div>'
+                +   '<div class="footer-row">'
+                +     '<span>📅 ' + (item.create_date || item.year_month) + '</span>'
+                +     '<span class="itemid-box" onclick="copyId(\'' + item.itemid + '\')">ID: ' + item.itemid + '</span>'
+                +   '</div>'
+                + '</div>';
             grid.appendChild(card);
         });
         renderPagination(dataList.length);
     }
 
     function openModal(src) { document.getElementById('modalImg').src = src; document.getElementById('imageModal').style.display = 'flex'; }
-    function copyId(id) { navigator.clipboard.writeText(id).then(() => showToast(`已复制 ID: ${id}`)); }
+    function copyId(id) { navigator.clipboard.writeText(id).then(function() { showToast('已复制 ID: ' + id); }); }
 
     function renderPagination(total) {
         const tp = Math.ceil(total/pageSize) || 1;
         document.getElementById('pagination').innerHTML =
-            `<button onclick="changePage(-1)" ${currentPage===1?'disabled':''}>&#8592;</button>
-             <span style="font-size:13px;color:var(--text-muted)">${currentPage} / ${tp}</span>
-             <button onclick="changePage(1)" ${currentPage>=tp?'disabled':''}>&#8594;</button>`;
+            '<button onclick="changePage(-1)" ' + (currentPage===1?'disabled':'') + '>←</button>'
+            + '<span style="font-size:13px;color:var(--text-muted)">' + currentPage + ' / ' + tp + '</span>'
+            + '<button onclick="changePage(1)" ' + (currentPage>=tp?'disabled':'') + '>→</button>';
     }
     function changePage(d) { render(filteredData, currentPage+d); window.scrollTo(0,0); }
 
@@ -481,9 +471,9 @@
         const isTopNew = document.getElementById('topNewFilter').checked;
         const sort     = document.getElementById('sortOrder').value;
 
-        const filtered = products.filter(arr => {
+        const filtered = products.filter(function(arr) {
             const i = mapData(arr);
-            return (!q       || i.title.toLowerCase().includes(q) || i.itemid.includes(q)) &&
+            return (!q       || i.title.toLowerCase().indexOf(q) !== -1 || i.itemid.indexOf(q) !== -1) &&
                    (!l1      || i.l1 === l1) &&
                    (!l2      || i.l2 === l2) &&
                    (!l3      || i.l3 === l3) &&
@@ -491,13 +481,13 @@
                    (!isTopNew || isNewSku(arr));
         });
         filteredData = sortData(filtered, sort);
-        document.getElementById('countDisplay').textContent = `共 ${filteredData.length} 款`;
+        document.getElementById('countDisplay').textContent = '共 ' + filteredData.length + ' 款';
         render(filteredData, 1);
     }
 
     function clearFilters() {
         document.getElementById('searchInput').value = '';
-        ['l1Filter','l2Filter','l3Filter','siteFilter'].forEach(id => document.getElementById(id).value = '');
+        ['l1Filter','l2Filter','l3Filter','siteFilter'].forEach(function(id) { document.getElementById(id).value = ''; });
         document.getElementById('sortOrder').value = 'adoDesc';
         document.getElementById('topNewFilter').checked = false;
         window._todayMs = null;
@@ -505,7 +495,7 @@
     }
 
     let timer;
-    const debouncedFilter = () => { clearTimeout(timer); timer = setTimeout(applyFilters, 300); };
+    function debouncedFilter() { clearTimeout(timer); timer = setTimeout(applyFilters, 300); }
     window.onload = loadData;
 </script>
 </body>
