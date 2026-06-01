@@ -104,7 +104,7 @@
             font-size: 11px; font-weight: 600; color: var(--text-muted);
             text-transform: uppercase; letter-spacing: 1px; white-space: nowrap;
         }
-        input[type="text"], input[type="number"], select {
+        input[type="text"], select {
             padding: 9px 14px;
             border: 1.5px solid var(--border);
             border-radius: var(--radius-sm);
@@ -112,10 +112,18 @@
             font-size: 13px; color: var(--text); background: var(--bg);
             transition: border-color 0.2s, box-shadow 0.2s; outline: none;
         }
-        input[type="text"]:focus, input[type="number"]:focus, select:focus {
+        input[type="text"]:focus, select:focus {
             border-color: var(--primary);
             box-shadow: 0 0 0 3px var(--primary-light);
         }
+
+        /* 排序下拉高亮激活态 */
+        select#sortOrder {
+            border-color: var(--primary);
+            color: var(--primary-dark);
+            font-weight: 600;
+        }
+
         .switch-container {
             display: flex; align-items: center; gap: 8px;
             background: var(--bg); padding: 6px 12px;
@@ -168,11 +176,6 @@
         .site-tag {
             position: absolute; top: 10px; left: 10px;
             background: var(--primary); color: white;
-            font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 20px; z-index: 10;
-        }
-        .special-tag {
-            position: absolute; top: 10px; right: 10px;
-            background: linear-gradient(90deg, var(--accent), #e0852a); color: white;
             font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 20px; z-index: 10;
         }
         .img-container {
@@ -246,7 +249,13 @@
         #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
         .pagination { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 32px 0; }
-        .pagination button { padding: 8px 16px; border: 1.5px solid var(--border); background: white; cursor: pointer; border-radius: var(--radius-sm); }
+        .pagination button {
+            padding: 8px 16px; border: 1.5px solid var(--border);
+            background: white; cursor: pointer; border-radius: var(--radius-sm);
+            font-family: 'DM Sans', sans-serif; transition: all 0.2s;
+        }
+        .pagination button:hover:not(:disabled) { border-color: var(--primary); color: var(--primary); }
+        .pagination button:disabled { opacity: 0.4; cursor: not-allowed; }
 
         footer { text-align: center; color: var(--text-muted); font-size: 11px; padding: 40px; border-top: 1px solid var(--border); }
     </style>
@@ -267,6 +276,7 @@
 
 <div class="container">
     <div class="filter-section">
+        <!-- 第一行：搜索 + 类目 + 排序 -->
         <div class="filter-row">
             <span class="filter-label">🔍</span>
             <input type="text" id="searchInput" placeholder="搜索标题 / ID..." oninput="debouncedFilter()">
@@ -281,21 +291,19 @@
                 <option value="">L3 类目</option>
             </select>
 
-            <span class="filter-label">价格(USD)</span>
-            <input type="number" id="minPrice" placeholder="Min" oninput="debouncedFilter()" style="width:70px;">
-            <input type="number" id="maxPrice" placeholder="Max" oninput="debouncedFilter()" style="width:70px;">
-
+            <!-- 排序：三个选项，默认 ADO 降序 -->
+            <span class="filter-label">📊 排序</span>
             <select id="sortOrder" onchange="applyFilters()">
-                <option value="default">默认排序</option>
-                <option value="priceAsc">价格 ↑</option>
+                <option value="adoDesc" selected>单量 (ADO) ↓</option>
+                <option value="adgDesc">销售额 (ADG) ↓</option>
                 <option value="priceDesc">价格 ↓</option>
-                <option value="adoDesc">ADO ↓</option>
             </select>
 
             <button class="btn-clear" onclick="clearFilters()">✕ 重置</button>
             <span class="count-badge" id="countDisplay">—</span>
         </div>
 
+        <!-- 第二行：站点 + Top New -->
         <div class="filter-row">
             <span class="filter-label">🌏 站点</span>
             <select id="siteFilter" onchange="applyFilters()">
@@ -335,7 +343,11 @@
 
     let products = [], filteredData = [], currentPage = 1;
     const pageSize = 40;
-    const siteFlag = { BR:'🇧🇷', MX:'🇲🇽', MY:'🇲🇾', PH:'🇵🇭', SG:'🇸🇬', TH:'🇹🇭', TW:'🇹🇼', VN:'🇻🇳' };
+
+    const siteFlag = {
+        BR: '🇧🇷', MX: '🇲🇽', MY: '🇲🇾', PH: '🇵🇭',
+        SG: '🇸🇬', TH: '🇹🇭', TW: '🇹🇼', VN: '🇻🇳'
+    };
 
     function showToast(msg) {
         const t = document.getElementById('toast');
@@ -350,16 +362,16 @@
      * CSV 字段映射：
      * arr[0]  item_id
      * arr[1]  year_month
-     * arr[2]  grass_region                  → 站点 site
-     * arr[3]  item_name                     → 商品标题
+     * arr[2]  grass_region                  → site
+     * arr[3]  item_name
      * arr[4]  cb_level1_global_be_category  → L1
      * arr[5]  level2_global_be_category     → L2
      * arr[6]  level3_global_be_category     → L3
      * arr[7]  item_create_date
      * arr[8]  product_image
      * arr[9]  product_link
-     * arr[10] price_usd                     → 直接展示，不脱敏
-     * arr[11] ADO(SUM)                      → 区间脱敏，每10一档
+     * arr[10] price_usd                     → 直接展示
+     * arr[11] ADO(SUM)                      → 区间脱敏，每10一档；默认排序字段
      * arr[12] mom_ado_growth_contri(SUM)    → sparkline 方向
      * arr[13] ADG_usd(SUM)                  → 区间脱敏，动态档位
      */
@@ -380,6 +392,7 @@
         adg_usd:     toNum(arr[13]),
     });
 
+    /* ── CSV 解析 ──────────────────────────────────────────────── */
     function parseCSV(text) {
         const rows = [];
         const lines = text.split(/\r?\n/);
@@ -404,6 +417,7 @@
         return rows;
     }
 
+    /* ── 区间脱敏 ──────────────────────────────────────────────── */
     function toRangeStr(val, step) {
         const n = parseFloat(val);
         if (isNaN(n)) return null;
@@ -422,14 +436,15 @@
         const n = parseFloat(v);
         if (isNaN(n) || n === 0) return null;
         let step;
-        if      (n < 100)    step = 10;
-        else if (n < 500)    step = 50;
-        else if (n < 2000)   step = 100;
-        else if (n < 10000)  step = 500;
-        else                 step = 1000;
+        if      (n < 100)   step = 10;
+        else if (n < 500)   step = 50;
+        else if (n < 2000)  step = 100;
+        else if (n < 10000) step = 500;
+        else                step = 1000;
         return toRangeStr(n, step);
     }
 
+    /* ── ADO MoM Sparkline ─────────────────────────────────────── */
     function buildSparkline(adoMomStr, itemid) {
         const val = parseFloat(adoMomStr);
         if (isNaN(val)) return '';
@@ -463,6 +478,24 @@
         </svg>`;
     }
 
+    /* ── 排序函数 ──────────────────────────────────────────────── */
+    function sortData(data, sortKey) {
+        const sorted = [...data];
+        switch (sortKey) {
+            case 'adoDesc':  // 单量 ADO(SUM) 降序（默认）
+                sorted.sort((a, b) => toNum(b[11]) - toNum(a[11]));
+                break;
+            case 'adgDesc':  // 销售额 ADG_usd(SUM) 降序
+                sorted.sort((a, b) => toNum(b[13]) - toNum(a[13]));
+                break;
+            case 'priceDesc': // 价格 price_usd 降序
+                sorted.sort((a, b) => toNum(b[10]) - toNum(a[10]));
+                break;
+        }
+        return sorted;
+    }
+
+    /* ── 数据加载 ──────────────────────────────────────────────── */
     async function loadData() {
         try {
             const res = await fetch(DATA_URL);
@@ -482,7 +515,7 @@
             }
 
             initFilters();
-            applyFilters();
+            applyFilters();  // 初始加载默认按 ADO 降序（sortOrder 默认值为 adoDesc）
         } catch (e) {
             document.getElementById('productGrid').innerHTML = `
                 <div class="loading-state">
@@ -493,6 +526,7 @@
         }
     }
 
+    /* ── 筛选器初始化 ──────────────────────────────────────────── */
     function initFilters() {
         const l1s  = [...new Set(products.map(p => clean(p[4])))].filter(Boolean).sort();
         const l1El = document.getElementById('l1Filter');
@@ -523,6 +557,7 @@
             .forEach(v => s.innerHTML += `<option value="${v}">${v}</option>`);
     }
 
+    /* ── 卡片渲染 ──────────────────────────────────────────────── */
     function render(dataList, page = 1) {
         currentPage = page;
         const grid = document.getElementById('productGrid');
@@ -537,7 +572,8 @@
 
         pageData.forEach(arr => {
             const item = mapData(arr);
-            const flag = siteFlag[item.site] || '🌐';
+            const emoji = siteFlag[item.site] || '🌐';
+            const siteLabel = item.site ? `${emoji} ${item.site}` : '🌐';
 
             const priceDisplay = item.price_usd ? `$${item.price_usd.toFixed(2)}` : '—';
             const adoRangeStr  = adoRange(item.ado);
@@ -560,7 +596,7 @@
             const card = document.createElement('div');
             card.className = 'card';
             card.innerHTML = `
-                <div class="site-tag">${flag} ${item.site}</div>
+                <div class="site-tag">${siteLabel}</div>
                 <div class="img-container" onclick="openModal('${item.imgUrl}')">
                     <img src="${item.imgUrl}" loading="lazy" onerror="this.src='https://via.placeholder.com/200?text=No+Image'">
                 </div>
@@ -604,12 +640,13 @@
         const totalPages = Math.ceil(total / pageSize) || 1;
         document.getElementById('pagination').innerHTML = `
             <button onclick="changePage(-1)" ${currentPage === 1 ? 'disabled' : ''}>←</button>
-            <span>${currentPage} / ${totalPages}</span>
+            <span style="font-size:13px;color:var(--text-muted)">${currentPage} / ${totalPages}</span>
             <button onclick="changePage(1)" ${currentPage >= totalPages ? 'disabled' : ''}>→</button>`;
     }
 
     function changePage(d) { render(filteredData, currentPage + d); window.scrollTo(0, 0); }
 
+    /* ── 过滤 & 排序 ───────────────────────────────────────────── */
     function applyFilters() {
         const q        = document.getElementById('searchInput').value.toLowerCase();
         const l1       = document.getElementById('l1Filter').value;
@@ -617,10 +654,10 @@
         const l3       = document.getElementById('l3Filter').value;
         const site     = document.getElementById('siteFilter').value;
         const isTopNew = document.getElementById('topNewFilter').checked;
-        const minP     = parseFloat(document.getElementById('minPrice').value) || 0;
-        const maxP     = parseFloat(document.getElementById('maxPrice').value) || Infinity;
+        const sort     = document.getElementById('sortOrder').value;  // 始终有值
 
-        filteredData = products.filter(arr => {
+        // 过滤
+        const filtered = products.filter(arr => {
             const i = mapData(arr);
             const matchTopNew = !isTopNew || isTopNewItem(arr);
             return (!q    || i.title.toLowerCase().includes(q) || i.itemid.includes(q)) &&
@@ -628,14 +665,11 @@
                    (!l2   || i.l2 === l2) &&
                    (!l3   || i.l3 === l3) &&
                    (!site || i.site === site) &&
-                   matchTopNew &&
-                   (i.price_usd >= minP && (maxP === Infinity || i.price_usd <= maxP));
+                   matchTopNew;
         });
 
-        const sort = document.getElementById('sortOrder').value;
-        if      (sort === 'priceAsc')  filteredData.sort((a, b) => toNum(a[10]) - toNum(b[10]));
-        else if (sort === 'priceDesc') filteredData.sort((a, b) => toNum(b[10]) - toNum(a[10]));
-        else if (sort === 'adoDesc')   filteredData.sort((a, b) => toNum(b[11]) - toNum(a[11]));
+        // 排序（始终执行，默认 adoDesc）
+        filteredData = sortData(filtered, sort);
 
         document.getElementById('countDisplay').textContent = `共 ${filteredData.length} 款`;
         render(filteredData, 1);
@@ -649,10 +683,11 @@
         return clean(arr[1]) === window._latestMonth;
     }
 
+    /* ── 重置：恢复默认排序为 ADO 降序 ────────────────────────── */
     function clearFilters() {
-        ['searchInput', 'minPrice', 'maxPrice'].forEach(id => document.getElementById(id).value = '');
+        document.getElementById('searchInput').value = '';
         ['l1Filter', 'l2Filter', 'l3Filter', 'siteFilter'].forEach(id => document.getElementById(id).value = '');
-        document.getElementById('sortOrder').value = 'default';
+        document.getElementById('sortOrder').value = 'adoDesc';  // 重置回默认排序
         document.getElementById('topNewFilter').checked = false;
         window._latestMonth = null;
         updateL2();
@@ -666,4 +701,3 @@
 </script>
 </body>
 </html>
-
