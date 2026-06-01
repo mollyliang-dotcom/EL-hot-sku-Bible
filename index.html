@@ -1,402 +1,669 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>EL Hot SKU Bible</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Segoe UI', sans-serif; background: #f5f7fa; min-height: 100vh; padding: 20px; }
-    .top-bar { background: white; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.10); padding: 28px 32px; max-width: 1200px; margin: 0 auto 24px auto; }
-    h2 { font-size: 22px; font-weight: 700; color: #ee4d2d; margin-bottom: 20px; text-align: center; }
-    .filters { display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-end; }
-    .form-group { display: flex; flex-direction: column; flex: 1; min-width: 140px; }
-    label { font-size: 12px; font-weight: 600; color: #555; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.4px; }
-    select { padding: 9px 12px; border: 1.5px solid #e0e0e0; border-radius: 8px; font-size: 14px; color: #333; background: #fafafa; outline: none; transition: border 0.2s; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24'%3E%3Cpath fill='%23aaa' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; }
-    select:focus { border-color: #ee4d2d; background: #fff; }
-    select:disabled { background: #f0f0f0; color: #aaa; cursor: not-allowed; }
-    .btn { padding: 10px 28px; background: #ee4d2d; color: white; border: none; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; transition: background 0.2s; white-space: nowrap; height: 40px; }
-    .btn:hover { background: #d44227; }
-    .btn:disabled { background: #ccc; cursor: not-allowed; }
-    .required-note { font-size: 11px; color: #ee4d2d; margin-top: 4px; }
-    .progress-wrap { margin-top: 16px; display: none; }
-    .progress-bar-bg { background: #f0f0f0; border-radius: 99px; height: 8px; overflow: hidden; }
-    .progress-bar { height: 8px; background: #ee4d2d; border-radius: 99px; width: 0%; transition: width 0.3s; }
-    .progress-text { font-size: 12px; color: #888; margin-top: 6px; text-align: center; }
-    .result-area { max-width: 1200px; margin: 0 auto; }
-    .result-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; font-size: 14px; color: #666; }
-    .result-count { font-weight: 600; color: #333; }
-    .table-wrap { background: white; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    thead tr { background: #ee4d2d; color: white; }
-    thead th { padding: 12px 14px; text-align: left; font-weight: 600; white-space: nowrap; }
-    tbody tr { border-bottom: 1px solid #f0f0f0; }
-    tbody tr:hover { background: #fff8f7; }
-    tbody td { padding: 10px 14px; vertical-align: middle; color: #333; }
-    .product-img { width: 60px; height: 60px; object-fit: cover; border-radius: 8px; border: 1px solid #eee; }
-    .product-link { color: #ee4d2d; text-decoration: none; font-weight: 500; }
-    .product-link:hover { text-decoration: underline; }
-    .rank-badge { display: inline-block; background: #ee4d2d; color: white; border-radius: 50%; width: 28px; height: 28px; line-height: 28px; text-align: center; font-weight: 700; font-size: 13px; }
-    .rank-badge.gold { background: #f1c40f; color: #333; }
-    .rank-badge.silver { background: #bdc3c7; color: #333; }
-    .rank-badge.bronze { background: #e67e22; }
-    .tag { display: inline-block; background: #fff0ed; color: #ee4d2d; border-radius: 4px; padding: 2px 8px; font-size: 11px; font-weight: 600; }
-    .pagination { display: flex; justify-content: center; gap: 8px; margin-top: 20px; flex-wrap: wrap; }
-    .page-btn { padding: 7px 14px; border: 1.5px solid #e0e0e0; border-radius: 6px; background: white; cursor: pointer; font-size: 13px; transition: all 0.2s; }
-    .page-btn:hover { border-color: #ee4d2d; color: #ee4d2d; }
-    .page-btn.active { background: #ee4d2d; color: white; border-color: #ee4d2d; }
-    .empty-wrap { text-align: center; padding: 60px; color: #999; font-size: 15px; background: white; border-radius: 12px; }
-    .status-bar { text-align: center; margin-top: 14px; font-size: 14px; font-weight: 500; min-height: 20px; }
-    .status-bar.error { color: #e74c3c; }
-    .status-bar.loading { color: #f39c12; }
-    .status-bar.success { color: #27ae60; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopee EL 选品指南</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #EE4D2D;
+            --primary-light: #fff5f2;
+            --primary-dark: #d73211;
+            --accent: #F4A855;
+            --bg: #faf8f9;
+            --card-bg: #ffffff;
+            --text: #2d2038;
+            --text-muted: #9b8fa0;
+            --border: #f0e8ed;
+            --success: #27ae60;
+            --info: #2980b9;
+            --tag-bg: #fff3f7;
+            --danger: #eb4d4b;
+            --shadow: 0 2px 16px rgba(238,77,45,0.07);
+            --shadow-hover: 0 8px 32px rgba(238,77,45,0.16);
+            --radius: 16px;
+            --radius-sm: 8px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'DM Sans', 'PingFang SC', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        header {
+            background: linear-gradient(135deg, #FF6633 0%, #EE4D2D 50%, #D02D11 100%);
+            color: white;
+            padding: 36px 40px 28px;
+            position: relative;
+            overflow: hidden;
+        }
+        header::before {
+            content: '';
+            position: absolute; top: -60px; right: -60px;
+            width: 280px; height: 280px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
+        }
+        .header-inner { max-width: 1280px; margin: 0 auto; position: relative; z-index: 1; }
+        header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        header h1 .badge {
+            background: rgba(255,255,255,0.25);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        .header-desc {
+            margin-top: 14px;
+            background: rgba(0,0,0,0.1);
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            line-height: 1.8;
+            max-width: 700px;
+            border-left: 3px solid rgba(255,255,255,0.7);
+        }
+        .last-update-tag {
+            position: absolute; top: 20px; right: 40px;
+            background: rgba(255,255,255,0.15);
+            padding: 6px 12px; border-radius: 30px; font-size: 12px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .container { max-width: 1280px; margin: 0 auto; padding: 28px 24px; }
+
+        .filter-section {
+            background: var(--card-bg);
+            padding: 20px 24px;
+            border-radius: var(--radius);
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+        .filter-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+        .filter-row + .filter-row { margin-top: 12px; }
+        .filter-label {
+            font-size: 11px; font-weight: 600; color: var(--text-muted);
+            text-transform: uppercase; letter-spacing: 1px; white-space: nowrap;
+        }
+        input[type="text"], input[type="number"], select {
+            padding: 9px 14px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px; color: var(--text); background: var(--bg);
+            transition: border-color 0.2s, box-shadow 0.2s; outline: none;
+        }
+        input[type="text"]:focus, input[type="number"]:focus, select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+        .switch-container {
+            display: flex; align-items: center; gap: 8px;
+            background: var(--bg); padding: 6px 12px;
+            border-radius: var(--radius-sm); border: 1.5px solid var(--border); cursor: pointer;
+        }
+        .switch-container input { cursor: pointer; }
+        .count-badge {
+            margin-left: auto;
+            background: var(--primary-light); color: var(--primary-dark);
+            font-weight: 700; font-size: 13px; padding: 6px 14px; border-radius: 20px;
+        }
+        .btn-clear {
+            padding: 9px 16px; background: transparent;
+            border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+            color: var(--text-muted); font-family: 'DM Sans', sans-serif;
+            font-size: 13px; cursor: pointer; transition: all 0.2s;
+        }
+        .btn-clear:hover { border-color: var(--primary); color: var(--primary); }
+
+        .loading-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+        }
+        .loading-spinner {
+            width: 36px; height: 36px;
+            border: 3px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 16px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--card-bg); border-radius: var(--radius);
+            overflow: hidden; border: 1px solid var(--border);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            position: relative; display: flex; flex-direction: column;
+        }
+        .card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); border-color: #ffd6cc; }
+
+        .site-tag {
+            position: absolute; top: 10px; left: 10px;
+            background: var(--primary); color: white;
+            font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 20px; z-index: 10;
+        }
+        .special-tag {
+            position: absolute; top: 10px; right: 10px;
+            background: linear-gradient(90deg, var(--accent), #e0852a); color: white;
+            font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 20px; z-index: 10;
+        }
+        .img-container {
+            width: 100%; height: 220px; background: #fffafa; overflow: hidden;
+            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: center; cursor: zoom-in;
+        }
+        .img-container img { max-width: 100%; max-height: 100%; object-fit: contain; transition: transform 0.4s ease; }
+
+        .info { padding: 14px 16px; flex-grow: 1; display: flex; flex-direction: column; gap: 8px; }
+
+        .item-title {
+            font-weight: 600; font-size: 14px; line-height: 1.45; height: 40px;
+            overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+            color: var(--text);
+        }
+
+        .price-row { display: flex; align-items: baseline; gap: 6px; }
+        .price-label { font-size: 11px; color: var(--text-muted); font-weight: 500; }
+        .price-value { color: var(--primary); font-size: 18px; font-weight: 700; }
+
+        .meta-row { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
+        .pill { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 20px; border: 1px solid transparent; }
+        .pill-cat { background: var(--tag-bg); color: var(--primary-dark); border-color: #f5c5d2; }
+
+        .ado-block {
+            display: flex; align-items: center; gap: 8px;
+            background: var(--bg); border: 1px solid var(--border);
+            border-radius: var(--radius-sm); padding: 6px 10px;
+        }
+        .ado-label { font-size: 10px; color: var(--text-muted); font-weight: 600; white-space: nowrap; }
+        .ado-range { font-size: 12px; font-weight: 700; white-space: nowrap; }
+        .ado-range.pos { color: var(--success); }
+        .ado-range.neg { color: var(--danger); }
+        .ado-range.zero { color: var(--text-muted); }
+        .sparkline-wrap { flex: 1; display: flex; align-items: center; justify-content: flex-end; }
+        .sparkline-wrap svg { display: block; }
+
+        .stats-row { display: flex; gap: 8px; }
+        .stat-box {
+            flex: 1; background: var(--bg); border: 1px solid var(--border);
+            border-radius: var(--radius-sm); padding: 6px 10px; text-align: center;
+        }
+        .stat-label { font-size: 10px; color: var(--text-muted); font-weight: 600; margin-bottom: 2px; }
+        .stat-value { font-size: 12px; font-weight: 700; white-space: nowrap; }
+        .stat-value.ado-val { color: var(--success); }
+        .stat-value.adg-val { color: var(--info); }
+
+        .footer-row {
+            display: flex; justify-content: space-between; align-items: center;
+            border-top: 1px solid var(--border); padding-top: 10px; margin-top: auto;
+            font-size: 11px; color: var(--text-muted);
+        }
+        .itemid-box {
+            font-family: monospace; background: var(--bg); padding: 2px 7px;
+            border-radius: 4px; border: 1px dashed #ddd; cursor: pointer;
+        }
+
+        #imageModal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); z-index: 9999;
+            justify-content: center; align-items: center; cursor: zoom-out;
+        }
+        #imageModal img { max-width: 90vw; max-height: 90vh; border-radius: 8px; }
+
+        #toast {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(20px);
+            background: #333; color: white; padding: 10px 22px; border-radius: 30px;
+            font-size: 13px; opacity: 0; transition: all 0.3s; z-index: 10000;
+        }
+        #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        .pagination { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 32px 0; }
+        .pagination button { padding: 8px 16px; border: 1.5px solid var(--border); background: white; cursor: pointer; border-radius: var(--radius-sm); }
+
+        footer { text-align: center; color: var(--text-muted); font-size: 11px; padding: 40px; border-top: 1px solid var(--border); }
+    </style>
 </head>
 <body>
 
-<div class="top-bar">
-  <h2>🛒 Shopee EL Hot SKU Bible</h2>
-  <div class="filters">
-    <div class="form-group">
-      <label>Site <span style="color:#ee4d2d">*</span></label>
-      <select id="site">
-        <option value="">-- Select --</option>
-        <option value="BR">BR</option>
-        <option value="MX">MX</option>
-        <option value="MY">MY</option>
-        <option value="PH">PH</option>
-        <option value="SG">SG</option>
-        <option value="TH">TH</option>
-        <option value="TW">TW</option>
-        <option value="VN">VN</option>
-        <option value="ID">ID</option>
-      </select>
+<header>
+    <div class="header-inner">
+        <h1>🛍️ Shopee EL 选品指南 <span class="badge">External</span></h1>
+        <div class="header-desc">
+            ✨ <strong>精选热销品新品</strong> · 涵盖多站点，帮你快速锁定爆款选品<br>
+            📊 ADO 与 ADG 采用区间脱敏展示，价格以 USD 原价展示<br>
+            🔒 提示：当前页面仅供内部选品参考，不提供外部商品跳转链接。
+        </div>
+        <div class="last-update-tag" id="lastUpdateDisplay">数据更新中...</div>
     </div>
-    <div class="form-group">
-      <label>L1 Category <span style="color:#ee4d2d">*</span></label>
-      <select id="l1" disabled>
-        <option value="">-- Select L1 --</option>
-      </select>
+</header>
+
+<div class="container">
+    <div class="filter-section">
+        <div class="filter-row">
+            <span class="filter-label">🔍</span>
+            <input type="text" id="searchInput" placeholder="搜索标题 / ID..." oninput="debouncedFilter()">
+
+            <select id="l1Filter" onchange="updateL2(); applyFilters()">
+                <option value="">L1 类目</option>
+            </select>
+            <select id="l2Filter" onchange="updateL3(); applyFilters()">
+                <option value="">L2 类目</option>
+            </select>
+            <select id="l3Filter" onchange="applyFilters()">
+                <option value="">L3 类目</option>
+            </select>
+
+            <span class="filter-label">价格(USD)</span>
+            <input type="number" id="minPrice" placeholder="Min" oninput="debouncedFilter()" style="width:70px;">
+            <input type="number" id="maxPrice" placeholder="Max" oninput="debouncedFilter()" style="width:70px;">
+
+            <select id="sortOrder" onchange="applyFilters()">
+                <option value="default">默认排序</option>
+                <option value="priceAsc">价格 ↑</option>
+                <option value="priceDesc">价格 ↓</option>
+                <option value="adoDesc">ADO ↓</option>
+            </select>
+
+            <button class="btn-clear" onclick="clearFilters()">✕ 重置</button>
+            <span class="count-badge" id="countDisplay">—</span>
+        </div>
+
+        <div class="filter-row">
+            <span class="filter-label">🌏 站点</span>
+            <select id="siteFilter" onchange="applyFilters()">
+                <option value="">全部站点</option>
+                <option value="BR">🇧🇷 BR</option>
+                <option value="MX">🇲🇽 MX</option>
+                <option value="MY">🇲🇾 MY</option>
+                <option value="PH">🇵🇭 PH</option>
+                <option value="SG">🇸🇬 SG</option>
+                <option value="TH">🇹🇭 TH</option>
+                <option value="TW">🇹🇼 TW</option>
+                <option value="VN">🇻🇳 VN</option>
+            </select>
+
+            <label class="switch-container">
+                <input type="checkbox" id="topNewFilter" onchange="applyFilters()">
+                <span style="font-size: 13px; font-weight: 500;">🔥 Top New SKU</span>
+            </label>
+        </div>
     </div>
-    <div class="form-group">
-      <label>L2 Category</label>
-      <select id="l2" disabled>
-        <option value="">-- All L2 --</option>
-      </select>
+
+    <div class="product-grid" id="productGrid">
+        <div class="loading-state">
+            <div class="loading-spinner"></div>
+            <div>数据加载中，请稍候...</div>
+        </div>
     </div>
-    <div class="form-group">
-      <label>L3 Category</label>
-      <select id="l3" disabled>
-        <option value="">-- All L3 --</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label>Ranked By <span style="color:#ee4d2d">*</span></label>
-      <select id="ranked_by">
-        <option value="">-- Select --</option>
-        <option value="ADO">ADO</option>
-        <option value="ADGMV">ADGMV</option>
-      </select>
-    </div>
-    <button class="btn" id="applyBtn" onclick="applyFilter()">Apply Filter</button>
-  </div>
-  <div class="status-bar" id="statusBar">👆 Please select Site + L1 Category + Ranked By to load data</div>
-  <div class="progress-wrap" id="progressWrap">
-    <div class="progress-bar-bg"><div class="progress-bar" id="progressBar"></div></div>
-    <div class="progress-text" id="progressText">Loading...</div>
-  </div>
+    <div class="pagination" id="pagination"></div>
 </div>
 
-<div class="result-area" id="resultArea"></div>
+<div id="imageModal" onclick="this.style.display='none'"><img id="modalImg" src=""></div>
+<div id="toast"></div>
+<footer>Shopee EL 选品指南</footer>
 
 <script>
-  var CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT2Z61Z0LxqcTmhjJe5KS_PimpDY4bM-aODeY0CuL9z3EX233KOqWMkXWJteyXQkexOMSqIO3O3rMI-/pub?gid=990111578&single=true&output=csv';
-  var PAGE_SIZE = 50;
-  var allData = [];
-  var filteredData = [];
-  var currentPage = 1;
-  var dataLoaded = false;
-  var isLoading = false;
+    const DATA_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT2Z61Z0LxqcTmhjJe5KS_PimpDY4bM-aODeY0CuL9z3EX233KOqWMkXWJteyXQkexOMSqIO3O3rMI-/pub?gid=990111578&single=true&output=csv';
 
-  // ── 列名映射（根据你的 Web Data 实际列名）──
-  var COL_SITE = 'grass_region';
-  var COL_L1 = 'cb_level1_global_be_category';
-  var COL_L2 = 'level2_global_be_category';
-  var COL_L3 = 'level3_global_be_category';
-  var COL_NAME = 'item_name';
-  var COL_SELLER = 'seller_name';
-  var COL_IMAGE = 'product_image';
-  var COL_LINK = 'product_link';
-  var COL_PRICE = 'price_usd';
-  var COL_ADO = 'ADO(SUM)';
-  var COL_ADG = 'ADG_usd(SUM)';
-  var COL_CLASS = 'classification';
-  var COL_SHOP_TYPE = 'shop_wh_type_with_hybrid';
+    let products = [], filteredData = [], currentPage = 1;
+    const pageSize = 40;
+    const siteFlag = { BR:'🇧🇷', MX:'🇲🇽', MY:'🇲🇾', PH:'🇵🇭', SG:'🇸🇬', TH:'🇹🇭', TW:'🇹🇼', VN:'🇻🇳' };
 
-  // ── 进度条 ──
-  function setProgress(pct, text) {
-    var wrap = document.getElementById('progressWrap');
-    var bar = document.getElementById('progressBar');
-    var txt = document.getElementById('progressText');
-    wrap.style.display = 'block';
-    bar.style.width = pct + '%';
-    txt.textContent = text;
-    if (pct >= 100) { setTimeout(function(){ wrap.style.display = 'none'; }, 800); }
-  }
-
-  function setStatus(msg, type) {
-    var el = document.getElementById('statusBar');
-    el.textContent = msg;
-    el.className = 'status-bar' + (type ? ' ' + type : '');
-  }
-  // ── CSV 解析 ──
-  function parseCSVRow(row) {
-    var result = [], inQuotes = false, cur = '';
-    for (var i = 0; i < row.length; i++) {
-      var c = row[i];
-      if (c === '"') { inQuotes = !inQuotes; }
-      else if (c === ',' && !inQuotes) { result.push(cur); cur = ''; }
-      else { cur += c; }
-    }
-    result.push(cur);
-    return result;
-  }
-
-  function parseCSV(text) {
-    setProgress(60, 'Parsing data...');
-    var lines = text.split('\n');
-    var headers = parseCSVRow(lines[0]);
-    allData = [];
-    for (var i = 1; i < lines.length; i++) {
-      if (!lines[i].trim()) continue;
-      var row = parseCSVRow(lines[i]);
-      var obj = {};
-      headers.forEach(function(h, idx) { obj[h.trim()] = (row[idx] || '').trim(); });
-      allData.push(obj);
-    }
-    setProgress(80, 'Building filters...');
-  }
-
-  // ── 加载 CSV（点 Apply 才触发）──
-  function loadAndFilter() {
-    if (isLoading) return;
-    isLoading = true;
-    document.getElementById('applyBtn').disabled = true;
-    setProgress(10, 'Connecting to data source...');
-    setStatus('⏳ Loading data, please wait...', 'loading');
-
-    function onSuccess(text) {
-      parseCSV(text);
-      dataLoaded = true;
-      isLoading = false;
-      setProgress(100, 'Done!');
-      document.getElementById('applyBtn').disabled = false;
-      doFilter();
+    function showToast(msg) {
+        const t = document.getElementById('toast');
+        t.textContent = msg; t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 2000);
     }
 
-    function onError(err) {
-      setStatus('❌ Failed to load: ' + err + '. Please refresh and try again.', 'error');
-      setProgress(0, '');
-      document.getElementById('progressWrap').style.display = 'none';
-      document.getElementById('applyBtn').disabled = false;
-      isLoading = false;
+    const clean = (s) => (s || '').toString().replace(/[\t"]/g, '').trim();
+    const toNum = (s) => parseFloat(clean(s)) || 0;
+
+    /**
+     * CSV 字段映射：
+     * arr[0]  item_id
+     * arr[1]  year_month
+     * arr[2]  grass_region                  → 站点 site
+     * arr[3]  item_name                     → 商品标题
+     * arr[4]  cb_level1_global_be_category  → L1
+     * arr[5]  level2_global_be_category     → L2
+     * arr[6]  level3_global_be_category     → L3
+     * arr[7]  item_create_date
+     * arr[8]  product_image
+     * arr[9]  product_link
+     * arr[10] price_usd                     → 直接展示，不脱敏
+     * arr[11] ADO(SUM)                      → 区间脱敏，每10一档
+     * arr[12] mom_ado_growth_contri(SUM)    → sparkline 方向
+     * arr[13] ADG_usd(SUM)                  → 区间脱敏，动态档位
+     */
+    const mapData = (arr) => ({
+        itemid:      clean(arr[0]),
+        year_month:  clean(arr[1]),
+        site:        clean(arr[2]),
+        title:       clean(arr[3]),
+        l1:          clean(arr[4]),
+        l2:          clean(arr[5]),
+        l3:          clean(arr[6]),
+        create_date: clean(arr[7]),
+        imgUrl:      clean(arr[8]),
+        link:        clean(arr[9]),
+        price_usd:   toNum(arr[10]),
+        ado:         toNum(arr[11]),
+        ado_mom:     clean(arr[12]),
+        adg_usd:     toNum(arr[13]),
+    });
+
+    function parseCSV(text) {
+        const rows = [];
+        const lines = text.split(/\r?\n/);
+        for (const line of lines) {
+            if (!line.trim()) continue;
+            const row = [];
+            let cur = '', inQuote = false;
+            for (let i = 0; i < line.length; i++) {
+                const ch = line[i];
+                if (ch === '"') {
+                    if (inQuote && line[i+1] === '"') { cur += '"'; i++; }
+                    else inQuote = !inQuote;
+                } else if (ch === ',' && !inQuote) {
+                    row.push(cur.trim()); cur = '';
+                } else {
+                    cur += ch;
+                }
+            }
+            row.push(cur.trim());
+            rows.push(row);
+        }
+        return rows;
     }
 
-    // 先直接 fetch，失败再用代理
-    setProgress(20, 'Fetching data...');
-    fetch(CSV_URL)
-      .then(function(r) {
-        if (!r.ok) throw new Error('HTTP ' + r.status);
-        setProgress(40, 'Downloading (~8MB)...');
-        return r.text();
-      })
-      .then(onSuccess)
-      .catch(function() {
-        setProgress(20, 'Trying proxy...');
-        fetch('https://corsproxy.io/?' + encodeURIComponent(CSV_URL))
-          .then(function(r) {
-            if (!r.ok) throw new Error('HTTP ' + r.status);
-            setProgress(40, 'Downloading via proxy...');
-            return r.text();
-          })
-          .then(onSuccess)
-          .catch(onError);
-      });
-  }
-  // ── 下拉联动 ──
- var L1_OPTIONS = [
-    'Audio',
-    'Cameras & Drones',
-    'Computers & Accessories',
-    'Gaming & Consoles',
-    'Home Appliances',
-    'Mobile & Gadgets'
-  ];
-  function populateL1FromSite() {
-    var site = document.getElementById('site').value;
-    if (!site) return;
-    var l1El = document.getElementById('l1');
-    l1El.innerHTML = '<option value="">-- Select L1 --</option>';
-    L1_OPTIONS.forEach(function(k) {
-      var o = document.createElement('option');
-      o.value = k; o.textContent = k;
-      l1El.appendChild(o);
-    });
-    l1El.disabled = false;
-    document.getElementById('l2').innerHTML = '<option value="">-- All L2 --</option>';
-    document.getElementById('l2').disabled = true;
-    document.getElementById('l3').innerHTML = '<option value="">-- All L3 --</option>';
-    document.getElementById('l3').disabled = true;
-  }
-  function populateL2() {
-    if (!dataLoaded) return;
-    var site = document.getElementById('site').value;
-    var l1 = document.getElementById('l1').value;
-    var rows = allData.filter(function(r){
-      return r[COL_SITE]===site && r[COL_L1]===l1;
-    });
-    var set = {};
-    rows.forEach(function(r){ var v=r[COL_L2]; if(v) set[v]=1; });
-    var l2El = document.getElementById('l2');
-    l2El.innerHTML = '<option value="">-- All L2 --</option>';
-    Object.keys(set).sort().forEach(function(k){
-      var o=document.createElement('option'); o.value=k; o.textContent=k; l2El.appendChild(o);
-    });
-    l2El.disabled = false;
-    document.getElementById('l3').innerHTML = '<option value="">-- All L3 --</option>';
-    document.getElementById('l3').disabled = true;
-  }
-  function populateL3() {
-    if (!dataLoaded) return;
-    var site = document.getElementById('site').value;
-    var l1 = document.getElementById('l1').value;
-    var l2 = document.getElementById('l2').value;
-    var rows = allData.filter(function(r){
-      return r[COL_SITE]===site && r[COL_L1]===l1 && (!l2||r[COL_L2]===l2);
-    });
-    var set = {};
-    rows.forEach(function(r){ var v=r[COL_L3]; if(v) set[v]=1; });
-    var l3El = document.getElementById('l3');
-    l3El.innerHTML = '<option value="">-- All L3 --</option>';
-    Object.keys(set).sort().forEach(function(k){
-      var o=document.createElement('option'); o.value=k; o.textContent=k; l3El.appendChild(o);
-    });
-    l3El.disabled = Object.keys(set).length === 0;
-  }
-
-  // ── Apply Filter ──
-  function applyFilter() {
-    var site = document.getElementById('site').value;
-    var l1 = document.getElementById('l1').value;
-    var rankedBy = document.getElementById('ranked_by').value;
-    if (!site || !l1 || !rankedBy) {
-      setStatus('⚠️ Please select Site, L1 Category and Ranked By', 'error');
-      return;
-    }
-    if (!dataLoaded) {
-      loadAndFilter();
-    } else {
-      doFilter();
-    }
-  }
-
-  function doFilter() {
-    var site = document.getElementById('site').value;
-    var l1 = document.getElementById('l1').value;
-    var l2 = document.getElementById('l2').value;
-    var l3 = document.getElementById('l3').value;
-    var rankedBy = document.getElementById('ranked_by').value;
-    var sortKey = rankedBy === 'ADO' ? COL_ADO : COL_ADG;
-
-    filteredData = allData.filter(function(r) {
-      return r[COL_SITE] === site &&
-             r[COL_L1] === l1 &&
-             (!l2 || r[COL_L2] === l2) &&
-             (!l3 || r[COL_L3] === l3);
-    });
-
-    filteredData.sort(function(a,b){
-      return (parseFloat(b[sortKey])||0) - (parseFloat(a[sortKey])||0);
-    });
-
-    // 数据加载后填充 L1/L2/L3 下拉
-    populateL1FromSite();
-    document.getElementById('l1').value = l1;
-    if (l2) { populateL2(); document.getElementById('l2').value = l2; }
-    if (l3) { populateL3(); document.getElementById('l3').value = l3; }
-
-    setStatus('✅ ' + filteredData.length + ' SKUs found', 'success');
-    currentPage = 1;
-    renderResults();
-  }
-
-  // ── 渲染表格 ──
-  function renderResults() {
-    var area = document.getElementById('resultArea');
-    if (filteredData.length === 0) {
-      area.innerHTML = '<div class="empty-wrap">😕 No results found. Try adjusting your filters.</div>';
-      return;
-    }
-    var totalPages = Math.ceil(filteredData.length / PAGE_SIZE);
-    var start = (currentPage-1)*PAGE_SIZE;
-    var pageData = filteredData.slice(start, start+PAGE_SIZE);
-    var rankedBy = document.getElementById('ranked_by').value;
-
-    var html = '<div class="result-header">';
-    html += '<span class="result-count">📦 ' + filteredData.length + ' SKUs found</span>';
-    html += '<span>Page ' + currentPage + ' / ' + totalPages + '</span>';
-    html += '</div>';
-    html += '<div class="table-wrap"><table><thead><tr>';
-    html += '<th>#</th><th>Image</th><th>Item Name</th>';
-    html += '<th>L2</th><th>L3</th><th>Seller</th>';
-    html += '<th>Price (USD)</th>';
-    html += '<th>' + (rankedBy==='ADO'?'⭐ ADO':'ADO') + '</th>';
-    html += '<th>' + (rankedBy==='ADGMV'?'⭐ ADGMV (USD)':'ADGMV (USD)') + '</th>';
-    html += '<th>Classification</th>';
-    html += '</tr></thead><tbody>';
-
-    pageData.forEach(function(r, idx) {
-      var rank = start+idx+1;
-      var badgeClass = rank===1?'gold':rank===2?'silver':rank===3?'bronze':'';
-      var name = r[COL_NAME]||'-';
-      var link = r[COL_LINK]||'';
-      var img = r[COL_IMAGE]||'';
-      html += '<tr>';
-      html += '<td><span class="rank-badge '+badgeClass+'">'+rank+'</span></td>';
-      html += '<td>'+(img?'<img class="product-img" src="'+img+'" onerror="this.style.display=\'none\'"/>':'-')+'</td>';
-      html += '<td>'+(link?'<a class="product-link" href="'+link+'" target="_blank">'+name+'</a>':name)+'</td>';
-      html += '<td>'+(r[COL_L2]||'-')+'</td>';
-      html += '<td>'+(r[COL_L3]||'-')+'</td>';
-      html += '<td>'+(r[COL_SELLER]||'-')+'</td>';
-      html += '<td>'+(r[COL_PRICE]?'$'+parseFloat(r[COL_PRICE]).toFixed(2):'-')+'</td>';
-      html += '<td>'+(r[COL_ADO]?parseFloat(r[COL_ADO]).toFixed(0):'-')+'</td>';
-      html += '<td>'+(r[COL_ADG]?'$'+parseFloat(r[COL_ADG]).toFixed(2):'-')+'</td>';
-      html += '<td>'+(r[COL_CLASS]?'<span class="tag">'+r[COL_CLASS]+'</span>':'-')+'</td>';
-      html += '</tr>';
-    });
-
-    html += '</tbody></table></div>';
-
-    if (totalPages > 1) {
-      html += '<div class="pagination">';
-      if (currentPage>1) html += '<button class="page-btn" onclick="goPage('+(currentPage-1)+')">← Prev</button>';
-      var s=Math.max(1,currentPage-2), e=Math.min(totalPages,currentPage+2);
-      for(var p=s;p<=e;p++){
-        html += '<button class="page-btn'+(p===currentPage?' active':'')+'" onclick="goPage('+p+')">'+p+'</button>';
-      }
-      if (currentPage<totalPages) html += '<button class="page-btn" onclick="goPage('+(currentPage+1)+')">Next →</button>';
-      html += '</div>';
+    function toRangeStr(val, step) {
+        const n = parseFloat(val);
+        if (isNaN(n)) return null;
+        if (n >= 0) {
+            const lo = Math.floor(n / step) * step;
+            return `${lo}~${lo + step}`;
+        } else {
+            const hi = Math.ceil(n / step) * step;
+            return `${hi - step}~${hi}`;
+        }
     }
 
-    area.innerHTML = html;
-  }
+    const adoRange = (v) => toRangeStr(v, 10);
 
-  function goPage(p) { currentPage=p; renderResults(); window.scrollTo(0,0); }
+    function adgRange(v) {
+        const n = parseFloat(v);
+        if (isNaN(n) || n === 0) return null;
+        let step;
+        if      (n < 100)    step = 10;
+        else if (n < 500)    step = 50;
+        else if (n < 2000)   step = 100;
+        else if (n < 10000)  step = 500;
+        else                 step = 1000;
+        return toRangeStr(n, step);
+    }
 
-  // ── 事件绑定 ──
-  document.getElementById('site').addEventListener('change', function(){ populateL1FromSite(); });
-  document.getElementById('l1').addEventListener('change', function(){ if(dataLoaded) populateL2(); });
-  document.getElementById('l2').addEventListener('change', function(){ if(dataLoaded) populateL3(); });
+    function buildSparkline(adoMomStr, itemid) {
+        const val = parseFloat(adoMomStr);
+        if (isNaN(val)) return '';
+        const isPos = val >= 0;
+        const color = isPos ? '#27ae60' : '#eb4d4b';
+        const fill  = isPos ? 'rgba(39,174,96,0.10)' : 'rgba(235,77,75,0.10)';
+
+        let seed = 0;
+        for (let i = 0; i < itemid.length; i++) seed = (seed * 31 + itemid.charCodeAt(i)) & 0xffffffff;
+        const rand = (i) => { let x = Math.sin(seed + i) * 10000; return x - Math.floor(x); };
+
+        const W = 64, H = 28, pts = 5;
+        const rawY = [];
+        for (let i = 0; i < pts - 1; i++) rawY.push(0.3 + rand(i) * 0.4);
+        rawY.push(isPos ? 0.05 + rand(pts) * 0.15 : 0.80 + rand(pts) * 0.15);
+
+        const xStep  = W / (pts - 1);
+        const coords = rawY.map((y, i) => ({ x: +(i * xStep).toFixed(1), y: +(y * H).toFixed(1) }));
+
+        let d = `M${coords[0].x},${coords[0].y}`;
+        for (let i = 1; i < coords.length; i++) {
+            const cx = (coords[i-1].x + coords[i].x) / 2;
+            d += ` C${cx},${coords[i-1].y} ${cx},${coords[i].y} ${coords[i].x},${coords[i].y}`;
+        }
+        const fillD = `${d} L${coords[coords.length-1].x},${H} L${coords[0].x},${H} Z`;
+
+        return `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
+            <path d="${fillD}" fill="${fill}" stroke="none"/>
+            <path d="${d}" fill="none" stroke="${color}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="${coords[coords.length-1].x}" cy="${coords[coords.length-1].y}" r="2.2" fill="${color}"/>
+        </svg>`;
+    }
+
+    async function loadData() {
+        try {
+            const res = await fetch(DATA_URL);
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const text = await res.text();
+
+            const rows = parseCSV(text);
+            if (rows.length < 2) throw new Error('数据为空');
+
+            products = rows.slice(1).filter(a => a[0] && a[0].trim());
+
+            const dates = products.map(p => new Date(clean(p[7]))).filter(d => !isNaN(d));
+            if (dates.length) {
+                const latest = new Date(Math.max(...dates));
+                document.getElementById('lastUpdateDisplay').textContent =
+                    `数据最后更新: ${latest.toLocaleDateString('zh-CN')}`;
+            }
+
+            initFilters();
+            applyFilters();
+        } catch (e) {
+            document.getElementById('productGrid').innerHTML = `
+                <div class="loading-state">
+                    ⚠️ 数据加载失败：${e.message}<br>
+                    <small style="margin-top:8px;display:block;">请检查数据源链接或网络连接后刷新重试。</small>
+                </div>`;
+            console.error('数据加载错误:', e);
+        }
+    }
+
+    function initFilters() {
+        const l1s  = [...new Set(products.map(p => clean(p[4])))].filter(Boolean).sort();
+        const l1El = document.getElementById('l1Filter');
+        l1El.innerHTML = '<option value="">L1 类目</option>';
+        l1s.forEach(v => l1El.innerHTML += `<option value="${v}">${v}</option>`);
+        updateL2();
+    }
+
+    function updateL2() {
+        const l1 = document.getElementById('l1Filter').value;
+        const s  = document.getElementById('l2Filter');
+        s.innerHTML = '<option value="">L2 类目</option>';
+        [...new Set(products.filter(p => !l1 || clean(p[4]) === l1).map(p => clean(p[5])))]
+            .filter(Boolean).sort()
+            .forEach(v => s.innerHTML += `<option value="${v}">${v}</option>`);
+        updateL3();
+    }
+
+    function updateL3() {
+        const l1 = document.getElementById('l1Filter').value;
+        const l2 = document.getElementById('l2Filter').value;
+        const s  = document.getElementById('l3Filter');
+        s.innerHTML = '<option value="">L3 类目</option>';
+        [...new Set(products.filter(p =>
+            (!l1 || clean(p[4]) === l1) && (!l2 || clean(p[5]) === l2)
+        ).map(p => clean(p[6])))]
+            .filter(Boolean).sort()
+            .forEach(v => s.innerHTML += `<option value="${v}">${v}</option>`);
+    }
+
+    function render(dataList, page = 1) {
+        currentPage = page;
+        const grid = document.getElementById('productGrid');
+        grid.innerHTML = '';
+        const pageData = dataList.slice((page - 1) * pageSize, page * pageSize);
+
+        if (pageData.length === 0) {
+            grid.innerHTML = `<div class="loading-state">😕 没有找到符合条件的商品</div>`;
+            renderPagination(0);
+            return;
+        }
+
+        pageData.forEach(arr => {
+            const item = mapData(arr);
+            const flag = siteFlag[item.site] || '🌐';
+
+            const priceDisplay = item.price_usd ? `$${item.price_usd.toFixed(2)}` : '—';
+            const adoRangeStr  = adoRange(item.ado);
+            const adgRangeStr  = adgRange(item.adg_usd);
+
+            const adoMomVal = parseFloat(item.ado_mom);
+            const adoClass  = isNaN(adoMomVal) ? 'zero' : (adoMomVal > 0 ? 'pos' : adoMomVal < 0 ? 'neg' : 'zero');
+            const adoIcon   = adoMomVal > 0 ? '▲' : adoMomVal < 0 ? '▼' : '–';
+            const sparkSvg  = buildSparkline(item.ado_mom, item.itemid);
+
+            const adoMomBlockHtml = (adoRangeStr && sparkSvg) ? `
+                <div class="ado-block">
+                    <span class="ado-label">ADO MoM</span>
+                    <span class="ado-range ${adoClass}">${adoIcon} ${adoRangeStr}</span>
+                    <div class="sparkline-wrap">${sparkSvg}</div>
+                </div>` : '';
+
+            const l3Html = item.l3 ? `<span class="pill pill-cat">${item.l3}</span>` : '';
+
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+                <div class="site-tag">${flag} ${item.site}</div>
+                <div class="img-container" onclick="openModal('${item.imgUrl}')">
+                    <img src="${item.imgUrl}" loading="lazy" onerror="this.src='https://via.placeholder.com/200?text=No+Image'">
+                </div>
+                <div class="info">
+                    <div class="item-title" title="${item.title}">${item.title}</div>
+                    <div class="price-row">
+                        <span class="price-label">价格</span>
+                        <span class="price-value">${priceDisplay}</span>
+                    </div>
+                    ${l3Html ? `<div class="meta-row">${l3Html}</div>` : ''}
+                    ${adoMomBlockHtml}
+                    <div class="stats-row">
+                        <div class="stat-box">
+                            <div class="stat-label">ADO (件/日)</div>
+                            <div class="stat-value ado-val">${adoRangeStr || '—'}</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">ADG (USD/日)</div>
+                            <div class="stat-value adg-val">${adgRangeStr ? '$' + adgRangeStr : '—'}</div>
+                        </div>
+                    </div>
+                    <div class="footer-row">
+                        <span>📅 ${item.create_date || item.year_month}</span>
+                        <span class="itemid-box" onclick="copyId('${item.itemid}')">ID: ${item.itemid}</span>
+                    </div>
+                </div>`;
+            grid.appendChild(card);
+        });
+        renderPagination(dataList.length);
+    }
+
+    function openModal(src) {
+        document.getElementById('modalImg').src = src;
+        document.getElementById('imageModal').style.display = 'flex';
+    }
+    function copyId(id) {
+        navigator.clipboard.writeText(id).then(() => showToast(`已复制 ID: ${id}`));
+    }
+
+    function renderPagination(total) {
+        const totalPages = Math.ceil(total / pageSize) || 1;
+        document.getElementById('pagination').innerHTML = `
+            <button onclick="changePage(-1)" ${currentPage === 1 ? 'disabled' : ''}>←</button>
+            <span>${currentPage} / ${totalPages}</span>
+            <button onclick="changePage(1)" ${currentPage >= totalPages ? 'disabled' : ''}>→</button>`;
+    }
+
+    function changePage(d) { render(filteredData, currentPage + d); window.scrollTo(0, 0); }
+
+    function applyFilters() {
+        const q        = document.getElementById('searchInput').value.toLowerCase();
+        const l1       = document.getElementById('l1Filter').value;
+        const l2       = document.getElementById('l2Filter').value;
+        const l3       = document.getElementById('l3Filter').value;
+        const site     = document.getElementById('siteFilter').value;
+        const isTopNew = document.getElementById('topNewFilter').checked;
+        const minP     = parseFloat(document.getElementById('minPrice').value) || 0;
+        const maxP     = parseFloat(document.getElementById('maxPrice').value) || Infinity;
+
+        filteredData = products.filter(arr => {
+            const i = mapData(arr);
+            const matchTopNew = !isTopNew || isTopNewItem(arr);
+            return (!q    || i.title.toLowerCase().includes(q) || i.itemid.includes(q)) &&
+                   (!l1   || i.l1 === l1) &&
+                   (!l2   || i.l2 === l2) &&
+                   (!l3   || i.l3 === l3) &&
+                   (!site || i.site === site) &&
+                   matchTopNew &&
+                   (i.price_usd >= minP && (maxP === Infinity || i.price_usd <= maxP));
+        });
+
+        const sort = document.getElementById('sortOrder').value;
+        if      (sort === 'priceAsc')  filteredData.sort((a, b) => toNum(a[10]) - toNum(b[10]));
+        else if (sort === 'priceDesc') filteredData.sort((a, b) => toNum(b[10]) - toNum(a[10]));
+        else if (sort === 'adoDesc')   filteredData.sort((a, b) => toNum(b[11]) - toNum(a[11]));
+
+        document.getElementById('countDisplay').textContent = `共 ${filteredData.length} 款`;
+        render(filteredData, 1);
+    }
+
+    function isTopNewItem(arr) {
+        if (!window._latestMonth) {
+            const months = products.map(p => clean(p[1])).filter(Boolean).sort();
+            window._latestMonth = months[months.length - 1];
+        }
+        return clean(arr[1]) === window._latestMonth;
+    }
+
+    function clearFilters() {
+        ['searchInput', 'minPrice', 'maxPrice'].forEach(id => document.getElementById(id).value = '');
+        ['l1Filter', 'l2Filter', 'l3Filter', 'siteFilter'].forEach(id => document.getElementById(id).value = '');
+        document.getElementById('sortOrder').value = 'default';
+        document.getElementById('topNewFilter').checked = false;
+        window._latestMonth = null;
+        updateL2();
+        applyFilters();
+    }
+
+    let timer;
+    const debouncedFilter = () => { clearTimeout(timer); timer = setTimeout(applyFilters, 300); };
+
+    window.onload = loadData;
 </script>
 </body>
 </html>
+
