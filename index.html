@@ -90,15 +90,23 @@
         }
         .card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); border-color: #ffd6cc; }
 
+        /* 站点标签：左上角，使用图片国旗 */
         .site-tag {
-            position: absolute; top: 10px; left: 10px; background: var(--primary); color: white;
-            font-size: 13px; font-weight: 700; padding: 3px 10px; border-radius: 20px; z-index: 10;
-            display: flex; align-items: center; gap: 4px; line-height: 1.4;
+            position: absolute; top: 10px; left: 10px;
+            background: var(--primary); color: white;
+            padding: 3px 9px 3px 5px; border-radius: 20px; z-index: 10;
+            display: flex; align-items: center; gap: 5px;
         }
-        .site-tag .flag { font-size: 16px; line-height: 1; }
-        .site-tag .code { font-size: 11px; font-weight: 700; letter-spacing: 0.5px; }
+        .site-tag img.flag-img {
+            width: 18px; height: 13px;
+            border-radius: 2px;
+            object-fit: cover;
+            display: block;
+            flex-shrink: 0;
+        }
+        .site-tag .code { font-size: 11px; font-weight: 700; letter-spacing: 0.5px; line-height: 1; }
 
-        /* New SKU 角标 */
+        /* New SKU 角标：右上角 */
         .new-badge {
             position: absolute; top: 10px; right: 10px;
             background: #F4A855; color: white;
@@ -155,7 +163,7 @@
 
 <header>
     <div class="header-inner">
-        <h1>&#128717; Shopee EL &#36873;&#21697;&#25351;&#21335; <span class="badge">External</span></h1>
+        <h1>Shopee EL &#36873;&#21697;&#25351;&#21335; <span class="badge">Internal</span></h1>
         <div class="header-desc">
             &#10024; <strong>&#31934;&#36873;&#28909;&#38144;&#21697;&#26032;&#21697;</strong> &middot; &#28020;&#30418;&#22810;&#31449;&#28857;&#65292;&#24110;&#20320;&#24555;&#36895;&#38145;&#23450;&#29190;&#27454;&#36873;&#21697;<br>
             &#128202; ADO &#19982; ADG &#37319;&#29992;&#21306;&#38388;&#33073;&#25654;&#23637;&#31034;&#65292;&#20215;&#26684;&#20197; USD &#21407;&#20385;&#23637;&#31034;<br>
@@ -197,7 +205,7 @@
             </select>
             <label class="switch-container">
                 <input type="checkbox" id="topNewFilter" onchange="applyFilters()">
-                <span style="font-size:13px;font-weight:500;">&#128293; Top New SKU&#160;<small style="font-weight:400;color:var(--text-muted);">&#8203;(&#36827;30&#22825;&#19978;&#26032;)</small></span>
+                <span style="font-size:13px;font-weight:500;">&#128293; Top New SKU <small style="font-weight:400;color:var(--text-muted);">(&#36827;30&#22825;&#19978;&#26032;)</small></span>
             </label>
         </div>
     </div>
@@ -218,13 +226,17 @@
     let products = [], filteredData = [], currentPage = 1;
     const pageSize = 40;
 
-    // 国旗 emoji：Unicode 区域指示符码点动态拼合，不依赖字符存储
-    function getFlagEmoji(countryCode) {
+    /**
+     * 国旗方案：改用 flagcdn.com 图片，彻底绕开 emoji 字体渲染问题
+     * 用法：https://flagcdn.com/w40/{小写国家代码}.png
+     * 例：PH → https://flagcdn.com/w40/ph.png
+     * 该 CDN 免费、公开、无跨域限制，支持所有 ISO 3166-1 alpha-2 国家代码
+     */
+    function getFlagImgHtml(countryCode) {
         if (!countryCode || countryCode.length !== 2) return '';
-        const base = 0x1F1E6;
-        const c1 = countryCode.toUpperCase().charCodeAt(0) - 65;
-        const c2 = countryCode.toUpperCase().charCodeAt(1) - 65;
-        return String.fromCodePoint(base + c1) + String.fromCodePoint(base + c2);
+        const code = countryCode.toLowerCase();
+        const url  = `https://flagcdn.com/w40/${code}.png`;
+        return `<img class="flag-img" src="${url}" alt="${countryCode}" onerror="this.style.display='none'">`;
     }
 
     function showToast(msg) {
@@ -335,7 +347,7 @@
             initFilters(); applyFilters();
         } catch(e) {
             document.getElementById('productGrid').innerHTML =
-                `<div class="loading-state">&#9888;&#65039; 数据加载失败：${e.message}</div>`;
+                `<div class="loading-state">数据加载失败：${e.message}</div>`;
         }
     }
 
@@ -362,23 +374,17 @@
             .forEach(v => el.innerHTML += `<option value="${v}">${v}</option>`);
     }
 
-    /**
-     * ✅ Top New SKU 判断逻辑（修复版）
-     * 条件：item_create_date（arr[7]）距今 <= 30 天
-     * 页面加载时缓存「今天0点」时间戳，避免每次 filter 重复计算
-     */
+    // Top New SKU：item_create_date 距今 <= 30 天
     function isNewSku(arr) {
         const dateStr = clean(arr[7]);
         if (!dateStr) return false;
         const createTime = new Date(dateStr).getTime();
         if (isNaN(createTime)) return false;
-        // 缓存今天 0 点时间戳
         if (!window._todayMs) {
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            window._todayMs = today.getTime();
+            const t = new Date(); t.setHours(0,0,0,0);
+            window._todayMs = t.getTime();
         }
-        const diffDays = (window._todayMs - createTime) / (1000 * 60 * 60 * 24);
+        const diffDays = (window._todayMs - createTime) / 86400000;
         return diffDays >= 0 && diffDays <= 30;
     }
 
@@ -388,19 +394,18 @@
         grid.innerHTML = '';
         const pageData = dataList.slice((page-1)*pageSize, page*pageSize);
         if (!pageData.length) {
-            grid.innerHTML = `<div class="loading-state">&#128533; 没有找到符合条件的商品</div>`;
+            grid.innerHTML = `<div class="loading-state">没有找到符合条件的商品</div>`;
             renderPagination(0); return;
         }
 
         pageData.forEach(arr => {
             const item = mapData(arr);
-            const flag     = getFlagEmoji(item.site);
-            const siteCode = item.site;
-            const siteTagHtml = `<span class="flag">${flag}</span><span class="code">${siteCode}</span>`;
 
-            // New SKU 角标
-            const newBadge = isNewSku(arr) ? `<div class="new-badge">&#127381; NEW</div>` : '';
+            // ✅ 国旗：使用 flagcdn.com 图片，完全绕开 emoji 字体渲染问题
+            const flagHtml  = getFlagImgHtml(item.site);   // <img src="https://flagcdn.com/w40/ph.png">
+            const siteTagHtml = `${flagHtml}<span class="code">${item.site}</span>`;
 
+            const newBadge     = isNewSku(arr) ? `<div class="new-badge">NEW</div>` : '';
             const priceDisplay = item.price_usd ? `$${item.price_usd.toFixed(2)}` : '—';
             const adoRangeStr  = adoRange(item.ado);
             const adgRangeStr  = adgRange(item.adg_usd);
@@ -457,6 +462,7 @@
 
     function openModal(src) { document.getElementById('modalImg').src = src; document.getElementById('imageModal').style.display = 'flex'; }
     function copyId(id) { navigator.clipboard.writeText(id).then(() => showToast(`已复制 ID: ${id}`)); }
+
     function renderPagination(total) {
         const tp = Math.ceil(total/pageSize) || 1;
         document.getElementById('pagination').innerHTML =
@@ -482,7 +488,7 @@
                    (!l2      || i.l2 === l2) &&
                    (!l3      || i.l3 === l3) &&
                    (!site    || i.site === site) &&
-                   (!isTopNew || isNewSku(arr));   // ✅ 使用新的30天判断逻辑
+                   (!isTopNew || isNewSku(arr));
         });
         filteredData = sortData(filtered, sort);
         document.getElementById('countDisplay').textContent = `共 ${filteredData.length} 款`;
@@ -494,7 +500,7 @@
         ['l1Filter','l2Filter','l3Filter','siteFilter'].forEach(id => document.getElementById(id).value = '');
         document.getElementById('sortOrder').value = 'adoDesc';
         document.getElementById('topNewFilter').checked = false;
-        window._todayMs = null;   // 重置今日时间戳缓存
+        window._todayMs = null;
         updateL2(); applyFilters();
     }
 
