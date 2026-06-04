@@ -1,0 +1,31 @@
+name: Sync Sheet Data
+on:
+  schedule:
+    - cron: '0 * * * *'  # 每小时自动运行一次
+  workflow_dispatch:       # 允许手动触发
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Fetch CSV and convert to JSON
+        run: |
+          curl -L "https://docs.google.com/spreadsheets/d/e/2PACX-1vT2Z61Z0LxqcTmhjJe5KS_PimpDY4bM-aODeY0CuL9z3EX233KOqWMkXWJteyXQkexOMSqIO3O3rMI-/pub?gid=990111578&single=true&output=csv" -o data.csv
+          python3 -c "
+          import csv, json
+          with open('data.csv', encoding='utf-8') as f:
+              rows = list(csv.DictReader(f))
+          with open('data.json', 'w', encoding='utf-8') as f:
+              json.dump(rows, f, ensure_ascii=False)
+          print(f'Done: {len(rows)} rows')
+          "
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add data.json
+          git diff --staged --quiet || git commit -m "Auto sync data"
+          git push
