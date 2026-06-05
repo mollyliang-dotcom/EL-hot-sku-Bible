@@ -12,7 +12,7 @@ jobs:
 
       - name: Fetch CSV and convert to JSON
         run: |
-          curl -L "https://docs.google.com/spreadsheets/d/e/2PACX-1vT2Z61Z0LxqcTmhjJe5KS_PimpDY4bM-aODeY0CuL9z3EX233KOqWMkXWJteyXQkexOMSqIO3O3rMI-/pub?gid=990111578&single=true&output=csv" -o data.csv
+          curl -L "https://docs.google.com/spreadsheets/d/e/2PACX-1vT2Z61Z0LxqcTmhjJe5KS_PimpDY4bM-aODeY0CuL9z3EX233KOqWMkXWJteyXQkexOMSqIO3O3rMI-/pub?gid=759893186&single=true&output=csv" -o data.csv
           python3 -c "
           import csv, json
           with open('data.csv', encoding='utf-8') as f:
