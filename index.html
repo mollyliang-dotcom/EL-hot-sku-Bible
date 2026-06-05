@@ -208,9 +208,10 @@ const DATA_URL = './data.json';
 let products = [], filteredData = [], currentPage = 1;
 const pageSize = 40;
 
+// 国旗用 emoji 代替，无需外部请求
 const SITE_FLAG = {
-  BR:'🇧🇷', MX:'🇲🇽', MY:'🇲🇾', PH:'🇵🇭',
-  SG:'🇸🇬', TH:'🇹🇭', TW:'🇹🇼', VN:'🇻🇳'
+  BR: '🇧🇷', MX: '🇲🇽', MY: '🇲🇾', PH: '🇵🇭',
+  SG: '🇸🇬', TH: '🇹🇭', TW: '🇹🇼', VN: '🇻🇳'
 };
 
 function getSiteTagHtml(site) {
@@ -230,7 +231,7 @@ const toNum = function(s) {
   return parseFloat(str) || 0;
 };
 
-const KNOWN_SITES = ['BR','MX','MY','PH','SG','TH','TW','VN'];
+const KNOWN_SITES = ['BR', 'MX', 'MY', 'PH', 'SG', 'TH', 'TW', 'VN'];
 function normalizeSite(raw) {
   const s = clean(raw).toUpperCase();
   for (let i = 0; i < KNOWN_SITES.length; i++) { if (s === KNOWN_SITES[i]) return KNOWN_SITES[i]; }
@@ -238,22 +239,21 @@ function normalizeSite(raw) {
   return s;
 }
 
-// ✅ 压缩版字段映射 a~m 对应原字段
 function normalizeItem(obj) {
   return {
-    itemid:      clean(obj.a || ''),
-    year_month:  clean(obj.b || ''),
-    site:        normalizeSite(obj.c || ''),
-    title:       clean(obj.d || ''),
-    l1:          clean(obj.e || ''),
-    l2:          clean(obj.f || ''),
-    l3:          clean(obj.g || ''),
-    create_date: clean(obj.h || ''),
-    imgUrl:      clean(obj.i || ''),
-    price_usd:   toNum(obj.j || 0),
-    ado:         toNum(obj.k || 0),
-    ado_mom:     toNum(obj.l || 0),
-    adg_usd:     toNum(obj.m || 0)
+    itemid:      clean(obj.item_id || ''),
+    year_month:  clean(obj.year_month || ''),
+    site:        normalizeSite(obj.grass_region || ''),
+    title:       clean(obj.item_name || ''),
+    l1:          clean(obj.cb_level1_global_be_category || ''),
+    l2:          clean(obj.level2_global_be_category || ''),
+    l3:          clean(obj.level3_global_be_category || ''),
+    create_date: clean(obj.item_create_date || ''),
+    imgUrl:      clean(obj.product_image || ''),
+    price_usd:   toNum(obj.price_usd || 0),
+    ado:         toNum(obj['ADO(SUM)'] || 0),
+    ado_mom:     toNum(obj['mom_ado_growth_contri(SUM)'] || 0),
+    adg_usd:     toNum(obj['ADG_usd(SUM)'] || 0)
   };
 }
 
@@ -407,7 +407,7 @@ function render(dataList, page) {
       '<div class="site-tag">' + siteTagHtml + '</div>'
       + newBadge
       + '<div class="img-container" onclick="openModal(\'' + item.imgUrl + '\')">'
-      +   '<img src="' + item.imgUrl + '" loading="lazy" onerror="this.style.display=\'none\';this.parentNode.innerHTML+=\'<div style=&quot;font-size:40px;color:#ddd&quot;>📦</div>\'">'
+      +   '<img src="' + item.imgUrl + '" loading="lazy" onerror="this.src=\'https://via.placeholder.com/200?text=No+Image\'">'
       + '</div>'
       + '<div class="info">'
       +   '<div class="item-title" title="' + item.title + '">' + item.title + '</div>'
@@ -486,3 +486,5 @@ window.onload = loadData;
 </script>
 </body>
 </html>
+
+
