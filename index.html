@@ -208,10 +208,9 @@ const DATA_URL = './data.json';
 let products = [], filteredData = [], currentPage = 1;
 const pageSize = 40;
 
-// 国旗用 emoji 代替，无需外部请求
 const SITE_FLAG = {
-  BR: '🇧🇷', MX: '🇲🇽', MY: '🇲🇾', PH: '🇵🇭',
-  SG: '🇸🇬', TH: '🇹🇭', TW: '🇹🇼', VN: '🇻🇳'
+  BR:'🇧🇷', MX:'🇲🇽', MY:'🇲🇾', PH:'🇵🇭',
+  SG:'🇸🇬', TH:'🇹🇭', TW:'🇹🇼', VN:'🇻🇳'
 };
 
 function getSiteTagHtml(site) {
@@ -231,7 +230,7 @@ const toNum = function(s) {
   return parseFloat(str) || 0;
 };
 
-const KNOWN_SITES = ['BR', 'MX', 'MY', 'PH', 'SG', 'TH', 'TW', 'VN'];
+const KNOWN_SITES = ['BR','MX','MY','PH','SG','TH','TW','VN'];
 function normalizeSite(raw) {
   const s = clean(raw).toUpperCase();
   for (let i = 0; i < KNOWN_SITES.length; i++) { if (s === KNOWN_SITES[i]) return KNOWN_SITES[i]; }
@@ -239,6 +238,7 @@ function normalizeSite(raw) {
   return s;
 }
 
+// 原始字段名版本（兼容旧 data.json）
 function normalizeItem(obj) {
   return {
     itemid:      clean(obj.item_id || ''),
@@ -407,7 +407,7 @@ function render(dataList, page) {
       '<div class="site-tag">' + siteTagHtml + '</div>'
       + newBadge
       + '<div class="img-container" onclick="openModal(\'' + item.imgUrl + '\')">'
-      +   '<img src="' + item.imgUrl + '" loading="lazy" onerror="this.src=\'https://via.placeholder.com/200?text=No+Image\'">'
+      +   '<img src="' + item.imgUrl + '" loading="lazy" onerror="this.style.display=\'none\';this.parentNode.innerHTML+=\'<div style=&quot;font-size:40px;color:#ddd&quot;>📦</div>\'">'
       + '</div>'
       + '<div class="info">'
       +   '<div class="item-title" title="' + item.title + '">' + item.title + '</div>'
@@ -486,5 +486,4 @@ window.onload = loadData;
 </script>
 </body>
 </html>
-
 
