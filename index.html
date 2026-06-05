@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Shopee EL 选品指南</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 <style>
 :root {
 --primary: #EE4D2D;
@@ -24,7 +26,7 @@
 --radius-sm: 8px;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', Arial, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+body { font-family: 'DM Sans', 'PingFang SC', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 header {
 background: linear-gradient(135deg, #FF6633 0%, #EE4D2D 50%, #D02D11 100%);
 color: white; padding: 36px 40px 28px; position: relative; overflow: hidden;
@@ -34,9 +36,9 @@ content: ''; position: absolute; top: -60px; right: -60px;
 width: 280px; height: 280px; background: rgba(255,255,255,0.08); border-radius: 50%;
 }
 .header-inner { max-width: 1280px; margin: 0 auto; position: relative; z-index: 1; }
-header h1 { font-family: Georgia, 'Times New Roman', serif; font-size: 32px; display: flex; align-items: center; gap: 12px; }
+header h1 { font-family: 'Playfair Display', serif; font-size: 32px; display: flex; align-items: center; gap: 12px; }
 header h1 .badge {
-background: rgba(255,255,255,0.25); font-family: inherit;
+background: rgba(255,255,255,0.25); font-family: 'DM Sans', sans-serif;
 font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
 padding: 4px 10px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.3);
 }
@@ -60,7 +62,7 @@ margin-bottom: 24px; box-shadow: var(--shadow); border: 1px solid var(--border);
 .filter-label { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; }
 input[type="text"], select {
 padding: 9px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-sm);
-font-family: inherit; font-size: 13px; color: var(--text);
+font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--text);
 background: var(--bg); transition: border-color 0.2s, box-shadow 0.2s; outline: none;
 }
 input[type="text"]:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light); }
@@ -70,7 +72,7 @@ display: flex; align-items: center; gap: 8px; background: var(--bg); padding: 6p
 border-radius: var(--radius-sm); border: 1.5px solid var(--border); cursor: pointer;
 }
 .count-badge { margin-left: auto; background: var(--primary-light); color: var(--primary-dark); font-weight: 700; font-size: 13px; padding: 6px 14px; border-radius: 20px; }
-.btn-clear { padding: 9px 16px; background: transparent; border: 1.5px solid var(--border); border-radius: var(--radius-sm); color: var(--text-muted); font-family: inherit; font-size: 13px; cursor: pointer; transition: all 0.2s; }
+.btn-clear { padding: 9px 16px; background: transparent; border: 1.5px solid var(--border); border-radius: var(--radius-sm); color: var(--text-muted); font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer; transition: all 0.2s; }
 .btn-clear:hover { border-color: var(--primary); color: var(--primary); }
 .loading-state { grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: var(--text-muted); }
 .loading-spinner { width: 36px; height: 36px; border: 3px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 16px; }
@@ -85,8 +87,12 @@ position: relative; display: flex; flex-direction: column;
 .site-tag {
 position: absolute; top: 10px; left: 10px;
 background: var(--primary); color: white;
-padding: 3px 9px 3px 7px; border-radius: 20px; z-index: 10;
+padding: 3px 9px 3px 5px; border-radius: 20px; z-index: 10;
 display: flex; align-items: center; gap: 5px;
+}
+.site-tag img.flag-img {
+width: 18px; height: 13px; border-radius: 2px;
+object-fit: cover; display: block; flex-shrink: 0;
 }
 .site-tag .code { font-size: 11px; font-weight: 700; letter-spacing: 0.5px; line-height: 1; }
 .new-badge {
@@ -128,7 +134,7 @@ border-bottom: 1px solid var(--border); display: flex; align-items: center; just
 #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(20px); background: #333; color: white; padding: 10px 22px; border-radius: 30px; font-size: 13px; opacity: 0; transition: all 0.3s; z-index: 10000; }
 #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 .pagination { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 32px 0; }
-.pagination button { padding: 8px 16px; border: 1.5px solid var(--border); background: white; cursor: pointer; border-radius: var(--radius-sm); font-family: inherit; transition: all 0.2s; }
+.pagination button { padding: 8px 16px; border: 1.5px solid var(--border); background: white; cursor: pointer; border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; transition: all 0.2s; }
 .pagination button:hover:not(:disabled) { border-color: var(--primary); color: var(--primary); }
 .pagination button:disabled { opacity: 0.4; cursor: not-allowed; }
 footer { text-align: center; color: var(--text-muted); font-size: 11px; padding: 40px; border-top: 1px solid var(--border); }
@@ -179,13 +185,6 @@ footer { text-align: center; color: var(--text-muted); font-size: 11px; padding:
         <option value="TW">TW</option>
         <option value="VN">VN</option>
       </select>
-      <span class="filter-label">📈 ADO MoM</span>
-      <select id="momFilter" onchange="applyFilters()">
-        <option value="">全部趋势</option>
-        <option value="pos">▲ 正增长</option>
-        <option value="neg">▼ 负增长</option>
-        <option value="zero">– 持平</option>
-      </select>
       <label class="switch-container">
         <input type="checkbox" id="topNewFilter" onchange="applyFilters()">
         <span style="font-size:13px;font-weight:500;">🔥 Top New SKU <small style="font-weight:400;color:var(--text-muted);">(近30天上新)</small></span>
@@ -208,14 +207,10 @@ const DATA_URL = './data.json';
 let products = [], filteredData = [], currentPage = 1;
 const pageSize = 40;
 
-const SITE_FLAG = {
-  BR:'🇧🇷', MX:'🇲🇽', MY:'🇲🇾', PH:'🇵🇭',
-  SG:'🇸🇬', TH:'🇹🇭', TW:'🇹🇼', VN:'🇻🇳'
-};
-
-function getSiteTagHtml(site) {
-  const flag = SITE_FLAG[site] || '🌐';
-  return '<span style="font-size:14px;line-height:1;">' + flag + '</span><span class="code">' + site + '</span>';
+function getFlagImgHtml(countryCode) {
+  if (!countryCode || countryCode.length !== 2) return '';
+  const code = countryCode.toLowerCase();
+  return '<img class="flag-img" src="https://flagcdn.com/w40/' + code + '.png" alt="' + countryCode + '" onerror="this.style.display=\'none\'">';
 }
 
 function showToast(msg) {
@@ -230,7 +225,7 @@ const toNum = function(s) {
   return parseFloat(str) || 0;
 };
 
-const KNOWN_SITES = ['BR','MX','MY','PH','SG','TH','TW','VN'];
+const KNOWN_SITES = ['BR', 'MX', 'MY', 'PH', 'SG', 'TH', 'TW', 'VN'];
 function normalizeSite(raw) {
   const s = clean(raw).toUpperCase();
   for (let i = 0; i < KNOWN_SITES.length; i++) { if (s === KNOWN_SITES[i]) return KNOWN_SITES[i]; }
@@ -238,7 +233,6 @@ function normalizeSite(raw) {
   return s;
 }
 
-// 原始字段名版本（兼容旧 data.json）
 function normalizeItem(obj) {
   return {
     itemid:      clean(obj.item_id || ''),
@@ -309,7 +303,7 @@ function sortData(data, key) {
 
 async function loadData() {
   try {
-    const res = await fetch(DATA_URL + '?t=' + Date.now());
+    const res = await fetch(DATA_URL);
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const json = await res.json();
     const rawList = Array.isArray(json) ? json : (json.data || []);
@@ -383,7 +377,8 @@ function render(dataList, page) {
     renderPagination(0); return;
   }
   pageData.forEach(function(item) {
-    const siteTagHtml = getSiteTagHtml(item.site);
+    const flagHtml    = getFlagImgHtml(item.site);
+    const siteTagHtml = flagHtml + '<span class="code">' + item.site + '</span>';
     const newBadge    = isNewSku(item) ? '<div class="new-badge">NEW</div>' : '';
     const priceDisplay = item.price_usd ? '$' + item.price_usd.toFixed(2) : '—';
     const adoRangeStr  = adoRange(item.ado);
@@ -407,7 +402,7 @@ function render(dataList, page) {
       '<div class="site-tag">' + siteTagHtml + '</div>'
       + newBadge
       + '<div class="img-container" onclick="openModal(\'' + item.imgUrl + '\')">'
-      +   '<img src="' + item.imgUrl + '" loading="lazy" onerror="this.style.display=\'none\';this.parentNode.innerHTML+=\'<div style=&quot;font-size:40px;color:#ddd&quot;>📦</div>\'">'
+      +   '<img src="' + item.imgUrl + '" loading="lazy" onerror="this.src=\'https://via.placeholder.com/200?text=No+Image\'">'
       + '</div>'
       + '<div class="info">'
       +   '<div class="item-title" title="' + item.title + '">' + item.title + '</div>'
@@ -448,7 +443,6 @@ function applyFilters() {
   const site     = document.getElementById('siteFilter').value;
   const isTopNew = document.getElementById('topNewFilter').checked;
   const sort     = document.getElementById('sortOrder').value;
-  const mom      = document.getElementById('momFilter').value;
 
   const filtered = products.filter(function(p) {
     return (!q       || p.title.toLowerCase().indexOf(q) !== -1 || p.itemid.indexOf(q) !== -1) &&
@@ -456,12 +450,7 @@ function applyFilters() {
            (!l2      || p.l2 === l2) &&
            (!l3      || p.l3 === l3) &&
            (!site    || p.site === site) &&
-           (!isTopNew || isNewSku(p)) &&
-           (!mom ||
-             (mom === 'pos'  && p.ado_mom > 0) ||
-             (mom === 'neg'  && p.ado_mom < 0) ||
-             (mom === 'zero' && p.ado_mom === 0)
-           );
+           (!isTopNew || isNewSku(p));
   });
 
   filteredData = sortData(filtered, sort);
@@ -471,7 +460,7 @@ function applyFilters() {
 
 function clearFilters() {
   document.getElementById('searchInput').value = '';
-  ['l1Filter','l2Filter','l3Filter','siteFilter','momFilter'].forEach(function(id) {
+  ['l1Filter','l2Filter','l3Filter','siteFilter'].forEach(function(id) {
     document.getElementById(id).value = '';
   });
   document.getElementById('sortOrder').value = 'adoDesc';
