@@ -166,6 +166,8 @@ footer { text-align: center; color: var(--text-muted); font-size: 11px; padding:
         <option value="adoDesc" selected>单量 (ADO) ↓</option>
         <option value="adgDesc">销售额 (ADG) ↓</option>
         <option value="priceDesc">价格 ↓</option>
+        <option value="momDesc">ADO MoM ↓ (增长最快)</option>
+        <option value="momAsc">ADO MoM ↑ (跌幅最大)</option>
       </select>
       <button class="btn-clear" onclick="clearFilters()">✕ 重置</button>
       <span class="count-badge" id="countDisplay">—</span>
@@ -301,12 +303,14 @@ function sortData(data, key) {
   if (key === 'adoDesc')   s.sort(function(a,b) { return b.ado - a.ado; });
   if (key === 'adgDesc')   s.sort(function(a,b) { return b.adg_usd - a.adg_usd; });
   if (key === 'priceDesc') s.sort(function(a,b) { return b.price_usd - a.price_usd; });
+  if (key === 'momDesc')   s.sort(function(a,b) { return b.ado_mom - a.ado_mom; });
+  if (key === 'momAsc')    s.sort(function(a,b) { return a.ado_mom - b.ado_mom; });
   return s;
 }
 
 async function loadData() {
   try {
-    const res = await fetch(DATA_URL);
+    const res = await fetch(DATA_URL + '?t=' + Date.now());
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const json = await res.json();
     const rawList = Array.isArray(json) ? json : (json.data || []);
