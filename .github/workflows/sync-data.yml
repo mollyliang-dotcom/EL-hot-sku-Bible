@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Fetch CSV and convert to compressed JSON
+      - name: Fetch CSV and convert to JSON
         run: |
           python3 << 'EOF'
           import csv, json, urllib.request
@@ -23,44 +23,10 @@ jobs:
 
           rows = list(csv.DictReader(content.splitlines()))
 
-          # 字段名压缩映射（a~m 对应原字段，大幅减少文件体积）
-          # a = item_id
-          # b = year_month
-          # c = grass_region
-          # d = item_name
-          # e = cb_level1_global_be_category
-          # f = level2_global_be_category
-          # g = level3_global_be_category
-          # h = item_create_date
-          # i = product_image
-          # j = price_usd
-          # k = ADO(SUM)
-          # l = mom_ado_growth_contri(SUM)
-          # m = ADG_usd(SUM)
-
-          def compress(row):
-              return {
-                  "a": row.get("item_id", ""),
-                  "b": row.get("year_month", ""),
-                  "c": row.get("grass_region", ""),
-                  "d": row.get("item_name", ""),
-                  "e": row.get("cb_level1_global_be_category", ""),
-                  "f": row.get("level2_global_be_category", ""),
-                  "g": row.get("level3_global_be_category", ""),
-                  "h": row.get("item_create_date", ""),
-                  "i": row.get("product_image", ""),
-                  "j": row.get("price_usd", ""),
-                  "k": row.get("ADO(SUM)", ""),
-                  "l": row.get("mom_ado_growth_contri(SUM)", ""),
-                  "m": row.get("ADG_usd(SUM)", "")
-              }
-
-          compressed = [compress(r) for r in rows]
-
           with open("data.json", "w", encoding="utf-8") as f:
-              json.dump(compressed, f, separators=(',', ':'), ensure_ascii=False)
+              json.dump(rows, f, ensure_ascii=False)
 
-          print(f"Done: {len(compressed)} rows written to data.json")
+          print(f"Done: {len(rows)} rows written to data.json")
           EOF
 
       - name: Commit and push data.json
