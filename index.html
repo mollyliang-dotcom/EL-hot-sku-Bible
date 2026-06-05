@@ -85,8 +85,12 @@ position: relative; display: flex; flex-direction: column;
 .site-tag {
 position: absolute; top: 10px; left: 10px;
 background: var(--primary); color: white;
-padding: 3px 9px 3px 7px; border-radius: 20px; z-index: 10;
+padding: 3px 9px 3px 5px; border-radius: 20px; z-index: 10;
 display: flex; align-items: center; gap: 5px;
+}
+.site-tag img.flag-img {
+width: 18px; height: 13px; border-radius: 2px;
+object-fit: cover; display: block; flex-shrink: 0;
 }
 .site-tag .code { font-size: 11px; font-weight: 700; letter-spacing: 0.5px; line-height: 1; }
 .new-badge {
@@ -208,14 +212,10 @@ const DATA_URL = './data.json';
 let products = [], filteredData = [], currentPage = 1;
 const pageSize = 40;
 
-const SITE_FLAG = {
-  BR:'🇧🇷', MX:'🇲🇽', MY:'🇲🇾', PH:'🇵🇭',
-  SG:'🇸🇬', TH:'🇹🇭', TW:'🇹🇼', VN:'🇻🇳'
-};
-
-function getSiteTagHtml(site) {
-  const flag = SITE_FLAG[site] || '🌐';
-  return '<span style="font-size:14px;line-height:1;">' + flag + '</span><span class="code">' + site + '</span>';
+function getFlagImgHtml(countryCode) {
+  if (!countryCode || countryCode.length !== 2) return '';
+  const code = countryCode.toLowerCase();
+  return '<img class="flag-img" src="https://flagcdn.com/w40/' + code + '.png" alt="' + countryCode + '" onerror="this.style.display=\'none\'">';
 }
 
 function showToast(msg) {
@@ -382,7 +382,8 @@ function render(dataList, page) {
     renderPagination(0); return;
   }
   pageData.forEach(function(item) {
-    const siteTagHtml = getSiteTagHtml(item.site);
+    const flagHtml    = getFlagImgHtml(item.site);
+    const siteTagHtml = flagHtml + '<span class="code">' + item.site + '</span>';
     const newBadge    = isNewSku(item) ? '<div class="new-badge">NEW</div>' : '';
     const priceDisplay = item.price_usd ? '$' + item.price_usd.toFixed(2) : '—';
     const adoRangeStr  = adoRange(item.ado);
