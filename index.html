@@ -4,16 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Shopee EL 选品指南</title>
-
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-DMXQE68GVC"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-DMXQE68GVC');
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-DMXQE68GVC');
 </script>
-
 <style>
 :root {
 --primary: #EE4D2D;
@@ -311,10 +309,15 @@ const json = await res.json();
 const rawList = Array.isArray(json) ? json : (json.data || []);
 if (!rawList.length) throw new Error('数据为空');
 products = rawList.map(normalizeItem).filter(function(p) { return p.itemid; });
-const dates = products.map(function(p) { return new Date(p.create_date); }).filter(function(d) { return !isNaN(d); });
-if (dates.length) {
+const lastModified = res.headers.get('Last-Modified');
+if (lastModified) {
+const ld = new Date(lastModified);
 document.getElementById('lastUpdateDisplay').textContent =
-'数据最后更新: ' + new Date(Math.max.apply(null, dates)).toLocaleDateString('zh-CN');
+'数据最后更新: ' + ld.getFullYear() + '/' + (ld.getMonth()+1) + '/' + ld.getDate();
+} else {
+const _d = new Date();
+document.getElementById('lastUpdateDisplay').textContent =
+'数据最后更新: ' + _d.getFullYear() + '/' + (_d.getMonth()+1) + '/' + _d.getDate();
 }
 initFilters(); applyFilters();
 } catch(e) {
@@ -471,5 +474,3 @@ window.onload = loadData;
 </script>
 </body>
 </html>
-</html>
-
