@@ -120,6 +120,8 @@ border-bottom: 1px solid var(--border); display: flex; align-items: center; just
 .meta-row { display: flex; flex-wrap: wrap; gap: 5px; }
 .pill { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 20px; border: 1px solid transparent; }
 .pill-cat { background: var(--tag-bg); color: var(--primary-dark); border-color: #f5c5d2; }
+.pill-cb { background: #e8f4fd; color: #2980b9; border-color: #b8d9f0; }
+.pill-cnls { background: #e8f8ef; color: #27ae60; border-color: #b0e5c8; }
 .ado-block { display: flex; align-items: center; gap: 8px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 6px 10px; }
 .ado-label { font-size: 10px; color: var(--text-muted); font-weight: 600; white-space: nowrap; }
 .ado-range { font-size: 12px; font-weight: 700; white-space: nowrap; }
@@ -190,6 +192,12 @@ footer { text-align: center; color: var(--text-muted); font-size: 11px; padding:
 <option value="TW">TW</option>
 <option value="VN">VN</option>
 </select>
+<span class="filter-label">📦 产品类型</span>
+<select id="productTypeFilter" onchange="applyFilters()">
+<option value="">全部类型</option>
+<option value="CB">CB</option>
+<option value="CNLS">CNLS</option>
+</select>
 <span class="filter-label">📈 ADO MoM</span>
 <select id="momFilter" onchange="applyFilters()">
 <option value="">全部趋势</option>
@@ -212,7 +220,8 @@ footer { text-align: center; color: var(--text-muted); font-size: 11px; padding:
 <div id="toast"></div>
 <footer>Shopee EL 选品指南</footer>
 <script>
-const DATA_URL = './data.json';
+const CB_SHEET_URL = 'https://docs.google.com/spreadsheets/d/1rFygYkzsXpYaqScY2GtDAAuhXAQ0cM93cv4Jx243koA/export?format=csv&gid=990111578';
+const CNLS_SHEET_URL = 'https://docs.google.com/spreadsheets/d/1rFygYkzsXpYaqScY2GtDAAuhXAQ0cM93cv4Jx243koA/export?format=csv&gid=426750616';
 let products = [], filteredData = [], currentPage = 1;
 const pageSize = 40;
 function getFlagImgHtml(countryCode) {
@@ -237,21 +246,73 @@ for (let i = 0; i < KNOWN_SITES.length; i++) { if (s === KNOWN_SITES[i]) return 
 for (let i = 0; i < KNOWN_SITES.length; i++) { if (s.indexOf(KNOWN_SITES[i]) !== -1) return KNOWN_SITES[i]; }
 return s;
 }
-function normalizeItem(obj) {
+function parseCSV(text) {
+const lines = text.split('\n');
+const headers = parseCSVLine(lines[0]);
+const rows = [];
+for (let i = 1; i < lines.length; i++) {
+if (!lines[i].trim()) continue;
+const vals = parseCSVLine(lines[i]);
+const obj = {};
+headers.forEach(function(h, idx) { obj[h.trim()] = vals[idx] !== undefined ? vals[idx] : ''; });
+rows.push(obj);
+}
+return rows;
+}
+function parseCSVLine(line) {
+const result = [];
+let cur = '', inQ = false;
+for (let i = 0; i < line.length; i++) {
+const c = line[i];
+if (c === '"') {
+if (inQ && line[i+1] === '"') { cur += '"'; i++; }
+else { inQ = !inQ; }
+} else if (c === ',' && !inQ) {
+result.push(cur); cur = '';
+} else {
+cur += c;
+}
+}
+result.push(cur);
+return result;
+}
+function normalizeCBItem(obj) {
 return {
-itemid:      clean(obj.item_id || ''),
-year_month:  clean(obj.year_month || ''),
-site:        normalizeSite(obj.grass_region || ''),
-title:       clean(obj.item_name || ''),
-l1:          clean(obj.cb_level1_global_be_category || ''),
-l2:          clean(obj.level2_global_be_category || ''),
-l3:          clean(obj.level3_global_be_category || ''),
-create_date: clean(obj.item_create_date || ''),
-imgUrl:      clean(obj.product_image || ''),
-price_usd:   toNum(obj.price_usd || 0),
+itemid:      clean(obj['item_id'] || ''),
+year_month:  clean(obj['year_month'] || ''),
+site:        normalizeSite(obj['grass_region'] || ''),
+title:       clean(obj['item_name'] || ''),
+l1:          clean(obj['cb_level1_global_be_category'] || ''),
+l2:          clean(obj['level2_global_be_category'] || ''),
+l3:          clean(obj['level3_global_be_category'] || ''),
+create_date: clean(obj['item_create_date'] || ''),
+imgUrl:      clean(obj['product_image'] || ''),
+price_usd:   toNum(obj['price_usd'] || 0),
 ado:         toNum(obj['ADO(SUM)'] || 0),
 ado_mom:     toNum(obj['mom_ado_growth_contri(SUM)'] || 0),
-adg_usd:     toNum(obj['ADG_usd(SUM)'] || 0)
+adg_usd:     toNum(obj['ADG_usd(SUM)'] || 0),
+productType: 'CB'
+};
+}
+function normalizeCNLSItem(obj) {
+const adoDiff = toNum(obj['ado_diff(RAW)'] || 0);
+const benchmarkAdo = toNum(obj['benchmark_ado(RAW)'] || 0);
+const adoMom = (benchmarkAdo !== 0) ? (adoDiff / benchmarkAdo) * 100 : 0;
+return {
+itemid:      clean(obj['item_id'] || ''),
+year_month:  clean(obj['year_month'] || ''),
+site:        normalizeSite(obj['grass_region'] || ''),
+title:       clean(obj['item_name'] || ''),
+l1:          clean(obj['cb_level1_global_be_category'] || ''),
+l2:          clean(obj['level2_global_be_category'] || ''),
+l3:          clean(obj['level3_global_be_category'] || ''),
+create_date: clean(obj['item_create_date'] || ''),
+imgUrl:      clean(obj['item_image'] || ''),
+price_usd:   toNum(obj['item_price_usd'] || 0),
+ado:         toNum(obj['current_ado(RAW)'] || 0),
+ado_mom:     adoMom,
+adg_usd:     toNum(obj['current_adgmv(RAW)'] || 0),
+productType: 'CNLS'
 };
 }
 function toRangeStr(val, step) {
@@ -301,15 +362,24 @@ if (key === 'momDesc')   s.sort(function(a,b) { return b.ado_mom - a.ado_mom; })
 if (key === 'momAsc')    s.sort(function(a,b) { return a.ado_mom - b.ado_mom; });
 return s;
 }
+async function fetchCSV(url) {
+const res = await fetch(url + '&t=' + Date.now());
+if (!res.ok) throw new Error('HTTP ' + res.status);
+const text = await res.text();
+return { text: text, lastModified: res.headers.get('Last-Modified') };
+}
 async function loadData() {
 try {
-const res = await fetch(DATA_URL + '?t=' + Date.now());
-if (!res.ok) throw new Error('HTTP ' + res.status);
-const json = await res.json();
-const rawList = Array.isArray(json) ? json : (json.data || []);
-if (!rawList.length) throw new Error('数据为空');
-products = rawList.map(normalizeItem).filter(function(p) { return p.itemid; });
-const lastModified = res.headers.get('Last-Modified');
+const [cbResult, cnlsResult] = await Promise.all([
+fetchCSV(CB_SHEET_URL),
+fetchCSV(CNLS_SHEET_URL)
+]);
+const cbRows = parseCSV(cbResult.text);
+const cnlsRows = parseCSV(cnlsResult.text);
+const cbProducts = cbRows.map(normalizeCBItem).filter(function(p) { return p.itemid; });
+const cnlsProducts = cnlsRows.map(normalizeCNLSItem).filter(function(p) { return p.itemid; });
+products = cbProducts.concat(cnlsProducts);
+const lastModified = cbResult.lastModified || cnlsResult.lastModified;
 if (lastModified) {
 const ld = new Date(lastModified);
 document.getElementById('lastUpdateDisplay').textContent =
@@ -396,6 +466,9 @@ const adoBlock = adoRangeStr ? (
 + '</div>'
 ) : '';
 const l3Html = item.l3 ? '<span class="pill pill-cat">' + item.l3 + '</span>' : '';
+const typePillHtml = item.productType === 'CB'
+? '<span class="pill pill-cb">CB</span>'
+: '<span class="pill pill-cnls">CNLS</span>';
 const card = document.createElement('div');
 card.className = 'card';
 card.innerHTML =
@@ -407,7 +480,7 @@ card.innerHTML =
 + '<div class="info">'
 +   '<div class="item-title" title="' + item.title + '">' + item.title + '</div>'
 +   '<div class="price-row"><span class="price-label">价格</span><span class="price-value">' + priceDisplay + '</span></div>'
-+   (l3Html ? '<div class="meta-row">' + l3Html + '</div>' : '')
++   '<div class="meta-row">' + typePillHtml + (l3Html ? l3Html : '') + '</div>'
 +   adoBlock
 +   '<div class="stats-row">'
 +     '<div class="stat-box"><div class="stat-label">ADO (件/日)</div><div class="stat-value ado-val">' + (adoRangeStr || '—') + '</div></div>'
@@ -438,6 +511,7 @@ const l1       = document.getElementById('l1Filter').value;
 const l2       = document.getElementById('l2Filter').value;
 const l3       = document.getElementById('l3Filter').value;
 const site     = document.getElementById('siteFilter').value;
+const productType = document.getElementById('productTypeFilter').value;
 const isTopNew = document.getElementById('topNewFilter').checked;
 const sort     = document.getElementById('sortOrder').value;
 const mom      = document.getElementById('momFilter').value;
@@ -447,6 +521,7 @@ return (!q       || p.title.toLowerCase().indexOf(q) !== -1 || p.itemid.indexOf(
 (!l2      || p.l2 === l2) &&
 (!l3      || p.l3 === l3) &&
 (!site    || p.site === site) &&
+(!productType || p.productType === productType) &&
 (!isTopNew || isNewSku(p)) &&
 (!mom ||
 (mom === 'pos'  && p.ado_mom > 0) ||
@@ -460,7 +535,7 @@ render(filteredData, 1);
 }
 function clearFilters() {
 document.getElementById('searchInput').value = '';
-['l1Filter','l2Filter','l3Filter','siteFilter','momFilter'].forEach(function(id) {
+['l1Filter','l2Filter','l3Filter','siteFilter','productTypeFilter','momFilter'].forEach(function(id) {
 document.getElementById(id).value = '';
 });
 document.getElementById('sortOrder').value = 'adoDesc';
