@@ -14,33 +14,32 @@ jobs:
       - name: Fetch CSV and convert to JSON
         run: |
           python3 << 'EOF'
-          import csv, json, urllib.request
+          import csv, json, urllib.request, io
+
+          def fetch_json(url, label):
+              with urllib.request.urlopen(url) as r:
+                  content = r.read().decode('utf-8-sig')  # 处理 BOM 头
+              # 用 io.StringIO + csv.DictReader，指定 quoting 参数
+              reader = csv.DictReader(
+                  io.StringIO(content),
+                  quoting=csv.QUOTE_ALL
+              )
+              rows = list(reader)
+              print(f"{label}: {len(rows)} rows")
+              return rows
 
           # ── CB Tab ──────────────────────────────────────────────────
           cb_url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT2Z61Z0LxqcTmhjJe5KS_PimpDY4bM-aODeY0CuL9z3EX233KOqWMkXWJteyXQkexOMSqIO3O3rMI-/pub?gid=990111578&single=true&output=csv"
-
-          with urllib.request.urlopen(cb_url) as r:
-              cb_content = r.read().decode('utf-8')
-
-          cb_rows = list(csv.DictReader(cb_content.splitlines()))
-
+          cb_rows = fetch_json(cb_url, "CB")
           with open("data_cb.json", "w", encoding="utf-8") as f:
               json.dump(cb_rows, f, ensure_ascii=False)
 
-          print(f"CB Done: {len(cb_rows)} rows written to data_cb.json")
-
           # ── CNLS Tab ─────────────────────────────────────────────────
           cnls_url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT2Z61Z0LxqcTmhjJe5KS_PimpDY4bM-aODeY0CuL9z3EX233KOqWMkXWJteyXQkexOMSqIO3O3rMI-/pub?gid=426750616&single=true&output=csv"
-
-          with urllib.request.urlopen(cnls_url) as r:
-              cnls_content = r.read().decode('utf-8')
-
-          cnls_rows = list(csv.DictReader(cnls_content.splitlines()))
-
+          cnls_rows = fetch_json(cnls_url, "CNLS")
           with open("data_cnls.json", "w", encoding="utf-8") as f:
               json.dump(cnls_rows, f, ensure_ascii=False)
 
-          print(f"CNLS Done: {len(cnls_rows)} rows written to data_cnls.json")
           EOF
 
       - name: Commit and push
