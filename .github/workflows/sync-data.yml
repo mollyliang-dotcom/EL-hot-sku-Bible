@@ -16,23 +16,37 @@ jobs:
           python3 << 'EOF'
           import csv, json, urllib.request
 
-          url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT2Z61Z0LxqcTmhjJe5KS_PimpDY4bM-aODeY0CuL9z3EX233KOqWMkXWJteyXQkexOMSqIO3O3rMI-/pub?gid=759893186&single=true&output=csv"
+          # ── CB Tab ──────────────────────────────────────────────────
+          cb_url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT2Z61Z0LxqcTmhjJe5KS_PimpDY4bM-aODeY0CuL9z3EX233KOqWMkXWJteyXQkexOMSqIO3O3rMI-/pub?gid=990111578&single=true&output=csv"
 
-          with urllib.request.urlopen(url) as r:
-              content = r.read().decode('utf-8')
+          with urllib.request.urlopen(cb_url) as r:
+              cb_content = r.read().decode('utf-8')
 
-          rows = list(csv.DictReader(content.splitlines()))
+          cb_rows = list(csv.DictReader(cb_content.splitlines()))
 
-          with open("data.json", "w", encoding="utf-8") as f:
-              json.dump(rows, f, ensure_ascii=False)
+          with open("data_cb.json", "w", encoding="utf-8") as f:
+              json.dump(cb_rows, f, ensure_ascii=False)
 
-          print(f"Done: {len(rows)} rows written to data.json")
+          print(f"CB Done: {len(cb_rows)} rows written to data_cb.json")
+
+          # ── CNLS Tab ─────────────────────────────────────────────────
+          cnls_url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT2Z61Z0LxqcTmhjJe5KS_PimpDY4bM-aODeY0CuL9z3EX233KOqWMkXWJteyXQkexOMSqIO3O3rMI-/pub?gid=426750616&single=true&output=csv"
+
+          with urllib.request.urlopen(cnls_url) as r:
+              cnls_content = r.read().decode('utf-8')
+
+          cnls_rows = list(csv.DictReader(cnls_content.splitlines()))
+
+          with open("data_cnls.json", "w", encoding="utf-8") as f:
+              json.dump(cnls_rows, f, ensure_ascii=False)
+
+          print(f"CNLS Done: {len(cnls_rows)} rows written to data_cnls.json")
           EOF
 
-      - name: Commit and push data.json
+      - name: Commit and push
         run: |
           git config user.name "actions-user"
           git config user.email "actions@github.com"
-          git add data.json
+          git add data_cb.json data_cnls.json
           git diff --staged --quiet || git commit -m "Auto sync data"
           git push
