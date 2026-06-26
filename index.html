@@ -220,8 +220,8 @@ footer { text-align: center; color: var(--text-muted); font-size: 11px; padding:
 <div id="toast"></div>
 <footer>Shopee EL 选品指南</footer>
 <script>
-const CB_SHEET_URL = 'https://docs.google.com/spreadsheets/d/1rFygYkzsXpYaqScY2GtDAAuhXAQ0cM93cv4Jx243koA/export?format=csv&gid=990111578';
-const CNLS_SHEET_URL = 'https://docs.google.com/spreadsheets/d/1rFygYkzsXpYaqScY2GtDAAuhXAQ0cM93cv4Jx243koA/export?format=csv&gid=426750616';
+const CB_DATA_URL   = './data_cb.json';
+const CNLS_DATA_URL = './data_cnls.json';
 let products = [], filteredData = [], currentPage = 1;
 const pageSize = 40;
 function getFlagImgHtml(countryCode) {
@@ -246,36 +246,6 @@ for (let i = 0; i < KNOWN_SITES.length; i++) { if (s === KNOWN_SITES[i]) return 
 for (let i = 0; i < KNOWN_SITES.length; i++) { if (s.indexOf(KNOWN_SITES[i]) !== -1) return KNOWN_SITES[i]; }
 return s;
 }
-function parseCSV(text) {
-const lines = text.split('\n');
-const headers = parseCSVLine(lines[0]);
-const rows = [];
-for (let i = 1; i < lines.length; i++) {
-if (!lines[i].trim()) continue;
-const vals = parseCSVLine(lines[i]);
-const obj = {};
-headers.forEach(function(h, idx) { obj[h.trim()] = vals[idx] !== undefined ? vals[idx] : ''; });
-rows.push(obj);
-}
-return rows;
-}
-function parseCSVLine(line) {
-const result = [];
-let cur = '', inQ = false;
-for (let i = 0; i < line.length; i++) {
-const c = line[i];
-if (c === '"') {
-if (inQ && line[i+1] === '"') { cur += '"'; i++; }
-else { inQ = !inQ; }
-} else if (c === ',' && !inQ) {
-result.push(cur); cur = '';
-} else {
-cur += c;
-}
-}
-result.push(cur);
-return result;
-}
 function normalizeCBItem(obj) {
 return {
 itemid:      clean(obj['item_id'] || ''),
@@ -295,7 +265,7 @@ productType: 'CB'
 };
 }
 function normalizeCNLSItem(obj) {
-const adoDiff = toNum(obj['ado_diff(RAW)'] || 0);
+const adoDiff    = toNum(obj['ado_diff(RAW)'] || 0);
 const benchmarkAdo = toNum(obj['benchmark_ado(RAW)'] || 0);
 const adoMom = (benchmarkAdo !== 0) ? (adoDiff / benchmarkAdo) * 100 : 0;
 return {
@@ -362,24 +332,22 @@ if (key === 'momDesc')   s.sort(function(a,b) { return b.ado_mom - a.ado_mom; })
 if (key === 'momAsc')    s.sort(function(a,b) { return a.ado_mom - b.ado_mom; });
 return s;
 }
-async function fetchCSV(url) {
-const res = await fetch(url + '&t=' + Date.now());
-if (!res.ok) throw new Error('HTTP ' + res.status);
-const text = await res.text();
-return { text: text, lastModified: res.headers.get('Last-Modified') };
-}
 async function loadData() {
 try {
-const [cbResult, cnlsResult] = await Promise.all([
-fetchCSV(CB_SHEET_URL),
-fetchCSV(CNLS_SHEET_URL)
+const [cbRes, cnlsRes] = await Promise.all([
+fetch(CB_DATA_URL   + '?t=' + Date.now()),
+fetch(CNLS_DATA_URL + '?t=' + Date.now())
 ]);
-const cbRows = parseCSV(cbResult.text);
-const cnlsRows = parseCSV(cnlsResult.text);
-const cbProducts = cbRows.map(normalizeCBItem).filter(function(p) { return p.itemid; });
-const cnlsProducts = cnlsRows.map(normalizeCNLSItem).filter(function(p) { return p.itemid; });
+if (!cbRes.ok)   throw new Error('CB data HTTP '   + cbRes.status);
+if (!cnlsRes.ok) throw new Error('CNLS data HTTP ' + cnlsRes.status);
+const cbJson   = await cbRes.json();
+const cnlsJson = await cnlsRes.json();
+const cbRawList   = Array.isArray(cbJson)   ? cbJson   : (cbJson.data   || []);
+const cnlsRawList = Array.isArray(cnlsJson) ? cnlsJson : (cnlsJson.data || []);
+const cbProducts   = cbRawList.map(normalizeCBItem).filter(function(p) { return p.itemid; });
+const cnlsProducts = cnlsRawList.map(normalizeCNLSItem).filter(function(p) { return p.itemid; });
 products = cbProducts.concat(cnlsProducts);
-const lastModified = cbResult.lastModified || cnlsResult.lastModified;
+const lastModified = cbRes.headers.get('Last-Modified');
 if (lastModified) {
 const ld = new Date(lastModified);
 document.getElementById('lastUpdateDisplay').textContent =
