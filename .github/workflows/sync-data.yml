@@ -1,3 +1,4 @@
+
 name: Sync Sheet Data
 
 on:
@@ -9,7 +10,7 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Fetch CSV and convert to JSON
         run: |
@@ -17,15 +18,22 @@ jobs:
           import csv, json, urllib.request, io
 
           def fetch_json(url, label):
-              with urllib.request.urlopen(url) as r:
-                  content = r.read().decode('utf-8-sig')  # 处理 BOM 头
-              # 用 io.StringIO + csv.DictReader，指定 quoting 参数
+              try:
+                  req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+                  with urllib.request.urlopen(req, timeout=30) as r:
+                      if r.status != 200:
+                          raise Exception(f"HTTP {r.status}")
+                      content = r.read().decode('utf-8-sig')
+              except Exception as e:
+                  print(f"❌ {label} 请求失败: {e}")
+                  raise
+
               reader = csv.DictReader(
                   io.StringIO(content),
                   quoting=csv.QUOTE_ALL
               )
               rows = list(reader)
-              print(f"{label}: {len(rows)} rows")
+              print(f"✅ {label}: {len(rows)} rows")
               return rows
 
           # ── CB Tab ──────────────────────────────────────────────────
@@ -35,7 +43,7 @@ jobs:
               json.dump(cb_rows, f, ensure_ascii=False)
 
           # ── CNLS Tab ─────────────────────────────────────────────────
-          cnls_url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT2Z61Z0LxqcTmhjJe5KS_PimpDY4bM-aODeY0CuL9z3EX233KOqWMkXWJteyXQkexOMSqIO3O3rMI-/pub?gid=426750616&single=true&output=csv"
+          cnls_url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT2Z61Z0LxqcTmhjJe5KS_PimpDY4bM-aODeY0CuL9z3EX233KOqWMkXWJteyXQkexOMSqIO3O3rMI-/pub?gid=1366116887&single=true&output=csv"
           cnls_rows = fetch_json(cnls_url, "CNLS")
           with open("data_cnls.json", "w", encoding="utf-8") as f:
               json.dump(cnls_rows, f, ensure_ascii=False)
