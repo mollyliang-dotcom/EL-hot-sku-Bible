@@ -575,17 +575,87 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:36px;border-t
 &lt;section class="dash"&gt;&lt;div&gt;&lt;div class="card"&gt;&lt;div class="title" id="ct"&gt;L1 类目贡献度&lt;/div&gt;&lt;div class="note"&gt;可切换 ADO / ADGMV&lt;/div&gt;&lt;button class="metric" data-m="adg"&gt;ADGMV&lt;/button&gt; &lt;button class="metric" data-m="ado"&gt;ADO&lt;/button&gt;&lt;div id="bars" class="bars" style="margin-top:15px"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="card"&gt;&lt;div class="title"&gt;当前筛选类目 Top 10 产品&lt;/div&gt;&lt;div class="note"&gt;按 ADGMV 降序排序&lt;/div&gt;&lt;div class="wrap"&gt;&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;排名&lt;/th&gt;&lt;th&gt;图片&lt;/th&gt;&lt;th&gt;Item ID&lt;/th&gt;&lt;th&gt;站点&lt;/th&gt;&lt;th&gt;类目&lt;/th&gt;&lt;th&gt;ADO 占比&lt;/th&gt;&lt;th&gt;ADGMV 占比&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody id="pt"&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div class="card"&gt;&lt;div class="title"&gt;站点销售额贡献&lt;/div&gt;&lt;div class="note"&gt;当前筛选下各站点 ADGMV 占比&lt;/div&gt;&lt;div id="sb" class="bars"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="card"&gt;&lt;div class="title"&gt;类目洞察&lt;/div&gt;&lt;div class="note"&gt;当前类型及筛选条件&lt;/div&gt;&lt;div id="ins"&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;
 &lt;/main&gt;&lt;div id="modal"&gt;&lt;img id="mi"&gt;&lt;/div&gt;&lt;footer&gt;Shopee EL 选品指南 · Category Overview&lt;/footer&gt;
 &lt;script&gt;
-const UCB='./data_cb.json',UCN='./data_cnls.json';let cb=[],cn=[],typ='CB',metric='adg';const $=x=&gt;document.getElementById(x),n=v=&gt;parseFloat(String(v??'').replace(/,/g,''))||0,p=(a,b)=&gt;b?a/b*100:0,f=x=&gt;x.toFixed(1)+'%',esc=s=&gt;String(s??'').replace(/[&amp;&lt;&gt;"']/g,c=&gt;({'&amp;':'&amp;amp;','&lt;':'&amp;lt;','&gt;':'&amp;gt;','"':'&amp;quot;',"'":'&amp;#39;'}[c]));function ns(v){let s=String(v||'').toUpperCase();return ['BR','MX','MY','PH','SG','TH','TW','VN'].find(x=&gt;s===x||s.includes(x))||s}
+const UCB='./data_cb.json',UCN='./data_cnls.json';let cb=[],cn=[],typ='CB',metric='adg',cbError='',cnError='';const $=x=&gt;document.getElementById(x),n=v=&gt;parseFloat(String(v??'').replace(/,/g,''))||0,p=(a,b)=&gt;b?a/b*100:0,f=x=&gt;x.toFixed(1)+'%',esc=s=&gt;String(s??'').replace(/[&amp;&lt;&gt;"']/g,c=&gt;({'&amp;':'&amp;amp;','&lt;':'&amp;lt;','&gt;':'&amp;gt;','"':'&amp;quot;',"'":'&amp;#39;'}[c]));function ns(v){let s=String(v||'').toUpperCase();return ['BR','MX','MY','PH','SG','TH','TW','VN'].find(x=&gt;s===x||s.includes(x))||s}
 function NCB(r){return{id:String(r.item_id||''),site:ns(r.grass_region),l1:r.cb_level1_global_be_category||'',l2:r.level2_global_be_category||'',l3:r.level3_global_be_category||'',img:r.product_image||'',ado:n(r['ADO(SUM)']),adg:n(r['ADG_usd(SUM)'])}}function NCN(r){return{id:String(r.item_id||''),site:ns(r.grass_region),l1:r.cb_level1_global_be_category||'',l2:r.level2_global_be_category||'',l3:r.level3_global_be_category||'',img:r.item_image||'',ado:n(r['current_ado(RAW)']),adg:n(r['current_adgmv(RAW)'])}}
-function R(){return typ==='CB'?cb:cn}function F(){let s=$('site').value,a=$('l1').value,b=$('l2').value,c=$('l3').value;return R().filter(r=&gt;(!s||r.site===s)&amp;&amp;(!a||r.l1===a)&amp;&amp;(!b||r.l2===b)&amp;&amp;(!c||r.l3===c))}function A(d,k){let m=new Map;d.forEach(r=&gt;{let z=r[k]||'未分类';if(!m.has(z))m.set(z,{name:z,ado:0,adg:0});let g=m.get(z);g.ado+=r.ado;g.adg+=r.adg});return[...m.values()]}function S(d,k){return d.reduce((a,r)=&gt;a+r[k],0)}function H(){if($('l2').value)return['l3','L3'];if($('l1').value)return['l2','L2'];return['l1','L1']}
-const pal=['#FFB5A7','#FCD5CE','#F9DCC4','#CDEAC0','#BDE0FE','#A2D2FF','#CDB4DB','#FFC8DD','#D8E2DC','#E8D7F1','#D0F4DE','#FFF1E6'];function B(id,pts){if(!pts.length){$(id).innerHTML='&lt;div class="empty"&gt;暂无数据&lt;/div&gt;';return}let ma=Math.max(...pts.map(x=&gt;x.ado),1),mg=Math.max(...pts.map(x=&gt;x.adg),1),d='';pts.forEach((q,i)=&gt;{let x=55+q.ado/ma*460,y=285-q.adg/mg*235,r=9+Math.sqrt((q.ado/ma+q.adg/mg)/2)*17,c=pal[i%pal.length],s=q.name.length&gt;13?q.name.slice(0,13)+'…':q.name;d+=\`&lt;circle class="dot" cx="\${x}" cy="\${y}" r="\${r}" fill="\${c}"&gt;&lt;title&gt;\${esc(q.name)}&lt;/title&gt;&lt;/circle&gt;&lt;text class="label" x="\${x}" y="\${y+3}" text-anchor="middle"&gt;\${esc(s)}&lt;/text&gt;\`});$(id).innerHTML=\`&lt;svg viewBox="0 0 560 330"&gt;&lt;line x1="48" y1="290" x2="525" y2="290" stroke="#eadfe4"/&gt;&lt;line x1="48" y1="290" x2="48" y2="38" stroke="#eadfe4"/&gt;&lt;text class="axis" x="490" y="315"&gt;ADO 高 →&lt;/text&gt;&lt;text class="axis" x="12" y="50"&gt;ADGMV 高 ↑&lt;/text&gt;\${d}&lt;/svg&gt;\`}
+function R(){return typ==='CB'?cb:cn}
+function currentError(){return typ==='CB'?cbError:cnError}
+function showTypeState(){
+  const err=currentError(),data=R(),label=typ==='CB'?'跨境 CB':'本土 CNLS';
+  if(err){
+    $('siteBubble').innerHTML='&lt;div class="empty"&gt;'+esc(label+' 数据加载失败：'+err)+'&lt;/div&gt;';
+    $('l1Bubble').innerHTML='&lt;div class="empty"&gt;暂无可用数据&lt;/div&gt;';
+    $('bars').innerHTML='&lt;div class="empty"&gt;暂无可用数据&lt;/div&gt;';
+    $('pt').innerHTML='&lt;tr&gt;&lt;td colspan="7" class="empty"&gt;暂无可用数据&lt;/td&gt;&lt;/tr&gt;';
+    $('sb').innerHTML='&lt;div class="empty"&gt;暂无可用数据&lt;/div&gt;';
+    $('ins').innerHTML='&lt;div class="empty"&gt;请检查对应 JSON 数据文件&lt;/div&gt;';
+    ['sa','sg','la','lg'].forEach(id=&gt;$(id).textContent='—');
+    return true;
+  }
+  if(!data.length){
+    $('siteBubble').innerHTML='&lt;div class="empty"&gt;'+label+' 暂无数据&lt;/div&gt;';
+    $('l1Bubble').innerHTML='&lt;div class="empty"&gt;暂无数据&lt;/div&gt;';
+    $('bars').innerHTML='&lt;div class="empty"&gt;暂无数据&lt;/div&gt;';
+    $('pt').innerHTML='&lt;tr&gt;&lt;td colspan="7" class="empty"&gt;暂无数据&lt;/td&gt;&lt;/tr&gt;';
+    $('sb').innerHTML='&lt;div class="empty"&gt;暂无数据&lt;/div&gt;';
+    $('ins').innerHTML='&lt;div class="empty"&gt;暂无数据&lt;/div&gt;';
+    return true;
+  }
+  return false;
+}function F(){let s=$('site').value,a=$('l1').value,b=$('l2').value,c=$('l3').value;return R().filter(r=&gt;(!s||r.site===s)&amp;&amp;(!a||r.l1===a)&amp;&amp;(!b||r.l2===b)&amp;&amp;(!c||r.l3===c))}function A(d,k){let m=new Map;d.forEach(r=&gt;{let z=r[k]||'未分类';if(!m.has(z))m.set(z,{name:z,ado:0,adg:0});let g=m.get(z);g.ado+=r.ado;g.adg+=r.adg});return[...m.values()]}function S(d,k){return d.reduce((a,r)=&gt;a+r[k],0)}function H(){if($('l2').value)return['l3','L3'];if($('l1').value)return['l2','L2'];return['l1','L1']}
+const pal=['#FFB5A7','#FCD5CE','#F9DCC4','#CDEAC0','#BDE0FE','#A2D2FF','#CDB4DB','#FFC8DD','#D8E2DC','#E8D7F1','#D0F4DE','#FFF1E6'];function B(id,pts){if(!pts.length){$(id).innerHTML='&lt;div class="empty"&gt;暂无数据&lt;/div&gt;';return}let ma=Math.max(...pts.map(x=&gt;x.ado),1),mg=Math.max(...pts.map(x=&gt;x.adg),1),d='';pts.forEach((q,i)=&gt;{let x=55+q.ado/ma*460,y=285-q.adg/mg*235,r=9+Math.sqrt((q.ado/ma+q.adg/mg)/2)*17,c=pal[i%pal.length],s=q.name.length&gt;13?q.name.slice(0,13)+'…':q.name;d+=`&lt;circle class="dot" cx="${x}" cy="${y}" r="${r}" fill="${c}"&gt;&lt;title&gt;${esc(q.name)}&lt;/title&gt;&lt;/circle&gt;&lt;text class="label" x="${x}" y="${y+3}" text-anchor="middle"&gt;${esc(s)}&lt;/text&gt;`});$(id).innerHTML=`&lt;svg viewBox="0 0 560 330"&gt;&lt;line x1="48" y1="290" x2="525" y2="290" stroke="#eadfe4"/&gt;&lt;line x1="48" y1="290" x2="48" y2="38" stroke="#eadfe4"/&gt;&lt;text class="axis" x="490" y="315"&gt;ADO 高 →&lt;/text&gt;&lt;text class="axis" x="12" y="50"&gt;ADGMV 高 ↑&lt;/text&gt;${d}&lt;/svg&gt;`}
 function bubbles(){B('siteBubble',A(R(),'site').filter(x=&gt;x.name!=='未分类'));B('l1Bubble',A(R(),'l1').filter(x=&gt;x.name!=='未分类'))}function kpi(){let d=F(),da=S(d,'ado'),dg=S(d,'adg'),s=A(d,'site'),l=A(d,'l1'),sa=s.sort((a,b)=&gt;b.ado-a.ado)[0],sg=[...s].sort((a,b)=&gt;b.adg-a.adg)[0],la=l.sort((a,b)=&gt;b.ado-a.ado)[0],lg=[...l].sort((a,b)=&gt;b.adg-a.adg)[0];$('sa').textContent=sa?f(p(sa.ado,da)):'—';$('san').textContent=sa?sa.name:'—';$('sg').textContent=sg?f(p(sg.adg,dg)):'—';$('sgn').textContent=sg?sg.name:'—';$('la').textContent=la?f(p(la.ado,da)):'—';$('lan').textContent=la?la.name:'—';$('lg').textContent=lg?f(p(lg.adg,dg)):'—';$('lgn').textContent=lg?lg.name:'—'}
-function contrib(){let d=F(),[k,l]=H(),g=A(d,k).sort((a,b)=&gt;b[metric]-a[metric]).slice(0,12),den=g.reduce((a,x)=&gt;a+x[metric],0);$('ct').textContent=l+' 类目贡献度';$('bars').innerHTML=g.map(x=&gt;{let q=p(x[metric],den);return\`&lt;div class="bar"&gt;&lt;div class="bn"&gt;\${esc(x.name)}&lt;/div&gt;&lt;div class="track"&gt;&lt;div class="fill" style="width:\${Math.max(q,1)}%"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="bv"&gt;\${f(q)}&lt;/div&gt;&lt;/div&gt;\`}).join('')||'&lt;div class="empty"&gt;暂无数据&lt;/div&gt;'}
-function products(){let d=F(),da=S(d,'ado'),dg=S(d,'adg');$('pt').innerHTML=d.slice().sort((a,b)=&gt;b.adg-a.adg).slice(0,10).map((x,i)=&gt;\`&lt;tr&gt;&lt;td&gt;\${i+1}&lt;/td&gt;&lt;td&gt;\${x.img?\`&lt;img class="thumb" src="\${esc(x.img)}"&gt;\`:'—'}&lt;/td&gt;&lt;td&gt;\${esc(x.id)}&lt;/td&gt;&lt;td&gt;\${esc(x.site)}&lt;/td&gt;&lt;td&gt;&lt;div class="cat"&gt;\${esc([x.l1,x.l2,x.l3].filter(Boolean).join(' › '))}&lt;/div&gt;&lt;/td&gt;&lt;td&gt;\${f(p(x.ado,da))}&lt;/td&gt;&lt;td&gt;\${f(p(x.adg,dg))}&lt;/td&gt;&lt;/tr&gt;\`).join('')||'&lt;tr&gt;&lt;td colspan="7" class="empty"&gt;暂无数据&lt;/td&gt;&lt;/tr&gt;'}
-function side(){let d=F(),s=A(d,'site').sort((a,b)=&gt;b.adg-a.adg),den=S(d,'adg');$('sb').innerHTML=s.map(x=&gt;{let q=p(x.adg,den);return\`&lt;div class="bar"&gt;&lt;div class="bn"&gt;\${esc(x.name)}&lt;/div&gt;&lt;div class="track"&gt;&lt;div class="fill" style="width:\${Math.max(q,1)}%"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="bv"&gt;\${f(q)}&lt;/div&gt;&lt;/div&gt;\`}).join('');let l1=A(d,'l1').sort((a,b)=&gt;b.adg-a.adg),l2=A(d,'l2').sort((a,b)=&gt;b.adg-a.adg),a=[];if(l1[0])a.push(\`&lt;div class="ins"&gt;&lt;strong&gt;销售额领先 L1：&lt;/strong&gt;\${esc(l1[0].name)}，贡献 \${f(p(l1[0].adg,den))}。&lt;/div&gt;\`);if(l2[0])a.push(\`&lt;div class="ins"&gt;&lt;strong&gt;销售额领先 L2：&lt;/strong&gt;\${esc(l2[0].name)}。&lt;/div&gt;\`);if(s[0])a.push(\`&lt;div class="ins"&gt;&lt;strong&gt;核心站点：&lt;/strong&gt;\${esc(s[0].name)}，贡献 \${f(p(s[0].adg,den))} 的 ADGMV。&lt;/div&gt;\`);$('ins').innerHTML=a.join('')}
-function refill(){let r=R(),fill=(id,v,l)=&gt;{$(id).innerHTML=\`&lt;option value=""&gt;全部 \${l}&lt;/option&gt;\`+[...new Set(v.filter(Boolean))].sort().map(x=&gt;\`&lt;option value="\${esc(x)}"&gt;\${esc(x)}&lt;/option&gt;\`).join('')};fill('site',r.map(x=&gt;x.site),'站点');let a=r.filter(x=&gt;!$('site').value||x.site===$('site').value);fill('l1',a.map(x=&gt;x.l1),'L1');let b=a.filter(x=&gt;!$('l1').value||x.l1===$('l1').value);fill('l2',b.map(x=&gt;x.l2),'L2');let c=b.filter(x=&gt;!$('l2').value||x.l2===$('l2').value);fill('l3',c.map(x=&gt;x.l3),'L3')}
-function render(){bubbles();kpi();contrib();products();side()}function reset(){['site','l1','l2','l3'].forEach(x=&gt;$(x).value='');refill();render()}function init(){document.querySelectorAll('.tab').forEach(b=&gt;b.onclick=()=&gt;{document.querySelectorAll('.tab').forEach(x=&gt;x.classList.remove('active'));b.classList.add('active');typ=b.dataset.t;reset()});$('site').onchange=()=&gt;{refill();render()};$('l1').onchange=()=&gt;{refill();render()};$('l2').onchange=()=&gt;{refill();render()};$('l3').onchange=render;$('reset').onclick=reset;document.querySelectorAll('.metric').forEach(b=&gt;b.onclick=()=&gt;{metric=b.dataset.m;contrib()});$('pt').onclick=e=&gt;{let im=e.target.closest('.thumb');if(im){$('mi').src=im.src;$('modal').classList.add('show')}};$('modal').onclick=()=&gt;{$('modal').classList.remove('show')}}
-async function load(){try{let [a,b]=await Promise.all([fetch(UCB+'?t='+Date.now()).then(r=&gt;r.json()),fetch(UCN+'?t='+Date.now()).then(r=&gt;r.json())]);cb=(Array.isArray(a)?a:a.data||[]).map(NCB).filter(x=&gt;x.id);cn=(Array.isArray(b)?b:b.data||[]).map(NCN).filter(x=&gt;x.id);init();refill();render();$('update').textContent='数据最后更新: '+new Date().toLocaleDateString('zh-CN')}catch(e){$('update').textContent='数据加载失败';$('bars').innerHTML='&lt;div class="empty"&gt;'+esc(e.message)+'&lt;/div&gt;'}}window.onload=load;
+function contrib(){let d=F(),[k,l]=H(),g=A(d,k).sort((a,b)=&gt;b[metric]-a[metric]).slice(0,12),den=g.reduce((a,x)=&gt;a+x[metric],0);$('ct').textContent=l+' 类目贡献度';$('bars').innerHTML=g.map(x=&gt;{let q=p(x[metric],den);return`&lt;div class="bar"&gt;&lt;div class="bn"&gt;${esc(x.name)}&lt;/div&gt;&lt;div class="track"&gt;&lt;div class="fill" style="width:${Math.max(q,1)}%"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="bv"&gt;${f(q)}&lt;/div&gt;&lt;/div&gt;`}).join('')||'&lt;div class="empty"&gt;暂无数据&lt;/div&gt;'}
+function products(){let d=F(),da=S(d,'ado'),dg=S(d,'adg');$('pt').innerHTML=d.slice().sort((a,b)=&gt;b.adg-a.adg).slice(0,10).map((x,i)=&gt;`&lt;tr&gt;&lt;td&gt;${i+1}&lt;/td&gt;&lt;td&gt;${x.img?`&lt;img class="thumb" src="${esc(x.img)}"&gt;`:'—'}&lt;/td&gt;&lt;td&gt;${esc(x.id)}&lt;/td&gt;&lt;td&gt;${esc(x.site)}&lt;/td&gt;&lt;td&gt;&lt;div class="cat"&gt;${esc([x.l1,x.l2,x.l3].filter(Boolean).join(' › '))}&lt;/div&gt;&lt;/td&gt;&lt;td&gt;${f(p(x.ado,da))}&lt;/td&gt;&lt;td&gt;${f(p(x.adg,dg))}&lt;/td&gt;&lt;/tr&gt;`).join('')||'&lt;tr&gt;&lt;td colspan="7" class="empty"&gt;暂无数据&lt;/td&gt;&lt;/tr&gt;'}
+function side(){let d=F(),s=A(d,'site').sort((a,b)=&gt;b.adg-a.adg),den=S(d,'adg');$('sb').innerHTML=s.map(x=&gt;{let q=p(x.adg,den);return`&lt;div class="bar"&gt;&lt;div class="bn"&gt;${esc(x.name)}&lt;/div&gt;&lt;div class="track"&gt;&lt;div class="fill" style="width:${Math.max(q,1)}%"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="bv"&gt;${f(q)}&lt;/div&gt;&lt;/div&gt;`}).join('');let l1=A(d,'l1').sort((a,b)=&gt;b.adg-a.adg),l2=A(d,'l2').sort((a,b)=&gt;b.adg-a.adg),a=[];if(l1[0])a.push(`&lt;div class="ins"&gt;&lt;strong&gt;销售额领先 L1：&lt;/strong&gt;${esc(l1[0].name)}，贡献 ${f(p(l1[0].adg,den))}。&lt;/div&gt;`);if(l2[0])a.push(`&lt;div class="ins"&gt;&lt;strong&gt;销售额领先 L2：&lt;/strong&gt;${esc(l2[0].name)}。&lt;/div&gt;`);if(s[0])a.push(`&lt;div class="ins"&gt;&lt;strong&gt;核心站点：&lt;/strong&gt;${esc(s[0].name)}，贡献 ${f(p(s[0].adg,den))} 的 ADGMV。&lt;/div&gt;`);$('ins').innerHTML=a.join('')}
+function refill(){let r=R(),fill=(id,v,l)=&gt;{$(id).innerHTML=`&lt;option value=""&gt;全部 ${l}&lt;/option&gt;`+[...new Set(v.filter(Boolean))].sort().map(x=&gt;`&lt;option value="${esc(x)}"&gt;${esc(x)}&lt;/option&gt;`).join('')};fill('site',r.map(x=&gt;x.site),'站点');let a=r.filter(x=&gt;!$('site').value||x.site===$('site').value);fill('l1',a.map(x=&gt;x.l1),'L1');let b=a.filter(x=&gt;!$('l1').value||x.l1===$('l1').value);fill('l2',b.map(x=&gt;x.l2),'L2');let c=b.filter(x=&gt;!$('l2').value||x.l2===$('l2').value);fill('l3',c.map(x=&gt;x.l3),'L3')}
+function render(){if(showTypeState())return;bubbles();kpi();contrib();products();side()}function reset(){['site','l1','l2','l3'].forEach(x=&gt;$(x).value='');refill();render()}function init(){
+  document.querySelectorAll('.tab').forEach(b=&gt;b.addEventListener('click',()=&gt;{
+    document.querySelectorAll('.tab').forEach(x=&gt;x.classList.remove('active'));
+    b.classList.add('active');
+    typ=b.dataset.t;
+    ['site','l1','l2','l3'].forEach(id=&gt;$(id).value='');
+    refill();
+    render();
+  }));
+  $('site').addEventListener('change',()=&gt;{refill();render()});
+  $('l1').addEventListener('change',()=&gt;{$('l2').value='';$('l3').value='';refill();render()});
+  $('l2').addEventListener('change',()=&gt;{$('l3').value='';refill();render()});
+  $('l3').addEventListener('change',render);
+  $('reset').addEventListener('click',reset);
+  document.querySelectorAll('.metric').forEach(b=&gt;b.addEventListener('click',()=&gt;{metric=b.dataset.m;contrib()}));
+  $('pt').addEventListener('click',e=&gt;{let im=e.target.closest('.thumb');if(im){$('mi').src=im.src;$('modal').classList.add('show')}});
+  $('modal').addEventListener('click',()=&gt;{$('modal').classList.remove('show')});
+}
+
+async function fetchJson(url,label){
+  try{
+    const r=await fetch(url+'?t='+Date.now(),{cache:'no-store'});
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    const j=await r.json();
+    return {rows:Array.isArray(j)?j:(j.data||[]),error:''};
+  }catch(e){
+    return {rows:[],error:label+' '+e.message};
+  }
+}
+
+async function load(){
+  init();
+  $('update').textContent='数据加载中...';
+  const [cbResult,cnResult]=await Promise.all([
+    fetchJson(UCB,'CB'),
+    fetchJson(UCN,'CNLS')
+  ]);
+  cbError=cbResult.error;
+  cnError=cnResult.error;
+  cb=cbResult.rows.map(NCB).filter(x=&gt;x.id);
+  cn=cnResult.rows.map(NCN).filter(x=&gt;x.id);
+  refill();
+  render();
+  $('update').textContent=(cb.length||cn.length)
+    ? '数据最后更新: '+new Date().toLocaleDateString('zh-CN')
+    : '数据加载失败';
+}
+window.addEventListener('load',load);
 &lt;/script&gt;&lt;/body&gt;&lt;/html&gt;
 </textarea>
 
