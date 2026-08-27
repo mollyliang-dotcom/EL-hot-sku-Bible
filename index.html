@@ -561,7 +561,7 @@ header{background:linear-gradient(135deg,#FF6633,#EE4D2D 50%,#D02D11);color:#fff
 .filters{padding:17px 19px;margin-bottom:18px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}.fl{font-size:11px;color:var(--muted);font-weight:700}select,button{font:inherit;font-size:13px;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text)}
 .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}.kpi{padding:17px}.kl{font-size:11px;color:var(--muted);font-weight:700}.kv{font-size:27px;font-weight:800;margin-top:7px}.ks{font-size:11px;color:var(--muted);margin-top:5px}
 .dash{display:grid;grid-template-columns:1.25fr .75fr;gap:18px}.bars{display:flex;flex-direction:column;gap:12px}.bar{display:grid;grid-template-columns:minmax(130px,1.15fr) 3fr 68px;gap:10px;align-items:center}.bn{font-size:12px;font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.track{height:11px;background:#f5eef1;border-radius:999px;overflow:hidden}.fill{height:100%;background:linear-gradient(90deg,#ffb5a7,#EE4D2D)}.bv{text-align:right;font-size:12px;font-weight:750;color:#d73211}
-table{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:10px 9px;border-bottom:1px solid var(--border);text-align:right;white-space:nowrap}th{font-size:10px;color:var(--muted);background:#fffafa}.wrap{overflow:auto}.thumb{width:58px;height:58px;object-fit:contain;border-radius:10px;border:1px solid var(--border);cursor:zoom-in}.cat{max-width:260px;white-space:normal;line-height:1.45;color:var(--muted);text-align:center;margin:0 auto}.cat-head{text-align:center!important}.ins{padding:12px 14px;border:1px solid var(--border);background:#fffafa;border-radius:10px;font-size:12px;line-height:1.6;margin-bottom:10px}.empty{padding:40px;text-align:center;color:var(--muted)}
+table{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:10px 9px;border-bottom:1px solid var(--border);text-align:center;white-space:nowrap}th{font-size:10px;color:var(--muted);background:#fffafa}.wrap{overflow:auto}.thumb{width:58px;height:58px;object-fit:contain;border-radius:10px;border:1px solid var(--border);cursor:zoom-in}.cat{max-width:260px;white-space:normal;line-height:1.45;color:var(--muted);text-align:center;margin:0 auto}.cat-head{text-align:center!important}.ins{padding:12px 14px;border:1px solid var(--border);background:#fffafa;border-radius:10px;font-size:12px;line-height:1.6;margin-bottom:10px}.empty{padding:40px;text-align:center;color:var(--muted)}
 #modal{display:none;position:fixed;inset:0;background:#140e18e6;z-index:9999;align-items:center;justify-content:center}#modal.show{display:flex}#modal img{max-width:92vw;max-height:88vh;background:#fff;border-radius:14px}
 footer{text-align:center;color:var(--muted);font-size:11px;padding:36px;border-top:1px solid var(--border)}
 @media(max-width:980px){.grid2,.dash{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}}
@@ -572,11 +572,11 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:36px;border-t
 &lt;section class="grid2"&gt;&lt;div class="card bubble-card"&gt;&lt;div class="title"&gt;各站点规模分布&lt;/div&gt;&lt;div class="note"&gt;X：ADO · Y：ADGMV · 每个气泡代表一个站点&lt;/div&gt;&lt;div class="bubble" id="siteBubble"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="card bubble-card"&gt;&lt;div class="title"&gt;L1 类目规模分布&lt;/div&gt;&lt;div class="note"&gt;汇总所有站点，每个气泡代表一个 L1 类目&lt;/div&gt;&lt;div class="bubble" id="l1Bubble"&gt;&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;
 &lt;section class="filters"&gt;&lt;span class="fl"&gt;站点&lt;/span&gt;&lt;select id="site"&gt;&lt;option value=""&gt;全部站点&lt;/option&gt;&lt;/select&gt;&lt;span class="fl"&gt;L1 类目&lt;/span&gt;&lt;select id="l1"&gt;&lt;option value=""&gt;全部 L1&lt;/option&gt;&lt;/select&gt;&lt;span class="fl"&gt;L2 类目&lt;/span&gt;&lt;select id="l2"&gt;&lt;option value=""&gt;全部 L2&lt;/option&gt;&lt;/select&gt;&lt;span class="fl"&gt;L3 类目&lt;/span&gt;&lt;select id="l3"&gt;&lt;option value=""&gt;全部 L3&lt;/option&gt;&lt;/select&gt;&lt;button id="reset"&gt;✕ 重置&lt;/button&gt;&lt;/section&gt;
 &lt;section class="kpis"&gt;&lt;div class="card kpi"&gt;&lt;div class="kl"&gt;Top Site ADO 占比&lt;/div&gt;&lt;div class="kv" id="sa"&gt;—&lt;/div&gt;&lt;div class="ks" id="san"&gt;—&lt;/div&gt;&lt;/div&gt;&lt;div class="card kpi"&gt;&lt;div class="kl"&gt;Top Site ADGMV 占比&lt;/div&gt;&lt;div class="kv" id="sg"&gt;—&lt;/div&gt;&lt;div class="ks" id="sgn"&gt;—&lt;/div&gt;&lt;/div&gt;&lt;div class="card kpi"&gt;&lt;div class="kl"&gt;Top L1 ADO 占比&lt;/div&gt;&lt;div class="kv" id="la"&gt;—&lt;/div&gt;&lt;div class="ks" id="lan"&gt;—&lt;/div&gt;&lt;/div&gt;&lt;div class="card kpi"&gt;&lt;div class="kl"&gt;Top L1 ADGMV 占比&lt;/div&gt;&lt;div class="kv" id="lg"&gt;—&lt;/div&gt;&lt;div class="ks" id="lgn"&gt;—&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;
-&lt;section class="dash"&gt;&lt;div&gt;&lt;div class="card"&gt;&lt;div class="title" id="ct"&gt;L1 类目贡献度&lt;/div&gt;&lt;div class="note"&gt;可切换 ADO / ADGMV&lt;/div&gt;&lt;button class="metric" data-m="adg"&gt;ADGMV&lt;/button&gt; &lt;button class="metric" data-m="ado"&gt;ADO&lt;/button&gt;&lt;div id="bars" class="bars" style="margin-top:15px"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="card"&gt;&lt;div class="title"&gt;当前筛选类目 Top 10 产品&lt;/div&gt;&lt;div class="note"&gt;按 ADGMV 降序排序 · ADO / ADG 采用区间脱敏展示&lt;/div&gt;&lt;div class="wrap"&gt;&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;排名&lt;/th&gt;&lt;th&gt;图片&lt;/th&gt;&lt;th&gt;Item ID&lt;/th&gt;&lt;th&gt;站点&lt;/th&gt;&lt;th class="cat-head"&gt;类目&lt;/th&gt;&lt;th&gt;价格&lt;/th&gt;&lt;th&gt;ADO&lt;/th&gt;&lt;th&gt;ADG&lt;/th&gt;&lt;th&gt;ADO MoM&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody id="pt"&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div class="card"&gt;&lt;div class="title"&gt;站点销售额贡献&lt;/div&gt;&lt;div class="note"&gt;当前筛选下各站点 ADGMV 占比&lt;/div&gt;&lt;div id="sb" class="bars"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="card"&gt;&lt;div class="title"&gt;类目洞察&lt;/div&gt;&lt;div class="note"&gt;当前类型及筛选条件&lt;/div&gt;&lt;div id="ins"&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;
+&lt;section class="dash"&gt;&lt;div&gt;&lt;div class="card"&gt;&lt;div class="title" id="ct"&gt;L1 类目贡献度&lt;/div&gt;&lt;div class="note"&gt;可切换 ADO / ADGMV&lt;/div&gt;&lt;button class="metric" data-m="adg"&gt;ADGMV&lt;/button&gt; &lt;button class="metric" data-m="ado"&gt;ADO&lt;/button&gt;&lt;div id="bars" class="bars" style="margin-top:15px"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="card"&gt;&lt;div class="title"&gt;当前筛选类目 Top 10 产品&lt;/div&gt;&lt;div class="note"&gt;按 ADGMV 降序排序 · ADO / ADG 采用区间脱敏展示&lt;/div&gt;&lt;div class="wrap"&gt;&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;排名&lt;/th&gt;&lt;th&gt;图片&lt;/th&gt;&lt;th&gt;Item ID&lt;/th&gt;&lt;th&gt;站点&lt;/th&gt;&lt;th class="cat-head"&gt;类目&lt;/th&gt;&lt;th&gt;价格&lt;/th&gt;&lt;th&gt;ADO&lt;/th&gt;&lt;th&gt;ADG&lt;/th&gt;&lt;th&gt;ADO MoM&lt;/th&gt;&lt;th&gt;ADG MoM&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody id="pt"&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div class="card"&gt;&lt;div class="title"&gt;站点销售额贡献&lt;/div&gt;&lt;div class="note"&gt;当前筛选下各站点 ADGMV 占比&lt;/div&gt;&lt;div id="sb" class="bars"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="card"&gt;&lt;div class="title"&gt;类目洞察&lt;/div&gt;&lt;div class="note"&gt;按本期较上期增长绝对量识别 L2 类目，并补充其下 L3 增长亮点及增长幅度&lt;/div&gt;&lt;div id="ins"&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;
 &lt;/main&gt;&lt;div id="modal"&gt;&lt;img id="mi"&gt;&lt;/div&gt;&lt;footer&gt;Shopee EL 选品指南 · Category Overview&lt;/footer&gt;
 &lt;script&gt;
 const UCB='./data_cb.json',UCN='./data_cnls.json';let cb=[],cn=[],typ='CB',metric='adg',cbError='',cnError='';const $=x=&gt;document.getElementById(x),n=v=&gt;parseFloat(String(v??'').replace(/,/g,''))||0,p=(a,b)=&gt;b?a/b*100:0,f=x=&gt;x.toFixed(1)+'%',esc=s=&gt;String(s??'').replace(/[&amp;&lt;&gt;"']/g,c=&gt;({'&amp;':'&amp;amp;','&lt;':'&amp;lt;','&gt;':'&amp;gt;','"':'&amp;quot;',"'":'&amp;#39;'}[c]));function ns(v){let s=String(v||'').toUpperCase();return ['BR','MX','MY','PH','SG','TH','TW','VN'].find(x=&gt;s===x||s.includes(x))||s}
-function NCB(r){return{id:String(r.item_id||''),site:ns(r.grass_region),l1:r.cb_level1_global_be_category||'',l2:r.level2_global_be_category||'',l3:r.level3_global_be_category||'',img:r.product_image||'',price:n(r['price_usd']),ado:n(r['ADO(SUM)']),adg:n(r['ADG_usd(SUM)']),mom:n(r['mom_ado_growth_contri(SUM)'])}}function NCN(r){const diff=n(r['ado_diff(RAW)']),bench=n(r['benchmark_ado(RAW)']);return{id:String(r.item_id||''),site:ns(r.grass_region),l1:r.cb_level1_global_be_category||'',l2:r.level2_global_be_category||'',l3:r.level3_global_be_category||'',img:r.item_image||'',price:n(r['item_price_usd']),ado:n(r['current_ado(RAW)']),adg:n(r['current_adgmv(RAW)']),mom:bench?diff/bench*100:0}}
+function NCB(r){return{id:String(r.item_id||''),site:ns(r.grass_region),l1:r.cb_level1_global_be_category||'',l2:r.level2_global_be_category||'',l3:r.level3_global_be_category||'',img:r.product_image||'',price:n(r['price_usd']),ado:n(r['ADO(SUM)']),adg:n(r['ADG_usd(SUM)']),mom:n(r['mom_ado_growth_contri(SUM)']),adgMom:n(r['mom_adgmv_growth_contri(SUM)']||r['adgmv_mom']||0)}}function NCN(r){const diff=n(r['ado_diff(RAW)']),bench=n(r['benchmark_ado(RAW)']);return{id:String(r.item_id||''),site:ns(r.grass_region),l1:r.cb_level1_global_be_category||'',l2:r.level2_global_be_category||'',l3:r.level3_global_be_category||'',img:r.item_image||'',price:n(r['item_price_usd']),ado:n(r['current_ado(RAW)']),adg:n(r['current_adgmv(RAW)']),mom:bench?diff/bench*100:0,adgMom:n(r['benchmark_adgmv(RAW)'])?(n(r['current_adgmv(RAW)'])-n(r['benchmark_adgmv(RAW)']))/n(r['benchmark_adgmv(RAW)'])*100:n(r['adgmv_mom']||0)}}
 function R(){return typ==='CB'?cb:cn}
 function currentError(){return typ==='CB'?cbError:cnError}
 function showTypeState(){
@@ -617,11 +617,93 @@ function products(){
     const ado=adoRange(x.ado);
     const adg=adgRange(x.adg);
     const mom=momText(x.mom);
+    const adgMom=momText(x.adgMom);
     const momColor=x.mom&gt;0?'#27ae60':x.mom&lt;0?'#eb4d4b':'#9b8fa0';
-    return `&lt;tr&gt;&lt;td&gt;${i+1}&lt;/td&gt;&lt;td&gt;${x.img?`&lt;img class="thumb" src="${esc(x.img)}"&gt;`:'—'}&lt;/td&gt;&lt;td&gt;${esc(x.id)}&lt;/td&gt;&lt;td&gt;${esc(x.site)}&lt;/td&gt;&lt;td&gt;&lt;div class="cat"&gt;${esc([x.l1,x.l2,x.l3].filter(Boolean).join(' › '))}&lt;/div&gt;&lt;/td&gt;&lt;td&gt;${price}&lt;/td&gt;&lt;td&gt;${ado}&lt;/td&gt;&lt;td&gt;${adg==='—'?'—':'$'+adg}&lt;/td&gt;&lt;td style="font-weight:700;color:${momColor}"&gt;${mom}&lt;/td&gt;&lt;/tr&gt;`;
-  }).join('')||'&lt;tr&gt;&lt;td colspan="9" class="empty"&gt;暂无数据&lt;/td&gt;&lt;/tr&gt;'
+    const adgMomColor=x.adgMom&gt;0?'#27ae60':x.adgMom&lt;0?'#eb4d4b':'#9b8fa0';
+    return `&lt;tr&gt;&lt;td&gt;${i+1}&lt;/td&gt;&lt;td&gt;${x.img?`&lt;img class="thumb" src="${esc(x.img)}"&gt;`:'—'}&lt;/td&gt;&lt;td&gt;${esc(x.id)}&lt;/td&gt;&lt;td&gt;${esc(x.site)}&lt;/td&gt;&lt;td&gt;&lt;div class="cat"&gt;${esc([x.l1,x.l2,x.l3].filter(Boolean).join(' › '))}&lt;/div&gt;&lt;/td&gt;&lt;td&gt;${price}&lt;/td&gt;&lt;td&gt;${ado}&lt;/td&gt;&lt;td&gt;${adg==='—'?'—':'$'+adg}&lt;/td&gt;&lt;td style="font-weight:700;color:${momColor}"&gt;${mom}&lt;/td&gt;&lt;td style="font-weight:700;color:${adgMomColor}"&gt;${adgMom}&lt;/td&gt;&lt;/tr&gt;`;
+  }).join('')||'&lt;tr&gt;&lt;td colspan="10" class="empty"&gt;暂无数据&lt;/td&gt;&lt;/tr&gt;'
 }
-function side(){let d=F(),s=A(d,'site').sort((a,b)=&gt;b.adg-a.adg),den=S(d,'adg');$('sb').innerHTML=s.map(x=&gt;{let q=p(x.adg,den);return`&lt;div class="bar"&gt;&lt;div class="bn"&gt;${esc(x.name)}&lt;/div&gt;&lt;div class="track"&gt;&lt;div class="fill" style="width:${Math.max(q,1)}%"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="bv"&gt;${f(q)}&lt;/div&gt;&lt;/div&gt;`}).join('');let l1=A(d,'l1').sort((a,b)=&gt;b.adg-a.adg),l2=A(d,'l2').sort((a,b)=&gt;b.adg-a.adg),a=[];if(l1[0])a.push(`&lt;div class="ins"&gt;&lt;strong&gt;销售额领先 L1：&lt;/strong&gt;${esc(l1[0].name)}，贡献 ${f(p(l1[0].adg,den))}。&lt;/div&gt;`);if(l2[0])a.push(`&lt;div class="ins"&gt;&lt;strong&gt;销售额领先 L2：&lt;/strong&gt;${esc(l2[0].name)}。&lt;/div&gt;`);if(s[0])a.push(`&lt;div class="ins"&gt;&lt;strong&gt;核心站点：&lt;/strong&gt;${esc(s[0].name)}，贡献 ${f(p(s[0].adg,den))} 的 ADGMV。&lt;/div&gt;`);$('ins').innerHTML=a.join('')}
+function prevFromMom(cur,mom){
+  const rate=Number(mom);
+  const current=Number(cur)||0;
+  if(!Number.isFinite(rate)||rate&lt;=-100)return 0;
+  return current/(1+rate/100);
+}
+function growthByCategory(data,key){
+  const map=new Map();
+  data.forEach(r=&gt;{
+    const name=r[key]||'';
+    if(!name)return;
+    if(!map.has(name))map.set(name,{name,ado:0,adoPrev:0,adg:0,adgPrev:0});
+    const g=map.get(name);
+    g.ado+=Number(r.ado)||0;
+    g.adg+=Number(r.adg)||0;
+    g.adoPrev+=prevFromMom(r.ado,r.mom);
+    g.adgPrev+=prevFromMom(r.adg,r.adgMom);
+  });
+  return [...map.values()].map(g=&gt;({
+    ...g,
+    adoDelta:g.ado-g.adoPrev,
+    adgDelta:g.adg-g.adgPrev,
+    adoGrowth:g.adoPrev&gt;0?(g.ado/g.adoPrev-1)*100:NaN,
+    adgGrowth:g.adgPrev&gt;0?(g.adg/g.adgPrev-1)*100:NaN
+  }));
+}
+function growthText(v){
+  return Number.isFinite(v)?(v&gt;0?'+':'')+v.toFixed(1)+'%':'—';
+}
+function side(){
+  const d=F();
+  const sites=A(d,'site').sort((a,b)=&gt;b.adg-a.adg);
+  const den=S(d,'adg');
+
+  $('sb').innerHTML=sites.map(x=&gt;{
+    const q=p(x.adg,den);
+    return `&lt;div class="bar"&gt;&lt;div class="bn"&gt;${esc(x.name)}&lt;/div&gt;&lt;div class="track"&gt;&lt;div class="fill" style="width:${Math.max(q,1)}%"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="bv"&gt;${f(q)}&lt;/div&gt;&lt;/div&gt;`;
+  }).join('')||'&lt;div class="empty"&gt;暂无数据&lt;/div&gt;';
+
+  const l2Rows=growthByCategory(d,'l2');
+  const l3Rows=growthByCategory(d,'l3');
+
+  const bestAdgL2=l2Rows
+    .filter(g=&gt;g.adgDelta&gt;0)
+    .sort((a,b)=&gt;b.adgDelta-a.adgDelta)[0];
+  const bestAdoL2=l2Rows
+    .filter(g=&gt;g.adoDelta&gt;0)
+    .sort((a,b)=&gt;b.adoDelta-a.adoDelta)[0];
+
+  const topL3Under=(l2Name,metric)=&gt;{
+    const rows=d.filter(r=&gt;r.l2===l2Name);
+    return growthByCategory(rows,'l3')
+      .filter(g=&gt;(metric==='adg'?g.adgDelta:g.adoDelta)&gt;0)
+      .sort((a,b)=&gt;(metric==='adg'?b.adgDelta-a.adgDelta:b.adoDelta-a.adoDelta))
+      .slice(0,3);
+  };
+
+  const arr=[];
+
+  if(bestAdgL2){
+    const l3s=topL3Under(bestAdgL2.name,'adg');
+    const l3Text=l3s.length
+      ? '&lt;br&gt;&lt;strong&gt;L3 销售额增长较好：&lt;/strong&gt;'+l3s.map(g=&gt;esc(g.name)+'（'+growthText(g.adgGrowth)+'）').join('、')+'。'
+      : '';
+    arr.push(`&lt;div class="ins"&gt;&lt;strong&gt;L2 销售额增长领先：&lt;/strong&gt;${esc(bestAdgL2.name)}（${growthText(bestAdgL2.adgGrowth)}）。${l3Text}&lt;/div&gt;`);
+  }
+
+  if(bestAdoL2){
+    const l3s=topL3Under(bestAdoL2.name,'ado');
+    const l3Text=l3s.length
+      ? '&lt;br&gt;&lt;strong&gt;L3 单量增长较好：&lt;/strong&gt;'+l3s.map(g=&gt;esc(g.name)+'（'+growthText(g.adoGrowth)+'）').join('、')+'。'
+      : '';
+    arr.push(`&lt;div class="ins"&gt;&lt;strong&gt;L2 单量增长领先：&lt;/strong&gt;${esc(bestAdoL2.name)}（${growthText(bestAdoL2.adoGrowth)}）。${l3Text}&lt;/div&gt;`);
+  }
+
+  if(sites[0]){
+    arr.push(`&lt;div class="ins"&gt;&lt;strong&gt;核心站点：&lt;/strong&gt;${esc(sites[0].name)}，贡献 ${f(p(sites[0].adg,den))} 的 ADGMV。&lt;/div&gt;`);
+  }
+
+  $('ins').innerHTML=arr.join('')||'&lt;div class="empty"&gt;暂无正增长类目&lt;/div&gt;';
+}
 function refill(){let r=R(),fill=(id,v,l)=&gt;{$(id).innerHTML=`&lt;option value=""&gt;全部 ${l}&lt;/option&gt;`+[...new Set(v.filter(Boolean))].sort().map(x=&gt;`&lt;option value="${esc(x)}"&gt;${esc(x)}&lt;/option&gt;`).join('')};fill('site',r.map(x=&gt;x.site),'站点');let a=r.filter(x=&gt;!$('site').value||x.site===$('site').value);fill('l1',a.map(x=&gt;x.l1),'L1');let b=a.filter(x=&gt;!$('l1').value||x.l1===$('l1').value);fill('l2',b.map(x=&gt;x.l2),'L2');let c=b.filter(x=&gt;!$('l2').value||x.l2===$('l2').value);fill('l3',c.map(x=&gt;x.l3),'L3')}
 function render(){if(showTypeState())return;bubbles();kpi();contrib();products();side()}function reset(){['site','l1','l2','l3'].forEach(x=&gt;$(x).value='');refill();render()}function init(){
   document.querySelectorAll('.tab').forEach(b=&gt;b.addEventListener('click',()=&gt;{
