@@ -1,4 +1,8 @@
 <!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Shopee EL 选品指南</title>
+<style>*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:#faf8f9}.shell{height:100vh;overflow:hidden}iframe{display:none;width:100%;height:100vh;border:0}iframe.active{display:block}</style></head>
+<body><div class="shell"><iframe id="sku" class="active"></iframe><iframe id="cat"></iframe></div>
+<script>const HOT=`<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -227,14 +231,14 @@ const pageSize = 40;
 function getFlagImgHtml(countryCode) {
 if (!countryCode || countryCode.length !== 2) return '';
 const code = countryCode.toLowerCase();
-return '<img class="flag-img" src="https://flagcdn.com/w40/' + code + '.png" alt="' + countryCode + '" onerror="this.style.display=\'none\'">';
+return '<img class="flag-img" src="https://flagcdn.com/w40/' + code + '.png" alt="' + countryCode + '" onerror="this.style.display=\\'none\\'">';
 }
 function showToast(msg) {
 const t = document.getElementById('toast');
 t.textContent = msg; t.classList.add('show');
 setTimeout(function() { t.classList.remove('show'); }, 2000);
 }
-const clean = function(s) { return (s || '').toString().replace(/[\t"]/g, '').trim(); };
+const clean = function(s) { return (s || '').toString().replace(/[\\t"]/g, '').trim(); };
 const toNum = function(s) {
 const str = clean(s).replace(/,/g, '').replace(/%/g, '');
 return parseFloat(str) || 0;
@@ -442,8 +446,8 @@ card.className = 'card';
 card.innerHTML =
 '<div class="site-tag">' + siteTagHtml + '</div>'
 + newBadge
-+ '<div class="img-container" onclick="openModal(\'' + item.imgUrl + '\')">'
-+   '<img src="' + item.imgUrl + '" loading="lazy" onerror="this.style.display=\'none\';this.parentNode.innerHTML+=\'<div style=&quot;font-size:40px;color:#ddd&quot;>📦</div>\'">'
++ '<div class="img-container" onclick="openModal(\\'' + item.imgUrl + '\\')">'
++   '<img src="' + item.imgUrl + '" loading="lazy" onerror="this.style.display=\\'none\\';this.parentNode.innerHTML+=\\'<div style=&quot;font-size:40px;color:#ddd&quot;>📦</div>\\'">'
 + '</div>'
 + '<div class="info">'
 +   '<div class="item-title" title="' + item.title + '">' + item.title + '</div>'
@@ -456,7 +460,7 @@ card.innerHTML =
 +   '</div>'
 +   '<div class="footer-row">'
 +     '<span>📅 ' + (item.create_date || item.year_month) + '</span>'
-+     '<span class="itemid-box" onclick="copyId(\'' + item.itemid + '\')">ID: ' + item.itemid + '</span>'
++     '<span class="itemid-box" onclick="copyId(\\'' + item.itemid + '\\')">ID: ' + item.itemid + '</span>'
 +   '</div>'
 + '</div>';
 grid.appendChild(card);
@@ -516,4 +520,64 @@ function debouncedFilter() { clearTimeout(timer); timer = setTimeout(applyFilter
 window.onload = loadData;
 </script>
 </body>
-</html>
+</html>`,CAT=`<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Shopee EL Category Overview</title>
+<style>
+:root{--p:#EE4D2D;--pl:#fff5f2;--bg:#faf8f9;--card:#fff;--text:#2d2038;--muted:#9b8fa0;--border:#f0e8ed;--shadow:0 2px 16px rgba(238,77,45,.07)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',Arial,sans-serif;background:var(--bg);color:var(--text)}
+header{background:linear-gradient(135deg,#FF6633,#EE4D2D 50%,#D02D11);color:#fff;padding:36px 40px 28px}.inner,.container{max-width:1280px;margin:auto}.inner{position:relative}h1{font-family:Georgia,serif;font-size:32px}.badge{font:600 11px sans-serif;background:#ffffff38;padding:5px 10px;border-radius:20px}.desc{margin-top:14px;max-width:760px;background:#0000001a;padding:12px 16px;border-radius:8px;font-size:13px;line-height:1.8;border-left:3px solid #ffffffb3}.update{position:absolute;right:0;top:0;background:#ffffff26;padding:6px 12px;border-radius:30px;font-size:12px}
+.container{padding:26px 24px}.tabs{display:flex;gap:10px;margin-bottom:18px}.tab{padding:10px 20px;border:1.5px solid var(--border);background:#fff;border-radius:999px;cursor:pointer;font-weight:800;color:var(--muted)}.tab.active{background:var(--p);border-color:var(--p);color:#fff}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:20px}.card,.filters{background:#fff;border:1px solid var(--border);box-shadow:var(--shadow);border-radius:16px}.card{padding:20px;margin-bottom:18px}.bubble-card{height:420px}.title{font-size:16px;font-weight:800}.note{font-size:11px;color:var(--muted);margin:3px 0 14px}.bubble{height:330px;border:1px solid var(--border);border-radius:12px;background:#fffafa}.bubble svg{width:100%;height:100%}.dot{fill-opacity:.76;stroke:#fff;stroke-width:2}.axis{font-size:10px;fill:#9b8fa0}.label{font-size:9px;font-weight:800;fill:#2d2038}
+.filters{padding:17px 19px;margin-bottom:18px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}.fl{font-size:11px;color:var(--muted);font-weight:700}select,button{font:inherit;font-size:13px;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text)}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}.kpi{padding:17px}.kl{font-size:11px;color:var(--muted);font-weight:700}.kv{font-size:27px;font-weight:800;margin-top:7px}.ks{font-size:11px;color:var(--muted);margin-top:5px}
+.dash{display:grid;grid-template-columns:1.25fr .75fr;gap:18px}.bars{display:flex;flex-direction:column;gap:12px}.bar{display:grid;grid-template-columns:minmax(130px,1.15fr) 3fr 68px;gap:10px;align-items:center}.bn{font-size:12px;font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.track{height:11px;background:#f5eef1;border-radius:999px;overflow:hidden}.fill{height:100%;background:linear-gradient(90deg,#ffb5a7,#EE4D2D)}.bv{text-align:right;font-size:12px;font-weight:750;color:#d73211}
+table{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:10px 9px;border-bottom:1px solid var(--border);text-align:right;white-space:nowrap}th{font-size:10px;color:var(--muted);background:#fffafa}.wrap{overflow:auto}.thumb{width:58px;height:58px;object-fit:contain;border-radius:10px;border:1px solid var(--border);cursor:zoom-in}.cat{max-width:240px;white-space:normal;color:var(--muted)}.ins{padding:12px 14px;border:1px solid var(--border);background:#fffafa;border-radius:10px;font-size:12px;line-height:1.6;margin-bottom:10px}.empty{padding:40px;text-align:center;color:var(--muted)}
+#modal{display:none;position:fixed;inset:0;background:#140e18e6;z-index:9999;align-items:center;justify-content:center}#modal.show{display:flex}#modal img{max-width:92vw;max-height:88vh;background:#fff;border-radius:14px}
+footer{text-align:center;color:var(--muted);font-size:11px;padding:36px;border-top:1px solid var(--border)}
+@media(max-width:980px){.grid2,.dash{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}}
+</style></head><body>
+<header><div class="inner"><h1>Shopee EL Category Overview <span class="badge">External</span></h1><div class="desc">✨ 大盘类目数据分享，涵盖多站点，帮你快速识别潜力站点与热门类目<br>📊 以单量 ADO 与销售额 ADGMV 展示整体表现<br>🔒 跨境 CB 与本土 CNLS 分开展示</div><div class="update" id="update">数据加载中...</div></div></header>
+<main class="container">
+<div class="tabs"><button class="tab active" data-t="CB">跨境 CB</button><button class="tab" data-t="CNLS">本土 CNLS</button></div>
+<section class="grid2"><div class="card bubble-card"><div class="title">各站点规模分布</div><div class="note">X：ADO · Y：ADGMV · 每个气泡代表一个站点</div><div class="bubble" id="siteBubble"></div></div><div class="card bubble-card"><div class="title">L1 类目规模分布</div><div class="note">汇总所有站点，每个气泡代表一个 L1 类目</div><div class="bubble" id="l1Bubble"></div></div></section>
+<section class="filters"><span class="fl">站点</span><select id="site"><option value="">全部站点</option></select><span class="fl">L1 类目</span><select id="l1"><option value="">全部 L1</option></select><span class="fl">L2 类目</span><select id="l2"><option value="">全部 L2</option></select><span class="fl">L3 类目</span><select id="l3"><option value="">全部 L3</option></select><button id="reset">✕ 重置</button></section>
+<section class="kpis"><div class="card kpi"><div class="kl">Top Site ADO 占比</div><div class="kv" id="sa">—</div><div class="ks" id="san">—</div></div><div class="card kpi"><div class="kl">Top Site ADGMV 占比</div><div class="kv" id="sg">—</div><div class="ks" id="sgn">—</div></div><div class="card kpi"><div class="kl">Top L1 ADO 占比</div><div class="kv" id="la">—</div><div class="ks" id="lan">—</div></div><div class="card kpi"><div class="kl">Top L1 ADGMV 占比</div><div class="kv" id="lg">—</div><div class="ks" id="lgn">—</div></div></section>
+<section class="dash"><div><div class="card"><div class="title" id="ct">L1 类目贡献度</div><div class="note">可切换 ADO / ADGMV</div><button class="metric" data-m="adg">ADGMV</button> <button class="metric" data-m="ado">ADO</button><div id="bars" class="bars" style="margin-top:15px"></div></div><div class="card"><div class="title">当前筛选类目 Top 10 产品</div><div class="note">按 ADGMV 降序排序</div><div class="wrap"><table><thead><tr><th>排名</th><th>图片</th><th>Item ID</th><th>站点</th><th>类目</th><th>ADO 占比</th><th>ADGMV 占比</th></tr></thead><tbody id="pt"></tbody></table></div></div></div><div><div class="card"><div class="title">站点销售额贡献</div><div class="note">当前筛选下各站点 ADGMV 占比</div><div id="sb" class="bars"></div></div><div class="card"><div class="title">类目洞察</div><div class="note">当前类型及筛选条件</div><div id="ins"></div></div></div></section>
+</main><div id="modal"><img id="mi"></div><footer>Shopee EL 选品指南 · Category Overview</footer>
+<script>
+const UCB='./data_cb.json',UCN='./data_cnls.json';let cb=[],cn=[],typ='CB',metric='adg';const $=x=>document.getElementById(x),n=v=>parseFloat(String(v??'').replace(/,/g,''))||0,p=(a,b)=>b?a/b*100:0,f=x=>x.toFixed(1)+'%',esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));function ns(v){let s=String(v||'').toUpperCase();return ['BR','MX','MY','PH','SG','TH','TW','VN'].find(x=>s===x||s.includes(x))||s}
+function NCB(r){return{id:String(r.item_id||''),site:ns(r.grass_region),l1:r.cb_level1_global_be_category||'',l2:r.level2_global_be_category||'',l3:r.level3_global_be_category||'',img:r.product_image||'',ado:n(r['ADO(SUM)']),adg:n(r['ADG_usd(SUM)'])}}function NCN(r){return{id:String(r.item_id||''),site:ns(r.grass_region),l1:r.cb_level1_global_be_category||'',l2:r.level2_global_be_category||'',l3:r.level3_global_be_category||'',img:r.item_image||'',ado:n(r['current_ado(RAW)']),adg:n(r['current_adgmv(RAW)'])}}
+function R(){return typ==='CB'?cb:cn}function F(){let s=$('site').value,a=$('l1').value,b=$('l2').value,c=$('l3').value;return R().filter(r=>(!s||r.site===s)&&(!a||r.l1===a)&&(!b||r.l2===b)&&(!c||r.l3===c))}function A(d,k){let m=new Map;d.forEach(r=>{let z=r[k]||'未分类';if(!m.has(z))m.set(z,{name:z,ado:0,adg:0});let g=m.get(z);g.ado+=r.ado;g.adg+=r.adg});return[...m.values()]}function S(d,k){return d.reduce((a,r)=>a+r[k],0)}function H(){if($('l2').value)return['l3','L3'];if($('l1').value)return['l2','L2'];return['l1','L1']}
+const pal=['#FFB5A7','#FCD5CE','#F9DCC4','#CDEAC0','#BDE0FE','#A2D2FF','#CDB4DB','#FFC8DD','#D8E2DC','#E8D7F1','#D0F4DE','#FFF1E6'];function B(id,pts){if(!pts.length){$(id).innerHTML='<div class="empty">暂无数据</div>';return}let ma=Math.max(...pts.map(x=>x.ado),1),mg=Math.max(...pts.map(x=>x.adg),1),d='';pts.forEach((q,i)=>{let x=55+q.ado/ma*460,y=285-q.adg/mg*235,r=9+Math.sqrt((q.ado/ma+q.adg/mg)/2)*17,c=pal[i%pal.length],s=q.name.length>13?q.name.slice(0,13)+'…':q.name;d+=\`<circle class="dot" cx="\${x}" cy="\${y}" r="\${r}" fill="\${c}"><title>\${esc(q.name)}</title></circle><text class="label" x="\${x}" y="\${y+3}" text-anchor="middle">\${esc(s)}</text>\`});$(id).innerHTML=\`<svg viewBox="0 0 560 330"><line x1="48" y1="290" x2="525" y2="290" stroke="#eadfe4"/><line x1="48" y1="290" x2="48" y2="38" stroke="#eadfe4"/><text class="axis" x="490" y="315">ADO 高 →</text><text class="axis" x="12" y="50">ADGMV 高 ↑</text>\${d}</svg>\`}
+function bubbles(){B('siteBubble',A(R(),'site').filter(x=>x.name!=='未分类'));B('l1Bubble',A(R(),'l1').filter(x=>x.name!=='未分类'))}function kpi(){let d=F(),da=S(d,'ado'),dg=S(d,'adg'),s=A(d,'site'),l=A(d,'l1'),sa=s.sort((a,b)=>b.ado-a.ado)[0],sg=[...s].sort((a,b)=>b.adg-a.adg)[0],la=l.sort((a,b)=>b.ado-a.ado)[0],lg=[...l].sort((a,b)=>b.adg-a.adg)[0];$('sa').textContent=sa?f(p(sa.ado,da)):'—';$('san').textContent=sa?sa.name:'—';$('sg').textContent=sg?f(p(sg.adg,dg)):'—';$('sgn').textContent=sg?sg.name:'—';$('la').textContent=la?f(p(la.ado,da)):'—';$('lan').textContent=la?la.name:'—';$('lg').textContent=lg?f(p(lg.adg,dg)):'—';$('lgn').textContent=lg?lg.name:'—'}
+function contrib(){let d=F(),[k,l]=H(),g=A(d,k).sort((a,b)=>b[metric]-a[metric]).slice(0,12),den=g.reduce((a,x)=>a+x[metric],0);$('ct').textContent=l+' 类目贡献度';$('bars').innerHTML=g.map(x=>{let q=p(x[metric],den);return\`<div class="bar"><div class="bn">\${esc(x.name)}</div><div class="track"><div class="fill" style="width:\${Math.max(q,1)}%"></div></div><div class="bv">\${f(q)}</div></div>\`}).join('')||'<div class="empty">暂无数据</div>'}
+function products(){let d=F(),da=S(d,'ado'),dg=S(d,'adg');$('pt').innerHTML=d.slice().sort((a,b)=>b.adg-a.adg).slice(0,10).map((x,i)=>\`<tr><td>\${i+1}</td><td>\${x.img?\`<img class="thumb" src="\${esc(x.img)}">\`:'—'}</td><td>\${esc(x.id)}</td><td>\${esc(x.site)}</td><td><div class="cat">\${esc([x.l1,x.l2,x.l3].filter(Boolean).join(' › '))}</div></td><td>\${f(p(x.ado,da))}</td><td>\${f(p(x.adg,dg))}</td></tr>\`).join('')||'<tr><td colspan="7" class="empty">暂无数据</td></tr>'}
+function side(){let d=F(),s=A(d,'site').sort((a,b)=>b.adg-a.adg),den=S(d,'adg');$('sb').innerHTML=s.map(x=>{let q=p(x.adg,den);return\`<div class="bar"><div class="bn">\${esc(x.name)}</div><div class="track"><div class="fill" style="width:\${Math.max(q,1)}%"></div></div><div class="bv">\${f(q)}</div></div>\`}).join('');let l1=A(d,'l1').sort((a,b)=>b.adg-a.adg),l2=A(d,'l2').sort((a,b)=>b.adg-a.adg),a=[];if(l1[0])a.push(\`<div class="ins"><strong>销售额领先 L1：</strong>\${esc(l1[0].name)}，贡献 \${f(p(l1[0].adg,den))}。</div>\`);if(l2[0])a.push(\`<div class="ins"><strong>销售额领先 L2：</strong>\${esc(l2[0].name)}。</div>\`);if(s[0])a.push(\`<div class="ins"><strong>核心站点：</strong>\${esc(s[0].name)}，贡献 \${f(p(s[0].adg,den))} 的 ADGMV。</div>\`);$('ins').innerHTML=a.join('')}
+function refill(){let r=R(),fill=(id,v,l)=>{$(id).innerHTML=\`<option value="">全部 \${l}</option>\`+[...new Set(v.filter(Boolean))].sort().map(x=>\`<option value="\${esc(x)}">\${esc(x)}</option>\`).join('')};fill('site',r.map(x=>x.site),'站点');let a=r.filter(x=>!$('site').value||x.site===$('site').value);fill('l1',a.map(x=>x.l1),'L1');let b=a.filter(x=>!$('l1').value||x.l1===$('l1').value);fill('l2',b.map(x=>x.l2),'L2');let c=b.filter(x=>!$('l2').value||x.l2===$('l2').value);fill('l3',c.map(x=>x.l3),'L3')}
+function render(){bubbles();kpi();contrib();products();side()}function reset(){['site','l1','l2','l3'].forEach(x=>$(x).value='');refill();render()}function init(){document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');typ=b.dataset.t;reset()});$('site').onchange=()=>{refill();render()};$('l1').onchange=()=>{refill();render()};$('l2').onchange=()=>{refill();render()};$('l3').onchange=render;$('reset').onclick=reset;document.querySelectorAll('.metric').forEach(b=>b.onclick=()=>{metric=b.dataset.m;contrib()});$('pt').onclick=e=>{let im=e.target.closest('.thumb');if(im){$('mi').src=im.src;$('modal').classList.add('show')}};$('modal').onclick=()=>{$('modal').classList.remove('show')}}
+async function load(){try{let [a,b]=await Promise.all([fetch(UCB+'?t='+Date.now()).then(r=>r.json()),fetch(UCN+'?t='+Date.now()).then(r=>r.json())]);cb=(Array.isArray(a)?a:a.data||[]).map(NCB).filter(x=>x.id);cn=(Array.isArray(b)?b:b.data||[]).map(NCN).filter(x=>x.id);init();refill();render();$('update').textContent='数据最后更新: '+new Date().toLocaleDateString('zh-CN')}catch(e){$('update').textContent='数据加载失败';$('bars').innerHTML='<div class="empty">'+esc(e.message)+'</div>'}}window.onload=load;
+</script></body></html>`;function base(x){let h=new URL('.',location.href).href;return x.replace(/<head([^>]*)>/i,'<head$1><base href="'+h+'">')}sku.srcdoc=base(HOT);cat.srcdoc=base(CAT);function sw(x){let s=x==='sku';sku.classList.toggle('active',s);cat.classList.toggle('active',!s);history.replaceState(null,'',s?'#sku':'#category')}
+function injectHeaderNav(frame,activePage){
+  const doc=frame.contentDocument;
+  if(!doc||doc.getElementById('sharedPageNav'))return;
+  const head=doc.head;
+  const style=doc.createElement('style');
+  style.textContent='.shared-page-nav{display:flex;gap:8px;margin-top:17px}.shared-page-nav a{color:#fff;text-decoration:none;font-size:13px;font-weight:700;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.35)}.shared-page-nav a.active{background:#fff;color:#d73211}';
+  head.appendChild(style);
+  const host=doc.querySelector('.header-inner')||doc.querySelector('.inner');
+  if(!host)return;
+  const nav=doc.createElement('nav');
+  nav.id='sharedPageNav';
+  nav.className='shared-page-nav';
+  nav.innerHTML='<a href="#" data-page="sku">🔥 热门 SKU</a><a href="#" data-page="cat">📊 类目大盘</a>';
+  nav.querySelectorAll('a').forEach(a=>{
+    if(a.dataset.page===activePage)a.classList.add('active');
+    a.addEventListener('click',e=>{e.preventDefault();parent.sw(a.dataset.page)});
+  });
+  host.appendChild(nav);
+}
+sku.addEventListener('load',()=>injectHeaderNav(sku,'sku'));
+cat.addEventListener('load',()=>injectHeaderNav(cat,'cat'));
+
+if(location.hash==='#category')sw('cat');</script></body></html>
