@@ -2,41 +2,622 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Shopee EL 选品指南</title>
 <style>
-*{box-sizing:border-box}
-html,body{margin:0;width:100%;height:100%;background:#faf8f9}
-.site-shell{height:100vh;overflow:hidden}
-.page-frame{display:none;width:100%;height:100vh;border:0;background:#faf8f9}
-.page-frame.active{display:block}
+  * { box-sizing: border-box; }
+  html, body { margin: 0; width: 100%; height: 100%; background: #faf8f9; }
+  .site-shell { height: 100vh; overflow: hidden; }
+  .page-frame { display: none; width: 100%; height: 100vh; border: 0; background: #faf8f9; }
+  .page-frame.active { display: block; }
+  .source-holder { display: none; }
 </style>
 </head>
 <body>
+
 <div class="site-shell">
   <iframe id="skuFrame" class="page-frame active" title="Shopee EL 选品指南"></iframe>
   <iframe id="categoryFrame" class="page-frame" title="Category Overview"></iframe>
 </div>
-<script>
-const HOT_SKU_HTML = "<!DOCTYPE html>\n<html lang=\"zh-CN\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>Shopee EL 选品指南</title>\n<!-- Google tag (gtag.js) -->\n<script async src=\"https://www.googletagmanager.com/gtag/js?id=G-DMXQE68GVC\"></script>\n<script>\nwindow.dataLayer = window.dataLayer || [];\nfunction gtag(){dataLayer.push(arguments);}\ngtag('js', new Date());\ngtag('config', 'G-DMXQE68GVC');\n</script>\n<style>\n:root {\n--primary: #EE4D2D;\n--primary-light: #fff5f2;\n--primary-dark: #d73211;\n--bg: #faf8f9;\n--card-bg: #ffffff;\n--text: #2d2038;\n--text-muted: #9b8fa0;\n--border: #f0e8ed;\n--success: #27ae60;\n--info: #2980b9;\n--tag-bg: #fff3f7;\n--danger: #eb4d4b;\n--shadow: 0 2px 16px rgba(238,77,45,0.07);\n--shadow-hover: 0 8px 32px rgba(238,77,45,0.16);\n--radius: 16px;\n--radius-sm: 8px;\n}\n* { box-sizing: border-box; margin: 0; padding: 0; }\nbody { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', Arial, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }\nheader {\nbackground: linear-gradient(135deg, #FF6633 0%, #EE4D2D 50%, #D02D11 100%);\ncolor: white; padding: 36px 40px 28px; position: relative; overflow: hidden;\n}\nheader::before {\ncontent: ''; position: absolute; top: -60px; right: -60px;\nwidth: 280px; height: 280px; background: rgba(255,255,255,0.08); border-radius: 50%;\n}\n.header-inner { max-width: 1280px; margin: 0 auto; position: relative; z-index: 1; }\nheader h1 { font-family: Georgia, 'Times New Roman', serif; font-size: 32px; display: flex; align-items: center; gap: 12px; }\nheader h1 .badge {\nbackground: rgba(255,255,255,0.25); font-family: inherit;\nfont-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;\npadding: 4px 10px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.3);\n}\n.header-desc {\nmargin-top: 14px; background: rgba(0,0,0,0.1); padding: 12px 16px;\nborder-radius: var(--radius-sm); font-size: 13px; line-height: 1.8;\nmax-width: 700px; border-left: 3px solid rgba(255,255,255,0.7);\n}\n.last-update-tag {\nposition: absolute; top: 20px; right: 40px; background: rgba(255,255,255,0.15);\npadding: 6px 12px; border-radius: 30px; font-size: 12px;\nbackdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.2);\n}\n.page-nav { display:flex; gap:8px; margin-top:17px; }\n.page-nav a { color:#fff; text-decoration:none; font-size:13px; font-weight:700; padding:8px 14px; border-radius:999px; border:1px solid rgba(255,255,255,.35); }\n.page-nav a.active { background:#fff; color:var(--primary-dark); }\n.container { max-width: 1280px; margin: 0 auto; padding: 28px 24px; }\n.filter-section {\nbackground: var(--card-bg); padding: 20px 24px; border-radius: var(--radius);\nmargin-bottom: 24px; box-shadow: var(--shadow); border: 1px solid var(--border);\n}\n.filter-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }\n.filter-row + .filter-row { margin-top: 12px; }\n.filter-label { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; }\ninput[type=\"text\"], select {\npadding: 9px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-sm);\nfont-family: inherit; font-size: 13px; color: var(--text);\nbackground: var(--bg); transition: border-color 0.2s, box-shadow 0.2s; outline: none;\n}\ninput[type=\"text\"]:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light); }\nselect#sortOrder { border-color: var(--primary); color: var(--primary-dark); font-weight: 600; }\n.switch-container {\ndisplay: flex; align-items: center; gap: 8px; background: var(--bg); padding: 6px 12px;\nborder-radius: var(--radius-sm); border: 1.5px solid var(--border); cursor: pointer;\n}\n.count-badge { margin-left: auto; background: var(--primary-light); color: var(--primary-dark); font-weight: 700; font-size: 13px; padding: 6px 14px; border-radius: 20px; }\n.btn-clear { padding: 9px 16px; background: transparent; border: 1.5px solid var(--border); border-radius: var(--radius-sm); color: var(--text-muted); font-family: inherit; font-size: 13px; cursor: pointer; transition: all 0.2s; }\n.btn-clear:hover { border-color: var(--primary); color: var(--primary); }\n.loading-state { grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: var(--text-muted); }\n.loading-spinner { width: 36px; height: 36px; border: 3px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 16px; }\n@keyframes spin { to { transform: rotate(360deg); } }\n.product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 20px; }\n.card {\nbackground: var(--card-bg); border-radius: var(--radius); overflow: hidden;\nborder: 1px solid var(--border); transition: transform 0.25s ease, box-shadow 0.25s ease;\nposition: relative; display: flex; flex-direction: column;\n}\n.card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); border-color: #ffd6cc; }\n.site-tag {\nposition: absolute; top: 10px; left: 10px;\nbackground: var(--primary); color: white;\npadding: 3px 9px 3px 5px; border-radius: 20px; z-index: 10;\ndisplay: flex; align-items: center; gap: 5px;\n}\n.site-tag img.flag-img {\nwidth: 18px; height: 13px; border-radius: 2px;\nobject-fit: cover; display: block; flex-shrink: 0;\n}\n.site-tag .code { font-size: 11px; font-weight: 700; letter-spacing: 0.5px; line-height: 1; }\n.new-badge {\nposition: absolute; top: 10px; right: 10px;\nbackground: #F4A855; color: white;\nfont-size: 10px; font-weight: 700; padding: 3px 8px;\nborder-radius: 20px; z-index: 10; letter-spacing: 0.5px;\n}\n.img-container {\nwidth: 100%; height: 220px; background: #fffafa; overflow: hidden;\nborder-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: center; cursor: zoom-in;\n}\n.img-container img { max-width: 100%; max-height: 100%; object-fit: contain; }\n.info { padding: 14px 16px; flex-grow: 1; display: flex; flex-direction: column; gap: 8px; }\n.item-title { font-weight: 600; font-size: 14px; line-height: 1.45; height: 40px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; color: var(--text); }\n.price-row { display: flex; align-items: baseline; gap: 6px; }\n.price-label { font-size: 11px; color: var(--text-muted); font-weight: 500; }\n.price-value { color: var(--primary); font-size: 18px; font-weight: 700; }\n.meta-row { display: flex; flex-wrap: wrap; gap: 5px; }\n.pill { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 20px; border: 1px solid transparent; }\n.pill-cat { background: var(--tag-bg); color: var(--primary-dark); border-color: #f5c5d2; }\n.pill-cb { background: #e8f4fd; color: #2980b9; border-color: #b8d9f0; }\n.pill-cnls { background: #e8f8ef; color: #27ae60; border-color: #b0e5c8; }\n.ado-block { display: flex; align-items: center; gap: 8px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 6px 10px; }\n.ado-label { font-size: 10px; color: var(--text-muted); font-weight: 600; white-space: nowrap; }\n.ado-range { font-size: 12px; font-weight: 700; white-space: nowrap; }\n.ado-range.pos { color: var(--success); }\n.ado-range.neg { color: var(--danger); }\n.ado-range.zero { color: var(--text-muted); }\n.sparkline-wrap { flex: 1; display: flex; align-items: center; justify-content: flex-end; }\n.stats-row { display: flex; gap: 8px; }\n.stat-box { flex: 1; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 6px 10px; text-align: center; }\n.stat-label { font-size: 10px; color: var(--text-muted); font-weight: 600; margin-bottom: 2px; }\n.stat-value { font-size: 12px; font-weight: 700; white-space: nowrap; }\n.stat-value.ado-val { color: var(--success); }\n.stat-value.adg-val { color: var(--info); }\n.footer-row { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 10px; margin-top: auto; font-size: 11px; color: var(--text-muted); }\n.itemid-box { font-family: monospace; background: var(--bg); padding: 2px 7px; border-radius: 4px; border: 1px dashed #ddd; cursor: pointer; }\n#imageModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; justify-content: center; align-items: center; cursor: zoom-out; }\n#imageModal img { max-width: 90vw; max-height: 90vh; border-radius: 8px; }\n#toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(20px); background: #333; color: white; padding: 10px 22px; border-radius: 30px; font-size: 13px; opacity: 0; transition: all 0.3s; z-index: 10000; }\n#toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }\n.pagination { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 32px 0; }\n.pagination button { padding: 8px 16px; border: 1.5px solid var(--border); background: white; cursor: pointer; border-radius: var(--radius-sm); font-family: inherit; transition: all 0.2s; }\n.pagination button:hover:not(:disabled) { border-color: var(--primary); color: var(--primary); }\n.pagination button:disabled { opacity: 0.4; cursor: not-allowed; }\nfooter { text-align: center; color: var(--text-muted); font-size: 11px; padding: 40px; border-top: 1px solid var(--border); }\n</style>\n</head>\n<body>\n<header>\n<div class=\"header-inner\">\n<h1>Shopee EL 选品指南 <span class=\"badge\">External</span></h1>\n<div class=\"header-desc\">\n✨ <strong>精选热销品新品</strong> · 涵盖多站点，帮你快速锁定爆款选品<br>\n📊 ADO 与 ADG 采用区间脱敏展示，价格以 USD 原价展示<br>\n🔒 提示：当前页面仅供内部选品参考，不提供外部商品跳转链接。\n</div>\n<nav class=\"page-nav\"><a class=\"active\" href=\"#\" onclick=\"parent.switchPage(\\'sku\\');return false\">🔥 热门 SKU</a><a href=\"#\" onclick=\"parent.switchPage(\\'category\\');return false\">📊 类目大盘</a></nav>\n<div class=\"last-update-tag\" id=\"lastUpdateDisplay\">数据更新中...</div>\n</div>\n</header>\n<div class=\"container\">\n<div class=\"filter-section\">\n<div class=\"filter-row\">\n<span class=\"filter-label\">🔍</span>\n<input type=\"text\" id=\"searchInput\" placeholder=\"搜索标题 / ID...\" oninput=\"debouncedFilter()\">\n<select id=\"l1Filter\" onchange=\"updateL2(); applyFilters()\"><option value=\"\">L1 类目</option></select>\n<select id=\"l2Filter\" onchange=\"updateL3(); applyFilters()\"><option value=\"\">L2 类目</option></select>\n<select id=\"l3Filter\" onchange=\"applyFilters()\"><option value=\"\">L3 类目</option></select>\n<span class=\"filter-label\">📊 排序</span>\n<select id=\"sortOrder\" onchange=\"applyFilters()\">\n<option value=\"adoDesc\" selected>单量 (ADO) ↓</option>\n<option value=\"adgDesc\">销售额 (ADG) ↓</option>\n<option value=\"priceDesc\">价格 ↓</option>\n<option value=\"momDesc\">ADO MoM ↓ (增长最快)</option>\n<option value=\"momAsc\">ADO MoM ↑ (跌幅最大)</option>\n</select>\n<button class=\"btn-clear\" onclick=\"clearFilters()\">✕ 重置</button>\n<span class=\"count-badge\" id=\"countDisplay\">—</span>\n</div>\n<div class=\"filter-row\">\n<span class=\"filter-label\">🌏 站点</span>\n<select id=\"siteFilter\" onchange=\"applyFilters()\">\n<option value=\"\">全部站点</option>\n<option value=\"BR\">BR</option>\n<option value=\"MX\">MX</option>\n<option value=\"MY\">MY</option>\n<option value=\"PH\">PH</option>\n<option value=\"SG\">SG</option>\n<option value=\"TH\">TH</option>\n<option value=\"TW\">TW</option>\n<option value=\"VN\">VN</option>\n</select>\n<span class=\"filter-label\">📦 产品类型</span>\n<select id=\"productTypeFilter\" onchange=\"applyFilters()\">\n<option value=\"\">全部类型</option>\n<option value=\"CB\">CB</option>\n<option value=\"CNLS\">CNLS</option>\n</select>\n<span class=\"filter-label\">📈 ADO MoM</span>\n<select id=\"momFilter\" onchange=\"applyFilters()\">\n<option value=\"\">全部趋势</option>\n<option value=\"pos\">▲ 正增长</option>\n<option value=\"neg\">▼ 负增长</option>\n<option value=\"zero\">– 持平</option>\n</select>\n<label class=\"switch-container\">\n<input type=\"checkbox\" id=\"topNewFilter\" onchange=\"applyFilters()\">\n<span style=\"font-size:13px;font-weight:500;\">🔥 Top New SKU <small style=\"font-weight:400;color:var(--text-muted);\">(近30天上新)</small></span>\n</label>\n</div>\n</div>\n<div class=\"product-grid\" id=\"productGrid\">\n<div class=\"loading-state\"><div class=\"loading-spinner\"></div><div>数据加载中，请稍候...</div></div>\n</div>\n<div class=\"pagination\" id=\"pagination\"></div>\n</div>\n<div id=\"imageModal\" onclick=\"this.style.display='none'\"><img id=\"modalImg\" src=\"\"></div>\n<div id=\"toast\"></div>\n<footer>Shopee EL 选品指南</footer>\n<script>\nconst CB_DATA_URL   = './data_cb.json';\nconst CNLS_DATA_URL = './data_cnls.json';\nlet products = [], filteredData = [], currentPage = 1;\nconst pageSize = 40;\nfunction getFlagImgHtml(countryCode) {\nif (!countryCode || countryCode.length !== 2) return '';\nconst code = countryCode.toLowerCase();\nreturn '<img class=\"flag-img\" src=\"https://flagcdn.com/w40/' + code + '.png\" alt=\"' + countryCode + '\" onerror=\"this.style.display=\\'none\\'\">';\n}\nfunction showToast(msg) {\nconst t = document.getElementById('toast');\nt.textContent = msg; t.classList.add('show');\nsetTimeout(function() { t.classList.remove('show'); }, 2000);\n}\nconst clean = function(s) { return (s || '').toString().replace(/[\\t\"]/g, '').trim(); };\nconst toNum = function(s) {\nconst str = clean(s).replace(/,/g, '').replace(/%/g, '');\nreturn parseFloat(str) || 0;\n};\nconst KNOWN_SITES = ['BR','MX','MY','PH','SG','TH','TW','VN'];\nfunction normalizeSite(raw) {\nconst s = clean(raw).toUpperCase();\nfor (let i = 0; i < KNOWN_SITES.length; i++) { if (s === KNOWN_SITES[i]) return KNOWN_SITES[i]; }\nfor (let i = 0; i < KNOWN_SITES.length; i++) { if (s.indexOf(KNOWN_SITES[i]) !== -1) return KNOWN_SITES[i]; }\nreturn s;\n}\nfunction normalizeCBItem(obj) {\nreturn {\nitemid:      clean(obj['item_id'] || ''),\nyear_month:  clean(obj['year_month'] || ''),\nsite:        normalizeSite(obj['grass_region'] || ''),\ntitle:       clean(obj['item_name'] || ''),\nl1:          clean(obj['cb_level1_global_be_category'] || ''),\nl2:          clean(obj['level2_global_be_category'] || ''),\nl3:          clean(obj['level3_global_be_category'] || ''),\ncreate_date: clean(obj['item_create_date'] || ''),\nimgUrl:      clean(obj['product_image'] || ''),\nprice_usd:   toNum(obj['price_usd'] || 0),\nado:         toNum(obj['ADO(SUM)'] || 0),\nado_mom:     toNum(obj['mom_ado_growth_contri(SUM)'] || 0),\nadg_usd:     toNum(obj['ADG_usd(SUM)'] || 0),\nproductType: 'CB'\n};\n}\nfunction normalizeCNLSItem(obj) {\nconst adoDiff    = toNum(obj['ado_diff(RAW)'] || 0);\nconst benchmarkAdo = toNum(obj['benchmark_ado(RAW)'] || 0);\nconst adoMom = (benchmarkAdo !== 0) ? (adoDiff / benchmarkAdo) * 100 : 0;\nreturn {\nitemid:      clean(obj['item_id'] || ''),\nyear_month:  clean(obj['year_month'] || ''),\nsite:        normalizeSite(obj['grass_region'] || ''),\ntitle:       clean(obj['item_name'] || ''),\nl1:          clean(obj['cb_level1_global_be_category'] || ''),\nl2:          clean(obj['level2_global_be_category'] || ''),\nl3:          clean(obj['level3_global_be_category'] || ''),\ncreate_date: clean(obj['item_create_date'] || ''),\nimgUrl:      clean(obj['item_image'] || ''),\nprice_usd:   toNum(obj['item_price_usd'] || 0),\nado:         toNum(obj['current_ado(RAW)'] || 0),\nado_mom:     adoMom,\nadg_usd:     toNum(obj['current_adgmv(RAW)'] || 0),\nproductType: 'CNLS'\n};\n}\nfunction toRangeStr(val, step) {\nconst n = parseFloat(val); if (isNaN(n)) return null;\nif (n >= 0) { const lo = Math.floor(n/step)*step; return lo + '~' + (lo+step); }\nelse { const hi = Math.ceil(n/step)*step; return (hi-step) + '~' + hi; }\n}\nfunction adoRange(v) {\nconst n = parseFloat(v); if (isNaN(n) || n === 0) return null;\nlet step = n < 100 ? 10 : n < 1000 ? 50 : 100;\nreturn toRangeStr(n, step);\n}\nfunction adgRange(v) {\nconst n = parseFloat(v); if (isNaN(n) || n === 0) return null;\nlet step = n < 100 ? 10 : n < 500 ? 50 : n < 2000 ? 100 : n < 10000 ? 500 : 1000;\nreturn toRangeStr(n, step);\n}\nfunction buildSparkline(momVal) {\nif (isNaN(momVal) || momVal === null) return '';\nconst isPos = momVal > 0, isZero = momVal === 0;\nconst color = isZero ? '#9b8fa0' : (isPos ? '#27ae60' : '#eb4d4b');\nconst fill  = isZero ? 'rgba(155,143,160,0.08)' : (isPos ? 'rgba(39,174,96,0.10)' : 'rgba(235,77,75,0.10)');\nconst W = 64, H = 28, mid = 0.5;\nconst amp  = Math.min(0.45, Math.max(0.05, Math.abs(momVal) / 50 * 0.3));\nconst endY = isZero ? mid : (isPos ? mid - amp : mid + amp);\nconst ys   = [mid, mid+(endY-mid)*0.1, mid+(endY-mid)*0.35, mid+(endY-mid)*0.7, endY];\nconst coords = ys.map(function(y,i) { return { x: +((i*W/(ys.length-1)).toFixed(1)), y: +(y*H).toFixed(1) }; });\nlet d = 'M' + coords[0].x + ',' + coords[0].y;\nfor (let i = 1; i < coords.length; i++) {\nconst cx = (coords[i-1].x + coords[i].x) / 2;\nd += ' C' + cx + ',' + coords[i-1].y + ' ' + cx + ',' + coords[i].y + ' ' + coords[i].x + ',' + coords[i].y;\n}\nconst last = coords[coords.length-1];\nconst fillD = d + ' L' + last.x + ',' + H + ' L' + coords[0].x + ',' + H + ' Z';\nreturn '<svg width=\"' + W + '\" height=\"' + H + '\" viewBox=\"0 0 ' + W + ' ' + H + '\" xmlns=\"http://www.w3.org/2000/svg\">'\n+ '<path d=\"' + fillD + '\" fill=\"' + fill + '\" stroke=\"none\"/>'\n+ '<path d=\"' + d + '\" fill=\"none\" stroke=\"' + color + '\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>'\n+ '<circle cx=\"' + last.x + '\" cy=\"' + last.y + '\" r=\"2.2\" fill=\"' + color + '\"/>'\n+ '</svg>';\n}\nfunction sortData(data, key) {\nconst s = data.slice();\nif (key === 'adoDesc')   s.sort(function(a,b) { return b.ado - a.ado; });\nif (key === 'adgDesc')   s.sort(function(a,b) { return b.adg_usd - a.adg_usd; });\nif (key === 'priceDesc') s.sort(function(a,b) { return b.price_usd - a.price_usd; });\nif (key === 'momDesc')   s.sort(function(a,b) { return b.ado_mom - a.ado_mom; });\nif (key === 'momAsc')    s.sort(function(a,b) { return a.ado_mom - b.ado_mom; });\nreturn s;\n}\nasync function loadData() {\ntry {\nconst [cbRes, cnlsRes] = await Promise.all([\nfetch(CB_DATA_URL   + '?t=' + Date.now()),\nfetch(CNLS_DATA_URL + '?t=' + Date.now())\n]);\nif (!cbRes.ok)   throw new Error('CB data HTTP '   + cbRes.status);\nif (!cnlsRes.ok) throw new Error('CNLS data HTTP ' + cnlsRes.status);\nconst cbJson   = await cbRes.json();\nconst cnlsJson = await cnlsRes.json();\nconst cbRawList   = Array.isArray(cbJson)   ? cbJson   : (cbJson.data   || []);\nconst cnlsRawList = Array.isArray(cnlsJson) ? cnlsJson : (cnlsJson.data || []);\nconst cbProducts   = cbRawList.map(normalizeCBItem).filter(function(p) { return p.itemid; });\nconst cnlsProducts = cnlsRawList.map(normalizeCNLSItem).filter(function(p) { return p.itemid; });\nproducts = cbProducts.concat(cnlsProducts);\nconst lastModified = cbRes.headers.get('Last-Modified');\nif (lastModified) {\nconst ld = new Date(lastModified);\ndocument.getElementById('lastUpdateDisplay').textContent =\n'数据最后更新: ' + ld.getFullYear() + '/' + (ld.getMonth()+1) + '/' + ld.getDate();\n} else {\nconst _d = new Date();\ndocument.getElementById('lastUpdateDisplay').textContent =\n'数据最后更新: ' + _d.getFullYear() + '/' + (_d.getMonth()+1) + '/' + _d.getDate();\n}\ninitFilters(); applyFilters();\n} catch(e) {\ndocument.getElementById('productGrid').innerHTML =\n'<div class=\"loading-state\">数据加载失败：' + e.message + '</div>';\n}\n}\nfunction initFilters() {\nconst l1s = []; const seen = {};\nproducts.forEach(function(p) { const v = p.l1; if (v && !seen[v]) { seen[v] = 1; l1s.push(v); } });\nl1s.sort();\nconst el = document.getElementById('l1Filter');\nel.innerHTML = '<option value=\"\">L1 类目</option>';\nl1s.forEach(function(v) { el.innerHTML += '<option value=\"' + v + '\">' + v + '</option>'; });\nupdateL2();\n}\nfunction updateL2() {\nconst l1 = document.getElementById('l1Filter').value;\nconst el = document.getElementById('l2Filter');\nel.innerHTML = '<option value=\"\">L2 类目</option>';\nconst seen = {}, vals = [];\nproducts.filter(function(p) { return !l1 || p.l1 === l1; })\n.forEach(function(p) { const v = p.l2; if (v && !seen[v]) { seen[v] = 1; vals.push(v); } });\nvals.sort().forEach(function(v) { el.innerHTML += '<option value=\"' + v + '\">' + v + '</option>'; });\nupdateL3();\n}\nfunction updateL3() {\nconst l1 = document.getElementById('l1Filter').value;\nconst l2 = document.getElementById('l2Filter').value;\nconst el = document.getElementById('l3Filter');\nel.innerHTML = '<option value=\"\">L3 类目</option>';\nconst seen = {}, vals = [];\nproducts.filter(function(p) { return (!l1 || p.l1 === l1) && (!l2 || p.l2 === l2); })\n.forEach(function(p) { const v = p.l3; if (v && !seen[v]) { seen[v] = 1; vals.push(v); } });\nvals.sort().forEach(function(v) { el.innerHTML += '<option value=\"' + v + '\">' + v + '</option>'; });\n}\nfunction isNewSku(p) {\nconst dateStr = p.create_date;\nif (!dateStr) return false;\nconst createTime = new Date(dateStr).getTime();\nif (isNaN(createTime)) return false;\nif (!window._todayMs) {\nconst t = new Date(); t.setHours(0,0,0,0);\nwindow._todayMs = t.getTime();\n}\nconst diffDays = (window._todayMs - createTime) / 86400000;\nreturn diffDays >= 0 && diffDays <= 30;\n}\nfunction render(dataList, page) {\npage = page || 1;\ncurrentPage = page;\nconst grid = document.getElementById('productGrid');\ngrid.innerHTML = '';\nconst pageData = dataList.slice((page-1)*pageSize, page*pageSize);\nif (!pageData.length) {\ngrid.innerHTML = '<div class=\"loading-state\">没有找到符合条件的商品</div>';\nrenderPagination(0); return;\n}\npageData.forEach(function(item) {\nconst flagHtml    = getFlagImgHtml(item.site);\nconst siteTagHtml = flagHtml + '<span class=\"code\">' + item.site + '</span>';\nconst newBadge    = isNewSku(item) ? '<div class=\"new-badge\">NEW</div>' : '';\nconst priceDisplay = item.price_usd ? '$' + item.price_usd.toFixed(2) : '—';\nconst adoRangeStr  = adoRange(item.ado);\nconst adgRangeStr  = adgRange(item.adg_usd);\nconst momVal   = item.ado_mom;\nconst adoClass = momVal > 0 ? 'pos' : momVal < 0 ? 'neg' : 'zero';\nconst adoIcon  = momVal > 0 ? '▲' : momVal < 0 ? '▼' : '–';\nconst momDisplay = (momVal > 0 ? '+' : '') + momVal.toFixed(1) + '%';\nconst sparkSvg   = buildSparkline(momVal);\nconst adoBlock = adoRangeStr ? (\n'<div class=\"ado-block\">'\n+ '<span class=\"ado-label\">ADO MoM</span>'\n+ '<span class=\"ado-range ' + adoClass + '\">' + adoIcon + ' ' + momDisplay + '</span>'\n+ '<div class=\"sparkline-wrap\">' + sparkSvg + '</div>'\n+ '</div>'\n) : '';\nconst l3Html = item.l3 ? '<span class=\"pill pill-cat\">' + item.l3 + '</span>' : '';\nconst typePillHtml = item.productType === 'CB'\n? '<span class=\"pill pill-cb\">CB</span>'\n: '<span class=\"pill pill-cnls\">CNLS</span>';\nconst card = document.createElement('div');\ncard.className = 'card';\ncard.innerHTML =\n'<div class=\"site-tag\">' + siteTagHtml + '</div>'\n+ newBadge\n+ '<div class=\"img-container\" onclick=\"openModal(\\'' + item.imgUrl + '\\')\">'\n+   '<img src=\"' + item.imgUrl + '\" loading=\"lazy\" onerror=\"this.style.display=\\'none\\';this.parentNode.innerHTML+=\\'<div style=&quot;font-size:40px;color:#ddd&quot;>📦</div>\\'\">'\n+ '</div>'\n+ '<div class=\"info\">'\n+   '<div class=\"item-title\" title=\"' + item.title + '\">' + item.title + '</div>'\n+   '<div class=\"price-row\"><span class=\"price-label\">价格</span><span class=\"price-value\">' + priceDisplay + '</span></div>'\n+   '<div class=\"meta-row\">' + typePillHtml + (l3Html ? l3Html : '') + '</div>'\n+   adoBlock\n+   '<div class=\"stats-row\">'\n+     '<div class=\"stat-box\"><div class=\"stat-label\">ADO (件/日)</div><div class=\"stat-value ado-val\">' + (adoRangeStr || '—') + '</div></div>'\n+     '<div class=\"stat-box\"><div class=\"stat-label\">ADG (USD/日)</div><div class=\"stat-value adg-val\">' + (adgRangeStr ? '$' + adgRangeStr : '—') + '</div></div>'\n+   '</div>'\n+   '<div class=\"footer-row\">'\n+     '<span>📅 ' + (item.create_date || item.year_month) + '</span>'\n+     '<span class=\"itemid-box\" onclick=\"copyId(\\'' + item.itemid + '\\')\">ID: ' + item.itemid + '</span>'\n+   '</div>'\n+ '</div>';\ngrid.appendChild(card);\n});\nrenderPagination(dataList.length);\n}\nfunction openModal(src) { document.getElementById('modalImg').src = src; document.getElementById('imageModal').style.display = 'flex'; }\nfunction copyId(id) { navigator.clipboard.writeText(id).then(function() { showToast('已复制 ID: ' + id); }); }\nfunction renderPagination(total) {\nconst tp = Math.ceil(total/pageSize) || 1;\ndocument.getElementById('pagination').innerHTML =\n'<button onclick=\"changePage(-1)\" ' + (currentPage===1?'disabled':'') + '>←</button>'\n+ '<span style=\"font-size:13px;color:var(--text-muted)\">' + currentPage + ' / ' + tp + '</span>'\n+ '<button onclick=\"changePage(1)\" ' + (currentPage>=tp?'disabled':'') + '>→</button>';\n}\nfunction changePage(d) { render(filteredData, currentPage+d); window.scrollTo(0,0); }\nfunction applyFilters() {\nconst q        = document.getElementById('searchInput').value.toLowerCase();\nconst l1       = document.getElementById('l1Filter').value;\nconst l2       = document.getElementById('l2Filter').value;\nconst l3       = document.getElementById('l3Filter').value;\nconst site     = document.getElementById('siteFilter').value;\nconst productType = document.getElementById('productTypeFilter').value;\nconst isTopNew = document.getElementById('topNewFilter').checked;\nconst sort     = document.getElementById('sortOrder').value;\nconst mom      = document.getElementById('momFilter').value;\nconst filtered = products.filter(function(p) {\nreturn (!q       || p.title.toLowerCase().indexOf(q) !== -1 || p.itemid.indexOf(q) !== -1) &&\n(!l1      || p.l1 === l1) &&\n(!l2      || p.l2 === l2) &&\n(!l3      || p.l3 === l3) &&\n(!site    || p.site === site) &&\n(!productType || p.productType === productType) &&\n(!isTopNew || isNewSku(p)) &&\n(!mom ||\n(mom === 'pos'  && p.ado_mom > 0) ||\n(mom === 'neg'  && p.ado_mom < 0) ||\n(mom === 'zero' && p.ado_mom === 0)\n);\n});\nfilteredData = sortData(filtered, sort);\ndocument.getElementById('countDisplay').textContent = '共 ' + filteredData.length + ' 款';\nrender(filteredData, 1);\n}\nfunction clearFilters() {\ndocument.getElementById('searchInput').value = '';\n['l1Filter','l2Filter','l3Filter','siteFilter','productTypeFilter','momFilter'].forEach(function(id) {\ndocument.getElementById(id).value = '';\n});\ndocument.getElementById('sortOrder').value = 'adoDesc';\ndocument.getElementById('topNewFilter').checked = false;\nwindow._todayMs = null;\nupdateL2(); applyFilters();\n}\nlet timer;\nfunction debouncedFilter() { clearTimeout(timer); timer = setTimeout(applyFilters, 300); }\nwindow.onload = loadData;\n</script>\n</body>\n</html>";
-const CATEGORY_HTML = "<!DOCTYPE html>\n<html lang=\"zh-CN\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1.0\">\n<title>Shopee EL Category Overview</title>\n<style>\n:root{--p:#EE4D2D;--pl:#fff5f2;--bg:#faf8f9;--card:#fff;--text:#2d2038;--muted:#9b8fa0;--border:#f0e8ed;--shadow:0 2px 16px rgba(238,77,45,.07)}\n*{box-sizing:border-box;margin:0;padding:0}body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',Arial,sans-serif;background:var(--bg);color:var(--text)}\nheader{background:linear-gradient(135deg,#FF6633,#EE4D2D 50%,#D02D11);color:#fff;padding:36px 40px 28px}.inner,.container{max-width:1280px;margin:auto}.inner{position:relative}h1{font-family:Georgia,serif;font-size:32px}.badge{font:600 11px sans-serif;background:#ffffff38;padding:5px 10px;border-radius:20px}.desc{margin-top:14px;max-width:760px;background:#0000001a;padding:12px 16px;border-radius:8px;font-size:13px;line-height:1.8;border-left:3px solid #ffffffb3}.update{position:absolute;right:0;top:0;background:#ffffff26;padding:6px 12px;border-radius:30px;font-size:12px}\n.page-nav{display:flex;gap:8px;margin-top:17px}.page-nav a{color:#fff;text-decoration:none;font-size:13px;font-weight:700;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.35)}.page-nav a.active{background:#fff;color:#d73211}.container{padding:26px 24px}.tabs{display:flex;gap:10px;margin-bottom:18px}.tab{padding:10px 20px;border:1.5px solid var(--border);background:#fff;border-radius:999px;cursor:pointer;font-weight:800;color:var(--muted)}.tab.active{background:var(--p);border-color:var(--p);color:#fff}\n.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:20px}.card,.filters{background:#fff;border:1px solid var(--border);box-shadow:var(--shadow);border-radius:16px}.card{padding:20px;margin-bottom:18px}.bubble-card{height:420px}.title{font-size:16px;font-weight:800}.note{font-size:11px;color:var(--muted);margin:3px 0 14px}.bubble{height:330px;border:1px solid var(--border);border-radius:12px;background:#fffafa}.bubble svg{width:100%;height:100%}.dot{fill-opacity:.76;stroke:#fff;stroke-width:2}.axis{font-size:10px;fill:#9b8fa0}.label{font-size:9px;font-weight:800;fill:#2d2038}\n.filters{padding:17px 19px;margin-bottom:18px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}.fl{font-size:11px;color:var(--muted);font-weight:700}select,button{font:inherit;font-size:13px;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text)}\n.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}.kpi{padding:17px}.kl{font-size:11px;color:var(--muted);font-weight:700}.kv{font-size:27px;font-weight:800;margin-top:7px}.ks{font-size:11px;color:var(--muted);margin-top:5px}\n.dash{display:grid;grid-template-columns:1.25fr .75fr;gap:18px}.bars{display:flex;flex-direction:column;gap:12px}.bar{display:grid;grid-template-columns:minmax(130px,1.15fr) 3fr 68px;gap:10px;align-items:center}.bn{font-size:12px;font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.track{height:11px;background:#f5eef1;border-radius:999px;overflow:hidden}.fill{height:100%;background:linear-gradient(90deg,#ffb5a7,#EE4D2D)}.bv{text-align:right;font-size:12px;font-weight:750;color:#d73211}\ntable{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:10px 9px;border-bottom:1px solid var(--border);text-align:right;white-space:nowrap}th{font-size:10px;color:var(--muted);background:#fffafa}.wrap{overflow:auto}.thumb{width:58px;height:58px;object-fit:contain;border-radius:10px;border:1px solid var(--border);cursor:zoom-in}.cat{max-width:240px;white-space:normal;color:var(--muted)}.ins{padding:12px 14px;border:1px solid var(--border);background:#fffafa;border-radius:10px;font-size:12px;line-height:1.6;margin-bottom:10px}.empty{padding:40px;text-align:center;color:var(--muted)}\n#modal{display:none;position:fixed;inset:0;background:#140e18e6;z-index:9999;align-items:center;justify-content:center}#modal.show{display:flex}#modal img{max-width:92vw;max-height:88vh;background:#fff;border-radius:14px}\nfooter{text-align:center;color:var(--muted);font-size:11px;padding:36px;border-top:1px solid var(--border)}\n@media(max-width:980px){.grid2,.dash{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}}\n</style></head><body>\n<header><div class=\"inner\"><h1>Shopee EL Category Overview <span class=\"badge\">External</span></h1><div class=\"desc\">✨ 大盘类目数据分享，涵盖多站点，帮你快速识别潜力站点与热门类目<br>📊 以单量 ADO 与销售额 ADGMV 展示整体表现<br>🔒 跨境 CB 与本土 CNLS 分开展示</div><nav class=\"page-nav\"><a href=\"#\" onclick=\"parent.switchPage(\\'sku\\');return false\">🔥 热门 SKU</a><a class=\"active\" href=\"#\" onclick=\"parent.switchPage(\\'category\\');return false\">📊 类目大盘</a></nav><div class=\"update\" id=\"update\">数据加载中...</div></div></header>\n<main class=\"container\">\n<div class=\"tabs\"><button class=\"tab active\" data-t=\"CB\">跨境 CB</button><button class=\"tab\" data-t=\"CNLS\">本土 CNLS</button></div>\n<section class=\"grid2\"><div class=\"card bubble-card\"><div class=\"title\">各站点规模分布</div><div class=\"note\">X：ADO · Y：ADGMV · 每个气泡代表一个站点</div><div class=\"bubble\" id=\"siteBubble\"></div></div><div class=\"card bubble-card\"><div class=\"title\">L1 类目规模分布</div><div class=\"note\">汇总所有站点，每个气泡代表一个 L1 类目</div><div class=\"bubble\" id=\"l1Bubble\"></div></div></section>\n<section class=\"filters\"><span class=\"fl\">站点</span><select id=\"site\"><option value=\"\">全部站点</option></select><span class=\"fl\">L1 类目</span><select id=\"l1\"><option value=\"\">全部 L1</option></select><span class=\"fl\">L2 类目</span><select id=\"l2\"><option value=\"\">全部 L2</option></select><span class=\"fl\">L3 类目</span><select id=\"l3\"><option value=\"\">全部 L3</option></select><button id=\"reset\">✕ 重置</button></section>\n<section class=\"kpis\"><div class=\"card kpi\"><div class=\"kl\">Top Site ADO 占比</div><div class=\"kv\" id=\"sa\">—</div><div class=\"ks\" id=\"san\">—</div></div><div class=\"card kpi\"><div class=\"kl\">Top Site ADGMV 占比</div><div class=\"kv\" id=\"sg\">—</div><div class=\"ks\" id=\"sgn\">—</div></div><div class=\"card kpi\"><div class=\"kl\">Top L1 ADO 占比</div><div class=\"kv\" id=\"la\">—</div><div class=\"ks\" id=\"lan\">—</div></div><div class=\"card kpi\"><div class=\"kl\">Top L1 ADGMV 占比</div><div class=\"kv\" id=\"lg\">—</div><div class=\"ks\" id=\"lgn\">—</div></div></section>\n<section class=\"dash\"><div><div class=\"card\"><div class=\"title\" id=\"ct\">L1 类目贡献度</div><div class=\"note\">可切换 ADO / ADGMV</div><button class=\"metric\" data-m=\"adg\">ADGMV</button> <button class=\"metric\" data-m=\"ado\">ADO</button><div id=\"bars\" class=\"bars\" style=\"margin-top:15px\"></div></div><div class=\"card\"><div class=\"title\">当前筛选类目 Top 10 产品</div><div class=\"note\">按 ADGMV 降序排序</div><div class=\"wrap\"><table><thead><tr><th>排名</th><th>图片</th><th>Item ID</th><th>站点</th><th>类目</th><th>ADO 占比</th><th>ADGMV 占比</th></tr></thead><tbody id=\"pt\"></tbody></table></div></div></div><div><div class=\"card\"><div class=\"title\">站点销售额贡献</div><div class=\"note\">当前筛选下各站点 ADGMV 占比</div><div id=\"sb\" class=\"bars\"></div></div><div class=\"card\"><div class=\"title\">类目洞察</div><div class=\"note\">当前类型及筛选条件</div><div id=\"ins\"></div></div></div></section>\n</main><div id=\"modal\"><img id=\"mi\"></div><footer>Shopee EL 选品指南 · Category Overview</footer>\n<script>\nconst UCB='./data_cb.json',UCN='./data_cnls.json';let cb=[],cn=[],typ='CB',metric='adg';const $=x=>document.getElementById(x),n=v=>parseFloat(String(v??'').replace(/,/g,''))||0,p=(a,b)=>b?a/b*100:0,f=x=>x.toFixed(1)+'%',esc=s=>String(s??'').replace(/[&<>\"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',\"'\":'&#39;'}[c]));function ns(v){let s=String(v||'').toUpperCase();return ['BR','MX','MY','PH','SG','TH','TW','VN'].find(x=>s===x||s.includes(x))||s}\nfunction NCB(r){return{id:String(r.item_id||''),site:ns(r.grass_region),l1:r.cb_level1_global_be_category||'',l2:r.level2_global_be_category||'',l3:r.level3_global_be_category||'',img:r.product_image||'',ado:n(r['ADO(SUM)']),adg:n(r['ADG_usd(SUM)'])}}function NCN(r){return{id:String(r.item_id||''),site:ns(r.grass_region),l1:r.cb_level1_global_be_category||'',l2:r.level2_global_be_category||'',l3:r.level3_global_be_category||'',img:r.item_image||'',ado:n(r['current_ado(RAW)']),adg:n(r['current_adgmv(RAW)'])}}\nfunction R(){return typ==='CB'?cb:cn}function F(){let s=$('site').value,a=$('l1').value,b=$('l2').value,c=$('l3').value;return R().filter(r=>(!s||r.site===s)&&(!a||r.l1===a)&&(!b||r.l2===b)&&(!c||r.l3===c))}function A(d,k){let m=new Map;d.forEach(r=>{let z=r[k]||'未分类';if(!m.has(z))m.set(z,{name:z,ado:0,adg:0});let g=m.get(z);g.ado+=r.ado;g.adg+=r.adg});return[...m.values()]}function S(d,k){return d.reduce((a,r)=>a+r[k],0)}function H(){if($('l2').value)return['l3','L3'];if($('l1').value)return['l2','L2'];return['l1','L1']}\nconst pal=['#FFB5A7','#FCD5CE','#F9DCC4','#CDEAC0','#BDE0FE','#A2D2FF','#CDB4DB','#FFC8DD','#D8E2DC','#E8D7F1','#D0F4DE','#FFF1E6'];function B(id,pts){if(!pts.length){$(id).innerHTML='<div class=\"empty\">暂无数据</div>';return}let ma=Math.max(...pts.map(x=>x.ado),1),mg=Math.max(...pts.map(x=>x.adg),1),d='';pts.forEach((q,i)=>{let x=55+q.ado/ma*460,y=285-q.adg/mg*235,r=9+Math.sqrt((q.ado/ma+q.adg/mg)/2)*17,c=pal[i%pal.length],s=q.name.length>13?q.name.slice(0,13)+'…':q.name;d+=\\`<circle class=\"dot\" cx=\"\\${x}\" cy=\"\\${y}\" r=\"\\${r}\" fill=\"\\${c}\"><title>\\${esc(q.name)}</title></circle><text class=\"label\" x=\"\\${x}\" y=\"\\${y+3}\" text-anchor=\"middle\">\\${esc(s)}</text>\\`});$(id).innerHTML=\\`<svg viewBox=\"0 0 560 330\"><line x1=\"48\" y1=\"290\" x2=\"525\" y2=\"290\" stroke=\"#eadfe4\"/><line x1=\"48\" y1=\"290\" x2=\"48\" y2=\"38\" stroke=\"#eadfe4\"/><text class=\"axis\" x=\"490\" y=\"315\">ADO 高 →</text><text class=\"axis\" x=\"12\" y=\"50\">ADGMV 高 ↑</text>\\${d}</svg>\\`}\nfunction bubbles(){B('siteBubble',A(R(),'site').filter(x=>x.name!=='未分类'));B('l1Bubble',A(R(),'l1').filter(x=>x.name!=='未分类'))}function kpi(){let d=F(),da=S(d,'ado'),dg=S(d,'adg'),s=A(d,'site'),l=A(d,'l1'),sa=s.sort((a,b)=>b.ado-a.ado)[0],sg=[...s].sort((a,b)=>b.adg-a.adg)[0],la=l.sort((a,b)=>b.ado-a.ado)[0],lg=[...l].sort((a,b)=>b.adg-a.adg)[0];$('sa').textContent=sa?f(p(sa.ado,da)):'—';$('san').textContent=sa?sa.name:'—';$('sg').textContent=sg?f(p(sg.adg,dg)):'—';$('sgn').textContent=sg?sg.name:'—';$('la').textContent=la?f(p(la.ado,da)):'—';$('lan').textContent=la?la.name:'—';$('lg').textContent=lg?f(p(lg.adg,dg)):'—';$('lgn').textContent=lg?lg.name:'—'}\nfunction contrib(){let d=F(),[k,l]=H(),g=A(d,k).sort((a,b)=>b[metric]-a[metric]).slice(0,12),den=g.reduce((a,x)=>a+x[metric],0);$('ct').textContent=l+' 类目贡献度';$('bars').innerHTML=g.map(x=>{let q=p(x[metric],den);return\\`<div class=\"bar\"><div class=\"bn\">\\${esc(x.name)}</div><div class=\"track\"><div class=\"fill\" style=\"width:\\${Math.max(q,1)}%\"></div></div><div class=\"bv\">\\${f(q)}</div></div>\\`}).join('')||'<div class=\"empty\">暂无数据</div>'}\nfunction products(){let d=F(),da=S(d,'ado'),dg=S(d,'adg');$('pt').innerHTML=d.slice().sort((a,b)=>b.adg-a.adg).slice(0,10).map((x,i)=>\\`<tr><td>\\${i+1}</td><td>\\${x.img?\\`<img class=\"thumb\" src=\"\\${esc(x.img)}\">\\`:'—'}</td><td>\\${esc(x.id)}</td><td>\\${esc(x.site)}</td><td><div class=\"cat\">\\${esc([x.l1,x.l2,x.l3].filter(Boolean).join(' › '))}</div></td><td>\\${f(p(x.ado,da))}</td><td>\\${f(p(x.adg,dg))}</td></tr>\\`).join('')||'<tr><td colspan=\"7\" class=\"empty\">暂无数据</td></tr>'}\nfunction side(){let d=F(),s=A(d,'site').sort((a,b)=>b.adg-a.adg),den=S(d,'adg');$('sb').innerHTML=s.map(x=>{let q=p(x.adg,den);return\\`<div class=\"bar\"><div class=\"bn\">\\${esc(x.name)}</div><div class=\"track\"><div class=\"fill\" style=\"width:\\${Math.max(q,1)}%\"></div></div><div class=\"bv\">\\${f(q)}</div></div>\\`}).join('');let l1=A(d,'l1').sort((a,b)=>b.adg-a.adg),l2=A(d,'l2').sort((a,b)=>b.adg-a.adg),a=[];if(l1[0])a.push(\\`<div class=\"ins\"><strong>销售额领先 L1：</strong>\\${esc(l1[0].name)}，贡献 \\${f(p(l1[0].adg,den))}。</div>\\`);if(l2[0])a.push(\\`<div class=\"ins\"><strong>销售额领先 L2：</strong>\\${esc(l2[0].name)}。</div>\\`);if(s[0])a.push(\\`<div class=\"ins\"><strong>核心站点：</strong>\\${esc(s[0].name)}，贡献 \\${f(p(s[0].adg,den))} 的 ADGMV。</div>\\`);$('ins').innerHTML=a.join('')}\nfunction refill(){let r=R(),fill=(id,v,l)=>{$(id).innerHTML=\\`<option value=\"\">全部 \\${l}</option>\\`+[...new Set(v.filter(Boolean))].sort().map(x=>\\`<option value=\"\\${esc(x)}\">\\${esc(x)}</option>\\`).join('')};fill('site',r.map(x=>x.site),'站点');let a=r.filter(x=>!$('site').value||x.site===$('site').value);fill('l1',a.map(x=>x.l1),'L1');let b=a.filter(x=>!$('l1').value||x.l1===$('l1').value);fill('l2',b.map(x=>x.l2),'L2');let c=b.filter(x=>!$('l2').value||x.l2===$('l2').value);fill('l3',c.map(x=>x.l3),'L3')}\nfunction render(){bubbles();kpi();contrib();products();side()}function reset(){['site','l1','l2','l3'].forEach(x=>$(x).value='');refill();render()}function init(){document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');typ=b.dataset.t;reset()});$('site').onchange=()=>{refill();render()};$('l1').onchange=()=>{refill();render()};$('l2').onchange=()=>{refill();render()};$('l3').onchange=render;$('reset').onclick=reset;document.querySelectorAll('.metric').forEach(b=>b.onclick=()=>{metric=b.dataset.m;contrib()});$('pt').onclick=e=>{let im=e.target.closest('.thumb');if(im){$('mi').src=im.src;$('modal').classList.add('show')}};$('modal').onclick=()=>{$('modal').classList.remove('show')}}\nasync function load(){try{let [a,b]=await Promise.all([fetch(UCB+'?t='+Date.now()).then(r=>r.json()),fetch(UCN+'?t='+Date.now()).then(r=>r.json())]);cb=(Array.isArray(a)?a:a.data||[]).map(NCB).filter(x=>x.id);cn=(Array.isArray(b)?b:b.data||[]).map(NCN).filter(x=>x.id);init();refill();render();$('update').textContent='数据最后更新: '+new Date().toLocaleDateString('zh-CN')}catch(e){$('update').textContent='数据加载失败';$('bars').innerHTML='<div class=\"empty\">'+esc(e.message)+'</div>'}}window.onload=load;\n</script></body></html>";
 
+<!-- Hot SKU 完整源码 -->
+<textarea id="hotSkuSource" class="source-holder">
+&lt;!DOCTYPE html&gt;
+&lt;html lang="zh-CN"&gt;
+&lt;head&gt;
+&lt;meta charset="UTF-8"&gt;
+&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+&lt;title&gt;Shopee EL 选品指南&lt;/title&gt;
+&lt;!-- Google tag (gtag.js) --&gt;
+&lt;script async src="https://www.googletagmanager.com/gtag/js?id=G-DMXQE68GVC"&gt;&lt;/script&gt;
+&lt;script&gt;
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-DMXQE68GVC');
+&lt;/script&gt;
+&lt;style&gt;
+:root {
+--primary: #EE4D2D;
+--primary-light: #fff5f2;
+--primary-dark: #d73211;
+--bg: #faf8f9;
+--card-bg: #ffffff;
+--text: #2d2038;
+--text-muted: #9b8fa0;
+--border: #f0e8ed;
+--success: #27ae60;
+--info: #2980b9;
+--tag-bg: #fff3f7;
+--danger: #eb4d4b;
+--shadow: 0 2px 16px rgba(238,77,45,0.07);
+--shadow-hover: 0 8px 32px rgba(238,77,45,0.16);
+--radius: 16px;
+--radius-sm: 8px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', Arial, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+header {
+background: linear-gradient(135deg, #FF6633 0%, #EE4D2D 50%, #D02D11 100%);
+color: white; padding: 36px 40px 28px; position: relative; overflow: hidden;
+}
+header::before {
+content: ''; position: absolute; top: -60px; right: -60px;
+width: 280px; height: 280px; background: rgba(255,255,255,0.08); border-radius: 50%;
+}
+.header-inner { max-width: 1280px; margin: 0 auto; position: relative; z-index: 1; }
+header h1 { font-family: Georgia, 'Times New Roman', serif; font-size: 32px; display: flex; align-items: center; gap: 12px; }
+header h1 .badge {
+background: rgba(255,255,255,0.25); font-family: inherit;
+font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
+padding: 4px 10px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.3);
+}
+.header-desc {
+margin-top: 14px; background: rgba(0,0,0,0.1); padding: 12px 16px;
+border-radius: var(--radius-sm); font-size: 13px; line-height: 1.8;
+max-width: 700px; border-left: 3px solid rgba(255,255,255,0.7);
+}
+.last-update-tag {
+position: absolute; top: 20px; right: 40px; background: rgba(255,255,255,0.15);
+padding: 6px 12px; border-radius: 30px; font-size: 12px;
+backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.2);
+}
+.page-nav { display:flex; gap:8px; margin-top:17px; }
+.page-nav a { color:#fff; text-decoration:none; font-size:13px; font-weight:700; padding:8px 14px; border-radius:999px; border:1px solid rgba(255,255,255,.35); }
+.page-nav a.active { background:#fff; color:var(--primary-dark); }
+.container { max-width: 1280px; margin: 0 auto; padding: 28px 24px; }
+.filter-section {
+background: var(--card-bg); padding: 20px 24px; border-radius: var(--radius);
+margin-bottom: 24px; box-shadow: var(--shadow); border: 1px solid var(--border);
+}
+.filter-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.filter-row + .filter-row { margin-top: 12px; }
+.filter-label { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; }
+input[type="text"], select {
+padding: 9px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+font-family: inherit; font-size: 13px; color: var(--text);
+background: var(--bg); transition: border-color 0.2s, box-shadow 0.2s; outline: none;
+}
+input[type="text"]:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light); }
+select#sortOrder { border-color: var(--primary); color: var(--primary-dark); font-weight: 600; }
+.switch-container {
+display: flex; align-items: center; gap: 8px; background: var(--bg); padding: 6px 12px;
+border-radius: var(--radius-sm); border: 1.5px solid var(--border); cursor: pointer;
+}
+.count-badge { margin-left: auto; background: var(--primary-light); color: var(--primary-dark); font-weight: 700; font-size: 13px; padding: 6px 14px; border-radius: 20px; }
+.btn-clear { padding: 9px 16px; background: transparent; border: 1.5px solid var(--border); border-radius: var(--radius-sm); color: var(--text-muted); font-family: inherit; font-size: 13px; cursor: pointer; transition: all 0.2s; }
+.btn-clear:hover { border-color: var(--primary); color: var(--primary); }
+.loading-state { grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: var(--text-muted); }
+.loading-spinner { width: 36px; height: 36px; border: 3px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 16px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 20px; }
+.card {
+background: var(--card-bg); border-radius: var(--radius); overflow: hidden;
+border: 1px solid var(--border); transition: transform 0.25s ease, box-shadow 0.25s ease;
+position: relative; display: flex; flex-direction: column;
+}
+.card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); border-color: #ffd6cc; }
+.site-tag {
+position: absolute; top: 10px; left: 10px;
+background: var(--primary); color: white;
+padding: 3px 9px 3px 5px; border-radius: 20px; z-index: 10;
+display: flex; align-items: center; gap: 5px;
+}
+.site-tag img.flag-img {
+width: 18px; height: 13px; border-radius: 2px;
+object-fit: cover; display: block; flex-shrink: 0;
+}
+.site-tag .code { font-size: 11px; font-weight: 700; letter-spacing: 0.5px; line-height: 1; }
+.new-badge {
+position: absolute; top: 10px; right: 10px;
+background: #F4A855; color: white;
+font-size: 10px; font-weight: 700; padding: 3px 8px;
+border-radius: 20px; z-index: 10; letter-spacing: 0.5px;
+}
+.img-container {
+width: 100%; height: 220px; background: #fffafa; overflow: hidden;
+border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: center; cursor: zoom-in;
+}
+.img-container img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.info { padding: 14px 16px; flex-grow: 1; display: flex; flex-direction: column; gap: 8px; }
+.item-title { font-weight: 600; font-size: 14px; line-height: 1.45; height: 40px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; color: var(--text); }
+.price-row { display: flex; align-items: baseline; gap: 6px; }
+.price-label { font-size: 11px; color: var(--text-muted); font-weight: 500; }
+.price-value { color: var(--primary); font-size: 18px; font-weight: 700; }
+.meta-row { display: flex; flex-wrap: wrap; gap: 5px; }
+.pill { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 20px; border: 1px solid transparent; }
+.pill-cat { background: var(--tag-bg); color: var(--primary-dark); border-color: #f5c5d2; }
+.pill-cb { background: #e8f4fd; color: #2980b9; border-color: #b8d9f0; }
+.pill-cnls { background: #e8f8ef; color: #27ae60; border-color: #b0e5c8; }
+.ado-block { display: flex; align-items: center; gap: 8px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 6px 10px; }
+.ado-label { font-size: 10px; color: var(--text-muted); font-weight: 600; white-space: nowrap; }
+.ado-range { font-size: 12px; font-weight: 700; white-space: nowrap; }
+.ado-range.pos { color: var(--success); }
+.ado-range.neg { color: var(--danger); }
+.ado-range.zero { color: var(--text-muted); }
+.sparkline-wrap { flex: 1; display: flex; align-items: center; justify-content: flex-end; }
+.stats-row { display: flex; gap: 8px; }
+.stat-box { flex: 1; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 6px 10px; text-align: center; }
+.stat-label { font-size: 10px; color: var(--text-muted); font-weight: 600; margin-bottom: 2px; }
+.stat-value { font-size: 12px; font-weight: 700; white-space: nowrap; }
+.stat-value.ado-val { color: var(--success); }
+.stat-value.adg-val { color: var(--info); }
+.footer-row { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 10px; margin-top: auto; font-size: 11px; color: var(--text-muted); }
+.itemid-box { font-family: monospace; background: var(--bg); padding: 2px 7px; border-radius: 4px; border: 1px dashed #ddd; cursor: pointer; }
+#imageModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; justify-content: center; align-items: center; cursor: zoom-out; }
+#imageModal img { max-width: 90vw; max-height: 90vh; border-radius: 8px; }
+#toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(20px); background: #333; color: white; padding: 10px 22px; border-radius: 30px; font-size: 13px; opacity: 0; transition: all 0.3s; z-index: 10000; }
+#toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.pagination { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 32px 0; }
+.pagination button { padding: 8px 16px; border: 1.5px solid var(--border); background: white; cursor: pointer; border-radius: var(--radius-sm); font-family: inherit; transition: all 0.2s; }
+.pagination button:hover:not(:disabled) { border-color: var(--primary); color: var(--primary); }
+.pagination button:disabled { opacity: 0.4; cursor: not-allowed; }
+footer { text-align: center; color: var(--text-muted); font-size: 11px; padding: 40px; border-top: 1px solid var(--border); }
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;header&gt;
+&lt;div class="header-inner"&gt;
+&lt;h1&gt;Shopee EL 选品指南 &lt;span class="badge"&gt;External&lt;/span&gt;&lt;/h1&gt;
+&lt;div class="header-desc"&gt;
+✨ &lt;strong&gt;精选热销品新品&lt;/strong&gt; · 涵盖多站点，帮你快速锁定爆款选品&lt;br&gt;
+📊 ADO 与 ADG 采用区间脱敏展示，价格以 USD 原价展示&lt;br&gt;
+🔒 提示：当前页面仅供内部选品参考，不提供外部商品跳转链接。
+&lt;/div&gt;
+&lt;nav class="page-nav"&gt;&lt;a class="active" href="#" onclick="parent.switchPage(\'sku\');return false"&gt;🔥 热门 SKU&lt;/a&gt;&lt;a href="#" onclick="parent.switchPage(\'category\');return false"&gt;📊 类目大盘&lt;/a&gt;&lt;/nav&gt;
+&lt;div class="last-update-tag" id="lastUpdateDisplay"&gt;数据更新中...&lt;/div&gt;
+&lt;/div&gt;
+&lt;/header&gt;
+&lt;div class="container"&gt;
+&lt;div class="filter-section"&gt;
+&lt;div class="filter-row"&gt;
+&lt;span class="filter-label"&gt;🔍&lt;/span&gt;
+&lt;input type="text" id="searchInput" placeholder="搜索标题 / ID..." oninput="debouncedFilter()"&gt;
+&lt;select id="l1Filter" onchange="updateL2(); applyFilters()"&gt;&lt;option value=""&gt;L1 类目&lt;/option&gt;&lt;/select&gt;
+&lt;select id="l2Filter" onchange="updateL3(); applyFilters()"&gt;&lt;option value=""&gt;L2 类目&lt;/option&gt;&lt;/select&gt;
+&lt;select id="l3Filter" onchange="applyFilters()"&gt;&lt;option value=""&gt;L3 类目&lt;/option&gt;&lt;/select&gt;
+&lt;span class="filter-label"&gt;📊 排序&lt;/span&gt;
+&lt;select id="sortOrder" onchange="applyFilters()"&gt;
+&lt;option value="adoDesc" selected&gt;单量 (ADO) ↓&lt;/option&gt;
+&lt;option value="adgDesc"&gt;销售额 (ADG) ↓&lt;/option&gt;
+&lt;option value="priceDesc"&gt;价格 ↓&lt;/option&gt;
+&lt;option value="momDesc"&gt;ADO MoM ↓ (增长最快)&lt;/option&gt;
+&lt;option value="momAsc"&gt;ADO MoM ↑ (跌幅最大)&lt;/option&gt;
+&lt;/select&gt;
+&lt;button class="btn-clear" onclick="clearFilters()"&gt;✕ 重置&lt;/button&gt;
+&lt;span class="count-badge" id="countDisplay"&gt;—&lt;/span&gt;
+&lt;/div&gt;
+&lt;div class="filter-row"&gt;
+&lt;span class="filter-label"&gt;🌏 站点&lt;/span&gt;
+&lt;select id="siteFilter" onchange="applyFilters()"&gt;
+&lt;option value=""&gt;全部站点&lt;/option&gt;
+&lt;option value="BR"&gt;BR&lt;/option&gt;
+&lt;option value="MX"&gt;MX&lt;/option&gt;
+&lt;option value="MY"&gt;MY&lt;/option&gt;
+&lt;option value="PH"&gt;PH&lt;/option&gt;
+&lt;option value="SG"&gt;SG&lt;/option&gt;
+&lt;option value="TH"&gt;TH&lt;/option&gt;
+&lt;option value="TW"&gt;TW&lt;/option&gt;
+&lt;option value="VN"&gt;VN&lt;/option&gt;
+&lt;/select&gt;
+&lt;span class="filter-label"&gt;📦 产品类型&lt;/span&gt;
+&lt;select id="productTypeFilter" onchange="applyFilters()"&gt;
+&lt;option value=""&gt;全部类型&lt;/option&gt;
+&lt;option value="CB"&gt;CB&lt;/option&gt;
+&lt;option value="CNLS"&gt;CNLS&lt;/option&gt;
+&lt;/select&gt;
+&lt;span class="filter-label"&gt;📈 ADO MoM&lt;/span&gt;
+&lt;select id="momFilter" onchange="applyFilters()"&gt;
+&lt;option value=""&gt;全部趋势&lt;/option&gt;
+&lt;option value="pos"&gt;▲ 正增长&lt;/option&gt;
+&lt;option value="neg"&gt;▼ 负增长&lt;/option&gt;
+&lt;option value="zero"&gt;– 持平&lt;/option&gt;
+&lt;/select&gt;
+&lt;label class="switch-container"&gt;
+&lt;input type="checkbox" id="topNewFilter" onchange="applyFilters()"&gt;
+&lt;span style="font-size:13px;font-weight:500;"&gt;🔥 Top New SKU &lt;small style="font-weight:400;color:var(--text-muted);"&gt;(近30天上新)&lt;/small&gt;&lt;/span&gt;
+&lt;/label&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="product-grid" id="productGrid"&gt;
+&lt;div class="loading-state"&gt;&lt;div class="loading-spinner"&gt;&lt;/div&gt;&lt;div&gt;数据加载中，请稍候...&lt;/div&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="pagination" id="pagination"&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="imageModal" onclick="this.style.display='none'"&gt;&lt;img id="modalImg" src=""&gt;&lt;/div&gt;
+&lt;div id="toast"&gt;&lt;/div&gt;
+&lt;footer&gt;Shopee EL 选品指南&lt;/footer&gt;
+&lt;script&gt;
+const CB_DATA_URL   = './data_cb.json';
+const CNLS_DATA_URL = './data_cnls.json';
+let products = [], filteredData = [], currentPage = 1;
+const pageSize = 40;
+function getFlagImgHtml(countryCode) {
+if (!countryCode || countryCode.length !== 2) return '';
+const code = countryCode.toLowerCase();
+return '&lt;img class="flag-img" src="https://flagcdn.com/w40/' + code + '.png" alt="' + countryCode + '" onerror="this.style.display=\'none\'"&gt;';
+}
+function showToast(msg) {
+const t = document.getElementById('toast');
+t.textContent = msg; t.classList.add('show');
+setTimeout(function() { t.classList.remove('show'); }, 2000);
+}
+const clean = function(s) { return (s || '').toString().replace(/[\t"]/g, '').trim(); };
+const toNum = function(s) {
+const str = clean(s).replace(/,/g, '').replace(/%/g, '');
+return parseFloat(str) || 0;
+};
+const KNOWN_SITES = ['BR','MX','MY','PH','SG','TH','TW','VN'];
+function normalizeSite(raw) {
+const s = clean(raw).toUpperCase();
+for (let i = 0; i &lt; KNOWN_SITES.length; i++) { if (s === KNOWN_SITES[i]) return KNOWN_SITES[i]; }
+for (let i = 0; i &lt; KNOWN_SITES.length; i++) { if (s.indexOf(KNOWN_SITES[i]) !== -1) return KNOWN_SITES[i]; }
+return s;
+}
+function normalizeCBItem(obj) {
+return {
+itemid:      clean(obj['item_id'] || ''),
+year_month:  clean(obj['year_month'] || ''),
+site:        normalizeSite(obj['grass_region'] || ''),
+title:       clean(obj['item_name'] || ''),
+l1:          clean(obj['cb_level1_global_be_category'] || ''),
+l2:          clean(obj['level2_global_be_category'] || ''),
+l3:          clean(obj['level3_global_be_category'] || ''),
+create_date: clean(obj['item_create_date'] || ''),
+imgUrl:      clean(obj['product_image'] || ''),
+price_usd:   toNum(obj['price_usd'] || 0),
+ado:         toNum(obj['ADO(SUM)'] || 0),
+ado_mom:     toNum(obj['mom_ado_growth_contri(SUM)'] || 0),
+adg_usd:     toNum(obj['ADG_usd(SUM)'] || 0),
+productType: 'CB'
+};
+}
+function normalizeCNLSItem(obj) {
+const adoDiff    = toNum(obj['ado_diff(RAW)'] || 0);
+const benchmarkAdo = toNum(obj['benchmark_ado(RAW)'] || 0);
+const adoMom = (benchmarkAdo !== 0) ? (adoDiff / benchmarkAdo) * 100 : 0;
+return {
+itemid:      clean(obj['item_id'] || ''),
+year_month:  clean(obj['year_month'] || ''),
+site:        normalizeSite(obj['grass_region'] || ''),
+title:       clean(obj['item_name'] || ''),
+l1:          clean(obj['cb_level1_global_be_category'] || ''),
+l2:          clean(obj['level2_global_be_category'] || ''),
+l3:          clean(obj['level3_global_be_category'] || ''),
+create_date: clean(obj['item_create_date'] || ''),
+imgUrl:      clean(obj['item_image'] || ''),
+price_usd:   toNum(obj['item_price_usd'] || 0),
+ado:         toNum(obj['current_ado(RAW)'] || 0),
+ado_mom:     adoMom,
+adg_usd:     toNum(obj['current_adgmv(RAW)'] || 0),
+productType: 'CNLS'
+};
+}
+function toRangeStr(val, step) {
+const n = parseFloat(val); if (isNaN(n)) return null;
+if (n &gt;= 0) { const lo = Math.floor(n/step)*step; return lo + '~' + (lo+step); }
+else { const hi = Math.ceil(n/step)*step; return (hi-step) + '~' + hi; }
+}
+function adoRange(v) {
+const n = parseFloat(v); if (isNaN(n) || n === 0) return null;
+let step = n &lt; 100 ? 10 : n &lt; 1000 ? 50 : 100;
+return toRangeStr(n, step);
+}
+function adgRange(v) {
+const n = parseFloat(v); if (isNaN(n) || n === 0) return null;
+let step = n &lt; 100 ? 10 : n &lt; 500 ? 50 : n &lt; 2000 ? 100 : n &lt; 10000 ? 500 : 1000;
+return toRangeStr(n, step);
+}
+function buildSparkline(momVal) {
+if (isNaN(momVal) || momVal === null) return '';
+const isPos = momVal &gt; 0, isZero = momVal === 0;
+const color = isZero ? '#9b8fa0' : (isPos ? '#27ae60' : '#eb4d4b');
+const fill  = isZero ? 'rgba(155,143,160,0.08)' : (isPos ? 'rgba(39,174,96,0.10)' : 'rgba(235,77,75,0.10)');
+const W = 64, H = 28, mid = 0.5;
+const amp  = Math.min(0.45, Math.max(0.05, Math.abs(momVal) / 50 * 0.3));
+const endY = isZero ? mid : (isPos ? mid - amp : mid + amp);
+const ys   = [mid, mid+(endY-mid)*0.1, mid+(endY-mid)*0.35, mid+(endY-mid)*0.7, endY];
+const coords = ys.map(function(y,i) { return { x: +((i*W/(ys.length-1)).toFixed(1)), y: +(y*H).toFixed(1) }; });
+let d = 'M' + coords[0].x + ',' + coords[0].y;
+for (let i = 1; i &lt; coords.length; i++) {
+const cx = (coords[i-1].x + coords[i].x) / 2;
+d += ' C' + cx + ',' + coords[i-1].y + ' ' + cx + ',' + coords[i].y + ' ' + coords[i].x + ',' + coords[i].y;
+}
+const last = coords[coords.length-1];
+const fillD = d + ' L' + last.x + ',' + H + ' L' + coords[0].x + ',' + H + ' Z';
+return '&lt;svg width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '" xmlns="http://www.w3.org/2000/svg"&gt;'
++ '&lt;path d="' + fillD + '" fill="' + fill + '" stroke="none"/&gt;'
++ '&lt;path d="' + d + '" fill="none" stroke="' + color + '" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/&gt;'
++ '&lt;circle cx="' + last.x + '" cy="' + last.y + '" r="2.2" fill="' + color + '"/&gt;'
++ '&lt;/svg&gt;';
+}
+function sortData(data, key) {
+const s = data.slice();
+if (key === 'adoDesc')   s.sort(function(a,b) { return b.ado - a.ado; });
+if (key === 'adgDesc')   s.sort(function(a,b) { return b.adg_usd - a.adg_usd; });
+if (key === 'priceDesc') s.sort(function(a,b) { return b.price_usd - a.price_usd; });
+if (key === 'momDesc')   s.sort(function(a,b) { return b.ado_mom - a.ado_mom; });
+if (key === 'momAsc')    s.sort(function(a,b) { return a.ado_mom - b.ado_mom; });
+return s;
+}
+async function loadData() {
+try {
+const [cbRes, cnlsRes] = await Promise.all([
+fetch(CB_DATA_URL   + '?t=' + Date.now()),
+fetch(CNLS_DATA_URL + '?t=' + Date.now())
+]);
+if (!cbRes.ok)   throw new Error('CB data HTTP '   + cbRes.status);
+if (!cnlsRes.ok) throw new Error('CNLS data HTTP ' + cnlsRes.status);
+const cbJson   = await cbRes.json();
+const cnlsJson = await cnlsRes.json();
+const cbRawList   = Array.isArray(cbJson)   ? cbJson   : (cbJson.data   || []);
+const cnlsRawList = Array.isArray(cnlsJson) ? cnlsJson : (cnlsJson.data || []);
+const cbProducts   = cbRawList.map(normalizeCBItem).filter(function(p) { return p.itemid; });
+const cnlsProducts = cnlsRawList.map(normalizeCNLSItem).filter(function(p) { return p.itemid; });
+products = cbProducts.concat(cnlsProducts);
+const lastModified = cbRes.headers.get('Last-Modified');
+if (lastModified) {
+const ld = new Date(lastModified);
+document.getElementById('lastUpdateDisplay').textContent =
+'数据最后更新: ' + ld.getFullYear() + '/' + (ld.getMonth()+1) + '/' + ld.getDate();
+} else {
+const _d = new Date();
+document.getElementById('lastUpdateDisplay').textContent =
+'数据最后更新: ' + _d.getFullYear() + '/' + (_d.getMonth()+1) + '/' + _d.getDate();
+}
+initFilters(); applyFilters();
+} catch(e) {
+document.getElementById('productGrid').innerHTML =
+'&lt;div class="loading-state"&gt;数据加载失败：' + e.message + '&lt;/div&gt;';
+}
+}
+function initFilters() {
+const l1s = []; const seen = {};
+products.forEach(function(p) { const v = p.l1; if (v &amp;&amp; !seen[v]) { seen[v] = 1; l1s.push(v); } });
+l1s.sort();
+const el = document.getElementById('l1Filter');
+el.innerHTML = '&lt;option value=""&gt;L1 类目&lt;/option&gt;';
+l1s.forEach(function(v) { el.innerHTML += '&lt;option value="' + v + '"&gt;' + v + '&lt;/option&gt;'; });
+updateL2();
+}
+function updateL2() {
+const l1 = document.getElementById('l1Filter').value;
+const el = document.getElementById('l2Filter');
+el.innerHTML = '&lt;option value=""&gt;L2 类目&lt;/option&gt;';
+const seen = {}, vals = [];
+products.filter(function(p) { return !l1 || p.l1 === l1; })
+.forEach(function(p) { const v = p.l2; if (v &amp;&amp; !seen[v]) { seen[v] = 1; vals.push(v); } });
+vals.sort().forEach(function(v) { el.innerHTML += '&lt;option value="' + v + '"&gt;' + v + '&lt;/option&gt;'; });
+updateL3();
+}
+function updateL3() {
+const l1 = document.getElementById('l1Filter').value;
+const l2 = document.getElementById('l2Filter').value;
+const el = document.getElementById('l3Filter');
+el.innerHTML = '&lt;option value=""&gt;L3 类目&lt;/option&gt;';
+const seen = {}, vals = [];
+products.filter(function(p) { return (!l1 || p.l1 === l1) &amp;&amp; (!l2 || p.l2 === l2); })
+.forEach(function(p) { const v = p.l3; if (v &amp;&amp; !seen[v]) { seen[v] = 1; vals.push(v); } });
+vals.sort().forEach(function(v) { el.innerHTML += '&lt;option value="' + v + '"&gt;' + v + '&lt;/option&gt;'; });
+}
+function isNewSku(p) {
+const dateStr = p.create_date;
+if (!dateStr) return false;
+const createTime = new Date(dateStr).getTime();
+if (isNaN(createTime)) return false;
+if (!window._todayMs) {
+const t = new Date(); t.setHours(0,0,0,0);
+window._todayMs = t.getTime();
+}
+const diffDays = (window._todayMs - createTime) / 86400000;
+return diffDays &gt;= 0 &amp;&amp; diffDays &lt;= 30;
+}
+function render(dataList, page) {
+page = page || 1;
+currentPage = page;
+const grid = document.getElementById('productGrid');
+grid.innerHTML = '';
+const pageData = dataList.slice((page-1)*pageSize, page*pageSize);
+if (!pageData.length) {
+grid.innerHTML = '&lt;div class="loading-state"&gt;没有找到符合条件的商品&lt;/div&gt;';
+renderPagination(0); return;
+}
+pageData.forEach(function(item) {
+const flagHtml    = getFlagImgHtml(item.site);
+const siteTagHtml = flagHtml + '&lt;span class="code"&gt;' + item.site + '&lt;/span&gt;';
+const newBadge    = isNewSku(item) ? '&lt;div class="new-badge"&gt;NEW&lt;/div&gt;' : '';
+const priceDisplay = item.price_usd ? '$' + item.price_usd.toFixed(2) : '—';
+const adoRangeStr  = adoRange(item.ado);
+const adgRangeStr  = adgRange(item.adg_usd);
+const momVal   = item.ado_mom;
+const adoClass = momVal &gt; 0 ? 'pos' : momVal &lt; 0 ? 'neg' : 'zero';
+const adoIcon  = momVal &gt; 0 ? '▲' : momVal &lt; 0 ? '▼' : '–';
+const momDisplay = (momVal &gt; 0 ? '+' : '') + momVal.toFixed(1) + '%';
+const sparkSvg   = buildSparkline(momVal);
+const adoBlock = adoRangeStr ? (
+'&lt;div class="ado-block"&gt;'
++ '&lt;span class="ado-label"&gt;ADO MoM&lt;/span&gt;'
++ '&lt;span class="ado-range ' + adoClass + '"&gt;' + adoIcon + ' ' + momDisplay + '&lt;/span&gt;'
++ '&lt;div class="sparkline-wrap"&gt;' + sparkSvg + '&lt;/div&gt;'
++ '&lt;/div&gt;'
+) : '';
+const l3Html = item.l3 ? '&lt;span class="pill pill-cat"&gt;' + item.l3 + '&lt;/span&gt;' : '';
+const typePillHtml = item.productType === 'CB'
+? '&lt;span class="pill pill-cb"&gt;CB&lt;/span&gt;'
+: '&lt;span class="pill pill-cnls"&gt;CNLS&lt;/span&gt;';
+const card = document.createElement('div');
+card.className = 'card';
+card.innerHTML =
+'&lt;div class="site-tag"&gt;' + siteTagHtml + '&lt;/div&gt;'
++ newBadge
++ '&lt;div class="img-container" onclick="openModal(\'' + item.imgUrl + '\')"&gt;'
++   '&lt;img src="' + item.imgUrl + '" loading="lazy" onerror="this.style.display=\'none\';this.parentNode.innerHTML+=\'&lt;div style=&amp;quot;font-size:40px;color:#ddd&amp;quot;&gt;📦&lt;/div&gt;\'"&gt;'
++ '&lt;/div&gt;'
++ '&lt;div class="info"&gt;'
++   '&lt;div class="item-title" title="' + item.title + '"&gt;' + item.title + '&lt;/div&gt;'
++   '&lt;div class="price-row"&gt;&lt;span class="price-label"&gt;价格&lt;/span&gt;&lt;span class="price-value"&gt;' + priceDisplay + '&lt;/span&gt;&lt;/div&gt;'
++   '&lt;div class="meta-row"&gt;' + typePillHtml + (l3Html ? l3Html : '') + '&lt;/div&gt;'
++   adoBlock
++   '&lt;div class="stats-row"&gt;'
++     '&lt;div class="stat-box"&gt;&lt;div class="stat-label"&gt;ADO (件/日)&lt;/div&gt;&lt;div class="stat-value ado-val"&gt;' + (adoRangeStr || '—') + '&lt;/div&gt;&lt;/div&gt;'
++     '&lt;div class="stat-box"&gt;&lt;div class="stat-label"&gt;ADG (USD/日)&lt;/div&gt;&lt;div class="stat-value adg-val"&gt;' + (adgRangeStr ? '$' + adgRangeStr : '—') + '&lt;/div&gt;&lt;/div&gt;'
++   '&lt;/div&gt;'
++   '&lt;div class="footer-row"&gt;'
++     '&lt;span&gt;📅 ' + (item.create_date || item.year_month) + '&lt;/span&gt;'
++     '&lt;span class="itemid-box" onclick="copyId(\'' + item.itemid + '\')"&gt;ID: ' + item.itemid + '&lt;/span&gt;'
++   '&lt;/div&gt;'
++ '&lt;/div&gt;';
+grid.appendChild(card);
+});
+renderPagination(dataList.length);
+}
+function openModal(src) { document.getElementById('modalImg').src = src; document.getElementById('imageModal').style.display = 'flex'; }
+function copyId(id) { navigator.clipboard.writeText(id).then(function() { showToast('已复制 ID: ' + id); }); }
+function renderPagination(total) {
+const tp = Math.ceil(total/pageSize) || 1;
+document.getElementById('pagination').innerHTML =
+'&lt;button onclick="changePage(-1)" ' + (currentPage===1?'disabled':'') + '&gt;←&lt;/button&gt;'
++ '&lt;span style="font-size:13px;color:var(--text-muted)"&gt;' + currentPage + ' / ' + tp + '&lt;/span&gt;'
++ '&lt;button onclick="changePage(1)" ' + (currentPage&gt;=tp?'disabled':'') + '&gt;→&lt;/button&gt;';
+}
+function changePage(d) { render(filteredData, currentPage+d); window.scrollTo(0,0); }
+function applyFilters() {
+const q        = document.getElementById('searchInput').value.toLowerCase();
+const l1       = document.getElementById('l1Filter').value;
+const l2       = document.getElementById('l2Filter').value;
+const l3       = document.getElementById('l3Filter').value;
+const site     = document.getElementById('siteFilter').value;
+const productType = document.getElementById('productTypeFilter').value;
+const isTopNew = document.getElementById('topNewFilter').checked;
+const sort     = document.getElementById('sortOrder').value;
+const mom      = document.getElementById('momFilter').value;
+const filtered = products.filter(function(p) {
+return (!q       || p.title.toLowerCase().indexOf(q) !== -1 || p.itemid.indexOf(q) !== -1) &amp;&amp;
+(!l1      || p.l1 === l1) &amp;&amp;
+(!l2      || p.l2 === l2) &amp;&amp;
+(!l3      || p.l3 === l3) &amp;&amp;
+(!site    || p.site === site) &amp;&amp;
+(!productType || p.productType === productType) &amp;&amp;
+(!isTopNew || isNewSku(p)) &amp;&amp;
+(!mom ||
+(mom === 'pos'  &amp;&amp; p.ado_mom &gt; 0) ||
+(mom === 'neg'  &amp;&amp; p.ado_mom &lt; 0) ||
+(mom === 'zero' &amp;&amp; p.ado_mom === 0)
+);
+});
+filteredData = sortData(filtered, sort);
+document.getElementById('countDisplay').textContent = '共 ' + filteredData.length + ' 款';
+render(filteredData, 1);
+}
+function clearFilters() {
+document.getElementById('searchInput').value = '';
+['l1Filter','l2Filter','l3Filter','siteFilter','productTypeFilter','momFilter'].forEach(function(id) {
+document.getElementById(id).value = '';
+});
+document.getElementById('sortOrder').value = 'adoDesc';
+document.getElementById('topNewFilter').checked = false;
+window._todayMs = null;
+updateL2(); applyFilters();
+}
+let timer;
+function debouncedFilter() { clearTimeout(timer); timer = setTimeout(applyFilters, 300); }
+window.onload = loadData;
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</textarea>
+
+<!-- Category Overview 完整源码 -->
+<textarea id="categorySource" class="source-holder">
+&lt;!DOCTYPE html&gt;
+&lt;html lang="zh-CN"&gt;&lt;head&gt;&lt;meta charset="UTF-8"&gt;&lt;meta name="viewport" content="width=device-width,initial-scale=1.0"&gt;
+&lt;title&gt;Shopee EL Category Overview&lt;/title&gt;
+&lt;style&gt;
+:root{--p:#EE4D2D;--pl:#fff5f2;--bg:#faf8f9;--card:#fff;--text:#2d2038;--muted:#9b8fa0;--border:#f0e8ed;--shadow:0 2px 16px rgba(238,77,45,.07)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',Arial,sans-serif;background:var(--bg);color:var(--text)}
+header{background:linear-gradient(135deg,#FF6633,#EE4D2D 50%,#D02D11);color:#fff;padding:36px 40px 28px}.inner,.container{max-width:1280px;margin:auto}.inner{position:relative}h1{font-family:Georgia,serif;font-size:32px}.badge{font:600 11px sans-serif;background:#ffffff38;padding:5px 10px;border-radius:20px}.desc{margin-top:14px;max-width:760px;background:#0000001a;padding:12px 16px;border-radius:8px;font-size:13px;line-height:1.8;border-left:3px solid #ffffffb3}.update{position:absolute;right:0;top:0;background:#ffffff26;padding:6px 12px;border-radius:30px;font-size:12px}
+.page-nav{display:flex;gap:8px;margin-top:17px}.page-nav a{color:#fff;text-decoration:none;font-size:13px;font-weight:700;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.35)}.page-nav a.active{background:#fff;color:#d73211}.container{padding:26px 24px}.tabs{display:flex;gap:10px;margin-bottom:18px}.tab{padding:10px 20px;border:1.5px solid var(--border);background:#fff;border-radius:999px;cursor:pointer;font-weight:800;color:var(--muted)}.tab.active{background:var(--p);border-color:var(--p);color:#fff}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:20px}.card,.filters{background:#fff;border:1px solid var(--border);box-shadow:var(--shadow);border-radius:16px}.card{padding:20px;margin-bottom:18px}.bubble-card{height:420px}.title{font-size:16px;font-weight:800}.note{font-size:11px;color:var(--muted);margin:3px 0 14px}.bubble{height:330px;border:1px solid var(--border);border-radius:12px;background:#fffafa}.bubble svg{width:100%;height:100%}.dot{fill-opacity:.76;stroke:#fff;stroke-width:2}.axis{font-size:10px;fill:#9b8fa0}.label{font-size:9px;font-weight:800;fill:#2d2038}
+.filters{padding:17px 19px;margin-bottom:18px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}.fl{font-size:11px;color:var(--muted);font-weight:700}select,button{font:inherit;font-size:13px;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text)}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}.kpi{padding:17px}.kl{font-size:11px;color:var(--muted);font-weight:700}.kv{font-size:27px;font-weight:800;margin-top:7px}.ks{font-size:11px;color:var(--muted);margin-top:5px}
+.dash{display:grid;grid-template-columns:1.25fr .75fr;gap:18px}.bars{display:flex;flex-direction:column;gap:12px}.bar{display:grid;grid-template-columns:minmax(130px,1.15fr) 3fr 68px;gap:10px;align-items:center}.bn{font-size:12px;font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.track{height:11px;background:#f5eef1;border-radius:999px;overflow:hidden}.fill{height:100%;background:linear-gradient(90deg,#ffb5a7,#EE4D2D)}.bv{text-align:right;font-size:12px;font-weight:750;color:#d73211}
+table{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:10px 9px;border-bottom:1px solid var(--border);text-align:right;white-space:nowrap}th{font-size:10px;color:var(--muted);background:#fffafa}.wrap{overflow:auto}.thumb{width:58px;height:58px;object-fit:contain;border-radius:10px;border:1px solid var(--border);cursor:zoom-in}.cat{max-width:240px;white-space:normal;color:var(--muted)}.ins{padding:12px 14px;border:1px solid var(--border);background:#fffafa;border-radius:10px;font-size:12px;line-height:1.6;margin-bottom:10px}.empty{padding:40px;text-align:center;color:var(--muted)}
+#modal{display:none;position:fixed;inset:0;background:#140e18e6;z-index:9999;align-items:center;justify-content:center}#modal.show{display:flex}#modal img{max-width:92vw;max-height:88vh;background:#fff;border-radius:14px}
+footer{text-align:center;color:var(--muted);font-size:11px;padding:36px;border-top:1px solid var(--border)}
+@media(max-width:980px){.grid2,.dash{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}}
+&lt;/style&gt;&lt;/head&gt;&lt;body&gt;
+&lt;header&gt;&lt;div class="inner"&gt;&lt;h1&gt;Shopee EL Category Overview &lt;span class="badge"&gt;External&lt;/span&gt;&lt;/h1&gt;&lt;div class="desc"&gt;✨ 大盘类目数据分享，涵盖多站点，帮你快速识别潜力站点与热门类目&lt;br&gt;📊 以单量 ADO 与销售额 ADGMV 展示整体表现&lt;br&gt;🔒 跨境 CB 与本土 CNLS 分开展示&lt;/div&gt;&lt;nav class="page-nav"&gt;&lt;a href="#" onclick="parent.switchPage(\'sku\');return false"&gt;🔥 热门 SKU&lt;/a&gt;&lt;a class="active" href="#" onclick="parent.switchPage(\'category\');return false"&gt;📊 类目大盘&lt;/a&gt;&lt;/nav&gt;&lt;div class="update" id="update"&gt;数据加载中...&lt;/div&gt;&lt;/div&gt;&lt;/header&gt;
+&lt;main class="container"&gt;
+&lt;div class="tabs"&gt;&lt;button class="tab active" data-t="CB"&gt;跨境 CB&lt;/button&gt;&lt;button class="tab" data-t="CNLS"&gt;本土 CNLS&lt;/button&gt;&lt;/div&gt;
+&lt;section class="grid2"&gt;&lt;div class="card bubble-card"&gt;&lt;div class="title"&gt;各站点规模分布&lt;/div&gt;&lt;div class="note"&gt;X：ADO · Y：ADGMV · 每个气泡代表一个站点&lt;/div&gt;&lt;div class="bubble" id="siteBubble"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="card bubble-card"&gt;&lt;div class="title"&gt;L1 类目规模分布&lt;/div&gt;&lt;div class="note"&gt;汇总所有站点，每个气泡代表一个 L1 类目&lt;/div&gt;&lt;div class="bubble" id="l1Bubble"&gt;&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;
+&lt;section class="filters"&gt;&lt;span class="fl"&gt;站点&lt;/span&gt;&lt;select id="site"&gt;&lt;option value=""&gt;全部站点&lt;/option&gt;&lt;/select&gt;&lt;span class="fl"&gt;L1 类目&lt;/span&gt;&lt;select id="l1"&gt;&lt;option value=""&gt;全部 L1&lt;/option&gt;&lt;/select&gt;&lt;span class="fl"&gt;L2 类目&lt;/span&gt;&lt;select id="l2"&gt;&lt;option value=""&gt;全部 L2&lt;/option&gt;&lt;/select&gt;&lt;span class="fl"&gt;L3 类目&lt;/span&gt;&lt;select id="l3"&gt;&lt;option value=""&gt;全部 L3&lt;/option&gt;&lt;/select&gt;&lt;button id="reset"&gt;✕ 重置&lt;/button&gt;&lt;/section&gt;
+&lt;section class="kpis"&gt;&lt;div class="card kpi"&gt;&lt;div class="kl"&gt;Top Site ADO 占比&lt;/div&gt;&lt;div class="kv" id="sa"&gt;—&lt;/div&gt;&lt;div class="ks" id="san"&gt;—&lt;/div&gt;&lt;/div&gt;&lt;div class="card kpi"&gt;&lt;div class="kl"&gt;Top Site ADGMV 占比&lt;/div&gt;&lt;div class="kv" id="sg"&gt;—&lt;/div&gt;&lt;div class="ks" id="sgn"&gt;—&lt;/div&gt;&lt;/div&gt;&lt;div class="card kpi"&gt;&lt;div class="kl"&gt;Top L1 ADO 占比&lt;/div&gt;&lt;div class="kv" id="la"&gt;—&lt;/div&gt;&lt;div class="ks" id="lan"&gt;—&lt;/div&gt;&lt;/div&gt;&lt;div class="card kpi"&gt;&lt;div class="kl"&gt;Top L1 ADGMV 占比&lt;/div&gt;&lt;div class="kv" id="lg"&gt;—&lt;/div&gt;&lt;div class="ks" id="lgn"&gt;—&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;
+&lt;section class="dash"&gt;&lt;div&gt;&lt;div class="card"&gt;&lt;div class="title" id="ct"&gt;L1 类目贡献度&lt;/div&gt;&lt;div class="note"&gt;可切换 ADO / ADGMV&lt;/div&gt;&lt;button class="metric" data-m="adg"&gt;ADGMV&lt;/button&gt; &lt;button class="metric" data-m="ado"&gt;ADO&lt;/button&gt;&lt;div id="bars" class="bars" style="margin-top:15px"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="card"&gt;&lt;div class="title"&gt;当前筛选类目 Top 10 产品&lt;/div&gt;&lt;div class="note"&gt;按 ADGMV 降序排序&lt;/div&gt;&lt;div class="wrap"&gt;&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;排名&lt;/th&gt;&lt;th&gt;图片&lt;/th&gt;&lt;th&gt;Item ID&lt;/th&gt;&lt;th&gt;站点&lt;/th&gt;&lt;th&gt;类目&lt;/th&gt;&lt;th&gt;ADO 占比&lt;/th&gt;&lt;th&gt;ADGMV 占比&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody id="pt"&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div class="card"&gt;&lt;div class="title"&gt;站点销售额贡献&lt;/div&gt;&lt;div class="note"&gt;当前筛选下各站点 ADGMV 占比&lt;/div&gt;&lt;div id="sb" class="bars"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="card"&gt;&lt;div class="title"&gt;类目洞察&lt;/div&gt;&lt;div class="note"&gt;当前类型及筛选条件&lt;/div&gt;&lt;div id="ins"&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;
+&lt;/main&gt;&lt;div id="modal"&gt;&lt;img id="mi"&gt;&lt;/div&gt;&lt;footer&gt;Shopee EL 选品指南 · Category Overview&lt;/footer&gt;
+&lt;script&gt;
+const UCB='./data_cb.json',UCN='./data_cnls.json';let cb=[],cn=[],typ='CB',metric='adg';const $=x=&gt;document.getElementById(x),n=v=&gt;parseFloat(String(v??'').replace(/,/g,''))||0,p=(a,b)=&gt;b?a/b*100:0,f=x=&gt;x.toFixed(1)+'%',esc=s=&gt;String(s??'').replace(/[&amp;&lt;&gt;"']/g,c=&gt;({'&amp;':'&amp;amp;','&lt;':'&amp;lt;','&gt;':'&amp;gt;','"':'&amp;quot;',"'":'&amp;#39;'}[c]));function ns(v){let s=String(v||'').toUpperCase();return ['BR','MX','MY','PH','SG','TH','TW','VN'].find(x=&gt;s===x||s.includes(x))||s}
+function NCB(r){return{id:String(r.item_id||''),site:ns(r.grass_region),l1:r.cb_level1_global_be_category||'',l2:r.level2_global_be_category||'',l3:r.level3_global_be_category||'',img:r.product_image||'',ado:n(r['ADO(SUM)']),adg:n(r['ADG_usd(SUM)'])}}function NCN(r){return{id:String(r.item_id||''),site:ns(r.grass_region),l1:r.cb_level1_global_be_category||'',l2:r.level2_global_be_category||'',l3:r.level3_global_be_category||'',img:r.item_image||'',ado:n(r['current_ado(RAW)']),adg:n(r['current_adgmv(RAW)'])}}
+function R(){return typ==='CB'?cb:cn}function F(){let s=$('site').value,a=$('l1').value,b=$('l2').value,c=$('l3').value;return R().filter(r=&gt;(!s||r.site===s)&amp;&amp;(!a||r.l1===a)&amp;&amp;(!b||r.l2===b)&amp;&amp;(!c||r.l3===c))}function A(d,k){let m=new Map;d.forEach(r=&gt;{let z=r[k]||'未分类';if(!m.has(z))m.set(z,{name:z,ado:0,adg:0});let g=m.get(z);g.ado+=r.ado;g.adg+=r.adg});return[...m.values()]}function S(d,k){return d.reduce((a,r)=&gt;a+r[k],0)}function H(){if($('l2').value)return['l3','L3'];if($('l1').value)return['l2','L2'];return['l1','L1']}
+const pal=['#FFB5A7','#FCD5CE','#F9DCC4','#CDEAC0','#BDE0FE','#A2D2FF','#CDB4DB','#FFC8DD','#D8E2DC','#E8D7F1','#D0F4DE','#FFF1E6'];function B(id,pts){if(!pts.length){$(id).innerHTML='&lt;div class="empty"&gt;暂无数据&lt;/div&gt;';return}let ma=Math.max(...pts.map(x=&gt;x.ado),1),mg=Math.max(...pts.map(x=&gt;x.adg),1),d='';pts.forEach((q,i)=&gt;{let x=55+q.ado/ma*460,y=285-q.adg/mg*235,r=9+Math.sqrt((q.ado/ma+q.adg/mg)/2)*17,c=pal[i%pal.length],s=q.name.length&gt;13?q.name.slice(0,13)+'…':q.name;d+=\`&lt;circle class="dot" cx="\${x}" cy="\${y}" r="\${r}" fill="\${c}"&gt;&lt;title&gt;\${esc(q.name)}&lt;/title&gt;&lt;/circle&gt;&lt;text class="label" x="\${x}" y="\${y+3}" text-anchor="middle"&gt;\${esc(s)}&lt;/text&gt;\`});$(id).innerHTML=\`&lt;svg viewBox="0 0 560 330"&gt;&lt;line x1="48" y1="290" x2="525" y2="290" stroke="#eadfe4"/&gt;&lt;line x1="48" y1="290" x2="48" y2="38" stroke="#eadfe4"/&gt;&lt;text class="axis" x="490" y="315"&gt;ADO 高 →&lt;/text&gt;&lt;text class="axis" x="12" y="50"&gt;ADGMV 高 ↑&lt;/text&gt;\${d}&lt;/svg&gt;\`}
+function bubbles(){B('siteBubble',A(R(),'site').filter(x=&gt;x.name!=='未分类'));B('l1Bubble',A(R(),'l1').filter(x=&gt;x.name!=='未分类'))}function kpi(){let d=F(),da=S(d,'ado'),dg=S(d,'adg'),s=A(d,'site'),l=A(d,'l1'),sa=s.sort((a,b)=&gt;b.ado-a.ado)[0],sg=[...s].sort((a,b)=&gt;b.adg-a.adg)[0],la=l.sort((a,b)=&gt;b.ado-a.ado)[0],lg=[...l].sort((a,b)=&gt;b.adg-a.adg)[0];$('sa').textContent=sa?f(p(sa.ado,da)):'—';$('san').textContent=sa?sa.name:'—';$('sg').textContent=sg?f(p(sg.adg,dg)):'—';$('sgn').textContent=sg?sg.name:'—';$('la').textContent=la?f(p(la.ado,da)):'—';$('lan').textContent=la?la.name:'—';$('lg').textContent=lg?f(p(lg.adg,dg)):'—';$('lgn').textContent=lg?lg.name:'—'}
+function contrib(){let d=F(),[k,l]=H(),g=A(d,k).sort((a,b)=&gt;b[metric]-a[metric]).slice(0,12),den=g.reduce((a,x)=&gt;a+x[metric],0);$('ct').textContent=l+' 类目贡献度';$('bars').innerHTML=g.map(x=&gt;{let q=p(x[metric],den);return\`&lt;div class="bar"&gt;&lt;div class="bn"&gt;\${esc(x.name)}&lt;/div&gt;&lt;div class="track"&gt;&lt;div class="fill" style="width:\${Math.max(q,1)}%"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="bv"&gt;\${f(q)}&lt;/div&gt;&lt;/div&gt;\`}).join('')||'&lt;div class="empty"&gt;暂无数据&lt;/div&gt;'}
+function products(){let d=F(),da=S(d,'ado'),dg=S(d,'adg');$('pt').innerHTML=d.slice().sort((a,b)=&gt;b.adg-a.adg).slice(0,10).map((x,i)=&gt;\`&lt;tr&gt;&lt;td&gt;\${i+1}&lt;/td&gt;&lt;td&gt;\${x.img?\`&lt;img class="thumb" src="\${esc(x.img)}"&gt;\`:'—'}&lt;/td&gt;&lt;td&gt;\${esc(x.id)}&lt;/td&gt;&lt;td&gt;\${esc(x.site)}&lt;/td&gt;&lt;td&gt;&lt;div class="cat"&gt;\${esc([x.l1,x.l2,x.l3].filter(Boolean).join(' › '))}&lt;/div&gt;&lt;/td&gt;&lt;td&gt;\${f(p(x.ado,da))}&lt;/td&gt;&lt;td&gt;\${f(p(x.adg,dg))}&lt;/td&gt;&lt;/tr&gt;\`).join('')||'&lt;tr&gt;&lt;td colspan="7" class="empty"&gt;暂无数据&lt;/td&gt;&lt;/tr&gt;'}
+function side(){let d=F(),s=A(d,'site').sort((a,b)=&gt;b.adg-a.adg),den=S(d,'adg');$('sb').innerHTML=s.map(x=&gt;{let q=p(x.adg,den);return\`&lt;div class="bar"&gt;&lt;div class="bn"&gt;\${esc(x.name)}&lt;/div&gt;&lt;div class="track"&gt;&lt;div class="fill" style="width:\${Math.max(q,1)}%"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="bv"&gt;\${f(q)}&lt;/div&gt;&lt;/div&gt;\`}).join('');let l1=A(d,'l1').sort((a,b)=&gt;b.adg-a.adg),l2=A(d,'l2').sort((a,b)=&gt;b.adg-a.adg),a=[];if(l1[0])a.push(\`&lt;div class="ins"&gt;&lt;strong&gt;销售额领先 L1：&lt;/strong&gt;\${esc(l1[0].name)}，贡献 \${f(p(l1[0].adg,den))}。&lt;/div&gt;\`);if(l2[0])a.push(\`&lt;div class="ins"&gt;&lt;strong&gt;销售额领先 L2：&lt;/strong&gt;\${esc(l2[0].name)}。&lt;/div&gt;\`);if(s[0])a.push(\`&lt;div class="ins"&gt;&lt;strong&gt;核心站点：&lt;/strong&gt;\${esc(s[0].name)}，贡献 \${f(p(s[0].adg,den))} 的 ADGMV。&lt;/div&gt;\`);$('ins').innerHTML=a.join('')}
+function refill(){let r=R(),fill=(id,v,l)=&gt;{$(id).innerHTML=\`&lt;option value=""&gt;全部 \${l}&lt;/option&gt;\`+[...new Set(v.filter(Boolean))].sort().map(x=&gt;\`&lt;option value="\${esc(x)}"&gt;\${esc(x)}&lt;/option&gt;\`).join('')};fill('site',r.map(x=&gt;x.site),'站点');let a=r.filter(x=&gt;!$('site').value||x.site===$('site').value);fill('l1',a.map(x=&gt;x.l1),'L1');let b=a.filter(x=&gt;!$('l1').value||x.l1===$('l1').value);fill('l2',b.map(x=&gt;x.l2),'L2');let c=b.filter(x=&gt;!$('l2').value||x.l2===$('l2').value);fill('l3',c.map(x=&gt;x.l3),'L3')}
+function render(){bubbles();kpi();contrib();products();side()}function reset(){['site','l1','l2','l3'].forEach(x=&gt;$(x).value='');refill();render()}function init(){document.querySelectorAll('.tab').forEach(b=&gt;b.onclick=()=&gt;{document.querySelectorAll('.tab').forEach(x=&gt;x.classList.remove('active'));b.classList.add('active');typ=b.dataset.t;reset()});$('site').onchange=()=&gt;{refill();render()};$('l1').onchange=()=&gt;{refill();render()};$('l2').onchange=()=&gt;{refill();render()};$('l3').onchange=render;$('reset').onclick=reset;document.querySelectorAll('.metric').forEach(b=&gt;b.onclick=()=&gt;{metric=b.dataset.m;contrib()});$('pt').onclick=e=&gt;{let im=e.target.closest('.thumb');if(im){$('mi').src=im.src;$('modal').classList.add('show')}};$('modal').onclick=()=&gt;{$('modal').classList.remove('show')}}
+async function load(){try{let [a,b]=await Promise.all([fetch(UCB+'?t='+Date.now()).then(r=&gt;r.json()),fetch(UCN+'?t='+Date.now()).then(r=&gt;r.json())]);cb=(Array.isArray(a)?a:a.data||[]).map(NCB).filter(x=&gt;x.id);cn=(Array.isArray(b)?b:b.data||[]).map(NCN).filter(x=&gt;x.id);init();refill();render();$('update').textContent='数据最后更新: '+new Date().toLocaleDateString('zh-CN')}catch(e){$('update').textContent='数据加载失败';$('bars').innerHTML='&lt;div class="empty"&gt;'+esc(e.message)+'&lt;/div&gt;'}}window.onload=load;
+&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;
+</textarea>
+
+<script>
 function withBase(htmlText) {
   const baseHref = new URL('.', window.location.href).href;
-  return htmlText.replace(/<head([^>]*)>/i, '<head$1><base href="' + baseHref + '">');
+  if (/<head[^>]*>/i.test(htmlText)) {
+    return htmlText.replace(
+      /<head([^>]*)>/i,
+      '<head$1><base href="' + baseHref + '">'
+    );
+  }
+  return '<base href="' + baseHref + '">' + htmlText;
 }
+
+const HOT_SKU_HTML = document.getElementById('hotSkuSource').value.trim();
+const CATEGORY_HTML = document.getElementById('categorySource').value.trim();
 
 document.getElementById('skuFrame').srcdoc = withBase(HOT_SKU_HTML);
 document.getElementById('categoryFrame').srcdoc = withBase(CATEGORY_HTML);
 
 function switchPage(page) {
-  const sku = page === 'sku';
-  document.getElementById('skuFrame').classList.toggle('active', sku);
-  document.getElementById('categoryFrame').classList.toggle('active', !sku);
-  history.replaceState(null, '', sku ? '#sku' : '#category');
+  const isSku = page === 'sku';
+  document.getElementById('skuFrame').classList.toggle('active', isSku);
+  document.getElementById('categoryFrame').classList.toggle('active', !isSku);
+  history.replaceState(null, '', isSku ? '#sku' : '#category');
 }
 
-if (location.hash === '#category') switchPage('category');
+if (location.hash === '#category') {
+  switchPage('category');
+}
 </script>
+
 </body>
 </html>
