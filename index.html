@@ -184,7 +184,7 @@ footer { text-align: center; color: var(--text-muted); font-size: 11px; padding:
 📊 ADO 与 ADG 采用区间脱敏展示，价格以 USD 原价展示&lt;br&gt;
 🔒 提示：当前页面仅供内部选品参考，不提供外部商品跳转链接。
 &lt;/div&gt;
-&lt;nav class="page-nav"&gt;&lt;a class="active" href="#" onclick="parent.switchPage(\'sku\');return false"&gt;🔥 热门 SKU&lt;/a&gt;&lt;a href="#" onclick="parent.switchPage(\'category\');return false"&gt;📊 类目大盘&lt;/a&gt;&lt;/nav&gt;
+&lt;nav class="page-nav"&gt;&lt;a class="active" href="#" onclick="parent.switchPage('sku');return false"&gt;🔥 热门 SKU&lt;/a&gt;&lt;a href="#" onclick="parent.switchPage('category');return false"&gt;📊 类目大盘&lt;/a&gt;&lt;/nav&gt;
 &lt;div class="last-update-tag" id="lastUpdateDisplay"&gt;数据更新中...&lt;/div&gt;
 &lt;/div&gt;
 &lt;/header&gt;
@@ -566,7 +566,7 @@ table{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:10px 9px;
 footer{text-align:center;color:var(--muted);font-size:11px;padding:36px;border-top:1px solid var(--border)}
 @media(max-width:980px){.grid2,.dash{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}}
 &lt;/style&gt;&lt;/head&gt;&lt;body&gt;
-&lt;header&gt;&lt;div class="inner"&gt;&lt;h1&gt;Shopee EL Category Overview &lt;span class="badge"&gt;External&lt;/span&gt;&lt;/h1&gt;&lt;div class="desc"&gt;✨ 大盘类目数据分享，涵盖多站点，帮你快速识别潜力站点与热门类目&lt;br&gt;📊 以单量 ADO 与销售额 ADGMV 展示整体表现&lt;br&gt;🔒 跨境 CB 与本土 CNLS 分开展示&lt;/div&gt;&lt;nav class="page-nav"&gt;&lt;a href="#" onclick="parent.switchPage(\'sku\');return false"&gt;🔥 热门 SKU&lt;/a&gt;&lt;a class="active" href="#" onclick="parent.switchPage(\'category\');return false"&gt;📊 类目大盘&lt;/a&gt;&lt;/nav&gt;&lt;div class="update" id="update"&gt;数据加载中...&lt;/div&gt;&lt;/div&gt;&lt;/header&gt;
+&lt;header&gt;&lt;div class="inner"&gt;&lt;h1&gt;Shopee EL Category Overview &lt;span class="badge"&gt;External&lt;/span&gt;&lt;/h1&gt;&lt;div class="desc"&gt;✨ 大盘类目数据分享，涵盖多站点，帮你快速识别潜力站点与热门类目&lt;br&gt;📊 以单量 ADO 与销售额 ADGMV 展示整体表现&lt;br&gt;🔒 跨境 CB 与本土 CNLS 分开展示&lt;/div&gt;&lt;nav class="page-nav"&gt;&lt;a href="#" onclick="parent.switchPage('sku');return false"&gt;🔥 热门 SKU&lt;/a&gt;&lt;a class="active" href="#" onclick="parent.switchPage('category');return false"&gt;📊 类目大盘&lt;/a&gt;&lt;/nav&gt;&lt;div class="update" id="update"&gt;数据加载中...&lt;/div&gt;&lt;/div&gt;&lt;/header&gt;
 &lt;main class="container"&gt;
 &lt;div class="tabs"&gt;&lt;button class="tab active" data-t="CB"&gt;跨境 CB&lt;/button&gt;&lt;button class="tab" data-t="CNLS"&gt;本土 CNLS&lt;/button&gt;&lt;/div&gt;
 &lt;section class="grid2"&gt;&lt;div class="card bubble-card"&gt;&lt;div class="title"&gt;各站点规模分布&lt;/div&gt;&lt;div class="note"&gt;X：ADO · Y：ADGMV · 每个气泡代表一个站点&lt;/div&gt;&lt;div class="bubble" id="siteBubble"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="card bubble-card"&gt;&lt;div class="title"&gt;L1 类目规模分布&lt;/div&gt;&lt;div class="note"&gt;汇总所有站点，每个气泡代表一个 L1 类目&lt;/div&gt;&lt;div class="bubble" id="l1Bubble"&gt;&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;
