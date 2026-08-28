@@ -30,20 +30,15 @@ jobs:
           python -m pip install --upgrade pip
           pip install openpyxl pillow
 
-      - name: Download published Google Sheet as XLSX
+      - name: Download Category trendy as XLSX
         run: |
-          curl -L --fail --retry 3 --retry-delay 5 \
-            "https://docs.google.com/spreadsheets/d/e/2PACX-1vQfzzSQX034XjZOdgE_FGg8QuIVLdjxTaVqQqN58vI7i3sL4Pr2FhP6qM9PKjL2fYAK136q7TeMeq49/pub?output=xlsx" \
-            -o category_source.xlsx
+          curl -L --fail --retry 3 --retry-delay 5             -A "Mozilla/5.0"             "https://docs.google.com/spreadsheets/d/1h01w3EILyJbl0l7tSNXuvpDZ3kfuUfylYYXhgl7rVH4/export?format=xlsx&gid=1797704945"             -o category_source.xlsx
 
           test -s category_source.xlsx
 
-      - name: Extract text and floating images to staging
+      - name: Extract category text and floating images
         run: |
-          python extract_category_content.py \
-            --xlsx category_source.xlsx \
-            --sheet category \
-            --out-dir .category_sync_tmp
+          python extract_category_content.py             --xlsx category_source.xlsx             --sheet category             --out-dir .category_sync_tmp
 
       - name: Validate staged output
         run: |
@@ -65,23 +60,17 @@ jobs:
           if not blocks and stats.get("images_extracted", 0) == 0:
               raise SystemExit("staged content is unexpectedly empty")
 
-          print(
-              "Validated:",
-              len(blocks), "text blocks,",
-              stats.get("images_extracted", 0), "images"
-          )
+          print("Validated:", len(blocks), "text blocks,",
+                stats.get("images_extracted", 0), "images")
           PY
 
       - name: Publish staged output
         run: |
           rm -rf category_assets.new
           mv .category_sync_tmp/category_assets category_assets.new
-
           cp .category_sync_tmp/category_content.json category_content.json
-
           rm -rf category_assets
           mv category_assets.new category_assets
-
           rm -rf .category_sync_tmp
           rm -f category_source.xlsx
 
@@ -89,7 +78,6 @@ jobs:
         run: |
           git config user.name "actions-user"
           git config user.email "actions@github.com"
-
           git add category_content.json category_assets/
 
           if git diff --staged --quiet; then
