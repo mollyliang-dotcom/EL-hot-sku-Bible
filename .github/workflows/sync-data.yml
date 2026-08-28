@@ -114,7 +114,7 @@ jobs:
           # gid = 759893186
           # CB products: A:R
           # CNLS products: U:AM
-          # Keywords: AP:AX
+          # Keywords: AP:AY
           # ============================================================
 
           item_url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT2Z61Z0LxqcTmhjJe5KS_PimpDY4bM-aODeY0CuL9z3EX233KOqWMkXWJteyXQkexOMSqIO3O3rMI-/pub?gid=759893186&single=true&output=csv"
@@ -135,8 +135,8 @@ jobs:
           # W site / Y price / Z ADO / AC ADO MoM / AD ADG / AG ADG MoM
           # AI link / AJ image / AK L3 / AL L4
           #
-          # Keywords AP:AX
-          # AQ site / AT keyword / AV item click / AX click growth
+          # Keywords AP:AY
+          # AQ site / AS L2 / AT keyword / AV item click / AX click growth / AY Chinese translation
 
           for row in item_rows[1:]:
 
@@ -177,15 +177,23 @@ jobs:
                   })
 
               # ---------------- Keywords ----------------
-              keyword = cell(row, 45)  # AT
-              site = cell(row, 42)     # AQ
+              keyword = cell(row, 45)      # AT
+              site = cell(row, 42)         # AQ
+              keyword_l2 = cell(row, 44)   # AS
 
-              if keyword and site:
+              # Phone-case keyword scope:
+              # L2 = Accessories-Cases, Covers, & Skins
+              if (
+                  keyword
+                  and site
+                  and keyword_l2 == "Accessories-Cases, Covers, & Skins"
+              ):
                   keywords.append({
                       "site": site,
                       "keyword": keyword,
                       "clicks": clean_num(cell(row, 47)),    # AV
                       "growth": clean_pct(cell(row, 49)),    # AX
+                      "zh": cell(row, 50) or keyword,        # AY
                   })
 
           cb_products = dedupe_products(cb_products)
@@ -200,75 +208,6 @@ jobs:
               if prev is None or x["clicks"] > prev["clicks"]:
                   kw_map[key] = x
           keywords = list(kw_map.values())
-
-          # Chinese translations for the current common keyword pool.
-          # Unknown/new keywords fall back to the original keyword so
-          # automatic synchronization never breaks.
-          zh_map = {
-              "power bank": "充电宝",
-              "powerbank": "充电宝",
-              "phone case": "手机壳",
-              "iphone case": "iPhone 手机壳",
-              "case iphone": "iPhone 手机壳",
-              "casing iphone": "iPhone 手机壳",
-              "iphone 13 case": "iPhone 13 手机壳",
-              "iphone 17 case": "iPhone 17 手机壳",
-              "iphone 17 pro case": "iPhone 17 Pro 手机壳",
-              "iphone 17 pro max case": "iPhone 17 Pro Max 手机壳",
-              "iphone 17 pro max casing": "iPhone 17 Pro Max 手机壳",
-              "casing iphone 17 pro max": "iPhone 17 Pro Max 手机壳",
-              "ipad case": "iPad 保护壳",
-              "fold 8 case": "Fold 8 手机壳",
-              "z fold 8 case": "Z Fold 8 手机壳",
-              "phone strap": "手机挂绳",
-              "portable charger": "便携式充电器",
-              "portable fan": "便携风扇",
-              "charger type c": "Type-C 充电器",
-              "iphone charger": "iPhone 充电器",
-              "sd card": "SD 卡",
-              "capinha": "手机壳",
-              "capinha iphone 14": "iPhone 14 手机壳",
-              "capinha iphone 17": "iPhone 17 手机壳",
-              "capinha iphone 17 pro max": "iPhone 17 Pro Max 手机壳",
-              "suporte para celular": "手机支架",
-              "tripé para celular": "手机三脚架",
-              "carregador portátil": "便携式充电宝",
-              "carregador portátil para celular": "便携式手机充电宝",
-              "carregador portátil 20000mah": "20000mAh 便携式充电宝",
-              "funda poco x8 pro": "POCO X8 Pro 手机壳",
-              "funda iphone 15 pro max": "iPhone 15 Pro Max 手机壳",
-              "เคส": "手机壳",
-              "เคสไอโฟน": "iPhone 手机壳",
-              "เคสไอโฟน 13": "iPhone 13 手机壳",
-              "เคสไอโฟน 17 pro max": "iPhone 17 Pro Max 手机壳",
-              "พาวเวอร์แบงค์": "充电宝",
-              "สายชาร์จไอโฟน": "iPhone 充电线",
-              "สายชาร์จ type c": "Type-C 充电线",
-              "สายคล้องโทรศัพท์": "手机挂绳",
-              "手機殼": "手机壳",
-              "手機掛繩": "手机挂绳",
-              "充電線": "充电线",
-              "手機支架": "手机支架",
-              "ipad 保護殼": "iPad 保护壳",
-              "airpods 4保護殼": "AirPods 4 保护壳",
-              "iphone 17 手機殼": "iPhone 17 手机壳",
-              "iphone 17 pro 手機殼": "iPhone 17 Pro 手机壳",
-              "磁吸手機殼": "磁吸手机壳",
-              "ốp": "手机壳",
-              "ốp lưng": "手机壳",
-              "ốp lưng iphone": "iPhone 手机壳",
-              "ốp iphone 17 pro max": "iPhone 17 Pro Max 手机壳",
-              "sạc dự phòng": "充电宝",
-              "quạt cầm tay": "手持风扇",
-              "dây sạc iphone": "iPhone 充电线",
-              "giá đỡ điện thoại": "手机支架",
-              "kính cường lực iphone": "iPhone 钢化膜",
-              "cường lực iphone": "iPhone 钢化膜",
-          }
-
-          for x in keywords:
-              key = x["keyword"].strip().lower()
-              x["zh"] = zh_map.get(key, x["keyword"])
 
           phonecase_data = {
               "category": TARGET_L4,
