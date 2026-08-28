@@ -547,226 +547,138 @@ window.onload = loadData;
 </textarea>
 <textarea id="phoneCaseSource" class="source-holder">
 &lt;!DOCTYPE html&gt;
-&lt;html lang="zh-CN"&gt;&lt;head&gt;&lt;meta charset="UTF-8"&gt;&lt;meta name="viewport" content="width=device-width,initial-scale=1.0"&gt;
+&lt;html lang="zh-CN"&gt;
+&lt;head&gt;
+&lt;meta charset="UTF-8"&gt;&lt;meta name="viewport" content="width=device-width,initial-scale=1.0"&gt;
 &lt;title&gt;Shopee EL 手机壳类目分享&lt;/title&gt;
 &lt;style&gt;
 :root{--p:#EE4D2D;--pl:#fff5f2;--bg:#faf8f9;--card:#fff;--text:#2d2038;--muted:#9b8fa0;--border:#f0e8ed;--shadow:0 2px 16px rgba(238,77,45,.07)}
 *{box-sizing:border-box;margin:0;padding:0}body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',Arial,sans-serif;background:var(--bg);color:var(--text)}
 header{background:linear-gradient(135deg,#FF6633,#EE4D2D 50%,#D02D11);color:#fff;padding:36px 40px 28px}.inner,.container{max-width:1280px;margin:auto}.inner{position:relative}h1{font-family:Georgia,serif;font-size:32px}.badge{font:600 11px sans-serif;background:#ffffff38;padding:5px 10px;border-radius:20px}.desc{margin-top:14px;max-width:760px;background:#0000001a;padding:12px 16px;border-radius:8px;font-size:13px;line-height:1.8;border-left:3px solid #ffffffb3}.update{position:absolute;right:0;top:0;background:#ffffff26;padding:6px 12px;border-radius:30px;font-size:12px}
-.page-nav{display:flex;gap:8px;margin-top:17px}.page-nav a{color:#fff;text-decoration:none;font-size:13px;font-weight:700;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.35)}.page-nav a.active{background:#fff;color:#d73211}.container{padding:26px 24px}.tabs{display:flex;gap:10px;margin-bottom:18px}.tab{padding:10px 20px;border:1.5px solid var(--border);background:#fff;border-radius:999px;cursor:pointer;font-weight:800;color:var(--muted)}.tab.active{background:var(--p);border-color:var(--p);color:#fff}
+.page-nav{display:flex;gap:8px;margin-top:17px}.page-nav a{color:#fff;text-decoration:none;font-size:13px;font-weight:700;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.35)}.page-nav a.active{background:#fff;color:#d73211}
+.container{padding:26px 24px}.tabs{display:flex;gap:10px;margin-bottom:18px}.tab{padding:10px 20px;border:1.5px solid var(--border);background:#fff;border-radius:999px;cursor:pointer;font-weight:800;color:var(--muted)}.tab.active{background:var(--p);border-color:var(--p);color:#fff}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:20px}.card,.filters{background:#fff;border:1px solid var(--border);box-shadow:var(--shadow);border-radius:16px}.card{padding:20px;margin-bottom:18px}.bubble-card{height:420px}.title{font-size:16px;font-weight:800}.note{font-size:11px;color:var(--muted);margin:3px 0 14px}.bubble{height:330px;border:1px solid var(--border);border-radius:12px;background:#fffafa}.bubble svg{width:100%;height:100%}.dot{fill-opacity:.76;stroke:#fff;stroke-width:2}.axis{font-size:10px;fill:#9b8fa0}.label{font-size:9px;font-weight:800;fill:#2d2038}
-.filters{padding:17px 19px;margin-bottom:18px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}.fl{font-size:11px;color:var(--muted);font-weight:700}select,button{font:inherit;font-size:13px;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text)}
-.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}.kpi{padding:17px}.kl{font-size:11px;color:var(--muted);font-weight:700}.kv{font-size:27px;font-weight:800;margin-top:7px}.ks{font-size:11px;color:var(--muted);margin-top:5px}
-.dash{display:grid;grid-template-columns:1.25fr .75fr;gap:18px}.bars{display:flex;flex-direction:column;gap:12px}.bar{display:grid;grid-template-columns:minmax(130px,1.15fr) 3fr 68px;gap:10px;align-items:center}.bn{font-size:12px;font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.track{height:11px;background:#f5eef1;border-radius:999px;overflow:hidden}.fill{height:100%;background:linear-gradient(90deg,#ffb5a7,#EE4D2D)}.bv{text-align:right;font-size:12px;font-weight:750;color:#d73211}
-table{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:10px 9px;border-bottom:1px solid var(--border);text-align:center;white-space:nowrap}th{font-size:10px;color:var(--muted);background:#fffafa}.wrap{overflow:auto}.thumb{width:58px;height:58px;object-fit:contain;border-radius:10px;border:1px solid var(--border);cursor:zoom-in}.cat{max-width:260px;white-space:normal;line-height:1.45;color:var(--muted);text-align:center;margin:0 auto}.cat-head{text-align:center!important}.ins{padding:12px 14px;border:1px solid var(--border);background:#fffafa;border-radius:10px;font-size:12px;line-height:1.6;margin-bottom:10px}.empty{padding:40px;text-align:center;color:var(--muted)}
+.filters{padding:17px 19px;margin-bottom:18px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}.fl{font-size:11px;color:var(--muted);font-weight:700}select,button{font:inherit;font-size:13px;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text)}button{cursor:pointer}
+.wrap{overflow:auto}table{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:10px 9px;border-bottom:1px solid var(--border);text-align:center;white-space:nowrap}th{font-size:10px;color:var(--muted);background:#fffafa}.thumb{width:62px;height:62px;object-fit:contain;border-radius:10px;border:1px solid var(--border);background:#fff;cursor:zoom-in}.cat{max-width:245px;white-space:normal;line-height:1.45;color:var(--muted);margin:auto}.mom-pos{color:#27ae60;font-weight:700}.mom-neg{color:#eb4d4b;font-weight:700}.mom-zero{color:var(--muted);font-weight:700}.empty{padding:40px;text-align:center;color:var(--muted)}.keyword-card{margin-top:18px}.kw{max-width:300px;white-space:normal;text-align:left;font-weight:650}.click-val{font-weight:800;color:#d73211}
 #modal{display:none;position:fixed;inset:0;background:#140e18e6;z-index:9999;align-items:center;justify-content:center}#modal.show{display:flex}#modal img{max-width:92vw;max-height:88vh;background:#fff;border-radius:14px}
 footer{text-align:center;color:var(--muted);font-size:11px;padding:36px;border-top:1px solid var(--border)}
-@media(max-width:980px){.grid2,.dash{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}}
-&lt;/style&gt;&lt;/head&gt;&lt;body&gt;
+@media(max-width:980px){.grid2{grid-template-columns:1fr}}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
 &lt;header&gt;&lt;div class="inner"&gt;&lt;h1&gt;Shopee EL 手机壳类目分享 &lt;span class="badge"&gt;External&lt;/span&gt;&lt;/h1&gt;&lt;div class="desc"&gt;✨ 手机壳类目数据分享，涵盖多站点，帮你快速识别潜力站点与热门产品&lt;br&gt;📊 聚焦手机壳类目分享，以 ADO 与 ADGMV 展示整体表现&lt;br&gt;🔒 跨境 CB 与本土 CNLS 分开展示&lt;/div&gt;&lt;nav class="page-nav"&gt;&lt;a href="#" onclick="parent.switchPage('sku');return false"&gt;🔥 热门 SKU&lt;/a&gt;&lt;a class="active" href="#" onclick="parent.switchPage('phonecase');return false"&gt;📱 手机壳类目分享&lt;/a&gt;&lt;a href="#" onclick="parent.switchPage('trend');return false"&gt;📈 类目趋势分享&lt;/a&gt;&lt;a href="#" onclick="parent.switchPage('category');return false"&gt;📊 类目大盘&lt;/a&gt;&lt;/nav&gt;&lt;div class="update" id="update"&gt;数据加载中...&lt;/div&gt;&lt;/div&gt;&lt;/header&gt;
 &lt;main class="container"&gt;
 &lt;div class="tabs"&gt;&lt;button class="tab active" data-t="CB"&gt;跨境 CB&lt;/button&gt;&lt;button class="tab" data-t="CNLS"&gt;本土 CNLS&lt;/button&gt;&lt;/div&gt;
 &lt;section class="grid2"&gt;&lt;div class="card bubble-card"&gt;&lt;div class="title"&gt;各站点手机壳规模分布&lt;/div&gt;&lt;div class="note"&gt;X：ADO · Y：ADGMV · 每个气泡代表一个站点&lt;/div&gt;&lt;div class="bubble" id="siteBubble"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="card bubble-card"&gt;&lt;div class="title"&gt;手机壳 L1 类目规模分布&lt;/div&gt;&lt;div class="note"&gt;汇总所有站点，每个气泡代表一个 L1 类目&lt;/div&gt;&lt;div class="bubble" id="l1Bubble"&gt;&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;
-&lt;section class="filters"&gt;&lt;span class="fl"&gt;站点&lt;/span&gt;&lt;select id="site"&gt;&lt;option value=""&gt;全部站点&lt;/option&gt;&lt;/select&gt;&lt;span class="fl"&gt;L1 类目&lt;/span&gt;&lt;select id="l1"&gt;&lt;option value=""&gt;全部 L1&lt;/option&gt;&lt;/select&gt;&lt;span class="fl"&gt;L2 类目&lt;/span&gt;&lt;select id="l2"&gt;&lt;option value=""&gt;全部 L2&lt;/option&gt;&lt;/select&gt;&lt;span class="fl"&gt;L3 类目&lt;/span&gt;&lt;select id="l3"&gt;&lt;option value=""&gt;全部 L3&lt;/option&gt;&lt;/select&gt;&lt;button id="reset"&gt;✕ 重置&lt;/button&gt;&lt;/section&gt;
-&lt;section class="kpis"&gt;&lt;div class="card kpi"&gt;&lt;div class="kl"&gt;Top Site ADO 占比&lt;/div&gt;&lt;div class="kv" id="sa"&gt;—&lt;/div&gt;&lt;div class="ks" id="san"&gt;—&lt;/div&gt;&lt;/div&gt;&lt;div class="card kpi"&gt;&lt;div class="kl"&gt;Top Site ADGMV 占比&lt;/div&gt;&lt;div class="kv" id="sg"&gt;—&lt;/div&gt;&lt;div class="ks" id="sgn"&gt;—&lt;/div&gt;&lt;/div&gt;&lt;div class="card kpi"&gt;&lt;div class="kl"&gt;Top L1 ADO 占比&lt;/div&gt;&lt;div class="kv" id="la"&gt;—&lt;/div&gt;&lt;div class="ks" id="lan"&gt;—&lt;/div&gt;&lt;/div&gt;&lt;div class="card kpi"&gt;&lt;div class="kl"&gt;Top L1 ADGMV 占比&lt;/div&gt;&lt;div class="kv" id="lg"&gt;—&lt;/div&gt;&lt;div class="ks" id="lgn"&gt;—&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;
-&lt;section class="dash"&gt;&lt;div&gt;&lt;div class="card"&gt;&lt;div class="title" id="ct"&gt;L1 类目贡献度&lt;/div&gt;&lt;div class="note"&gt;可切换 ADO / ADGMV&lt;/div&gt;&lt;button class="metric" data-m="adg"&gt;ADGMV&lt;/button&gt; &lt;button class="metric" data-m="ado"&gt;ADO&lt;/button&gt;&lt;div id="bars" class="bars" style="margin-top:15px"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="card"&gt;&lt;div class="title"&gt;手机壳 Top 10 产品&lt;/div&gt;&lt;div class="note"&gt;按 ADGMV 降序排序 · ADO / ADG 采用区间脱敏展示&lt;/div&gt;&lt;div class="wrap"&gt;&lt;table&gt;&lt;thead&gt;&lt;tr id="productHead"&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody id="pt"&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div class="card"&gt;&lt;div class="title"&gt;站点销售额贡献&lt;/div&gt;&lt;div class="note"&gt;当前筛选下各站点 ADGMV 占比&lt;/div&gt;&lt;div id="sb" class="bars"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="card"&gt;&lt;div class="title"&gt;手机壳类目洞察&lt;/div&gt;&lt;div class="note" id="insightNote"&gt;按本期较上期增长绝对量识别类目增长表现&lt;/div&gt;&lt;div id="ins"&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;
-&lt;/main&gt;&lt;div id="modal"&gt;&lt;img id="mi"&gt;&lt;/div&gt;&lt;footer&gt;Shopee EL 选品指南 · Category Overview&lt;/footer&gt;
+
+&lt;section class="filters"&gt;
+  &lt;span class="fl"&gt;站点&lt;/span&gt;
+  &lt;select id="siteFilter"&gt;&lt;option value=""&gt;全部站点&lt;/option&gt;&lt;/select&gt;
+  &lt;span class="fl"&gt;排序&lt;/span&gt;
+  &lt;select id="sortFilter"&gt;&lt;option value="ado"&gt;按 ADO&lt;/option&gt;&lt;option value="adg"&gt;按 ADG&lt;/option&gt;&lt;/select&gt;
+  &lt;button id="resetBtn"&gt;✕ 重置&lt;/button&gt;
+&lt;/section&gt;
+
+&lt;section class="card"&gt;
+  &lt;div class="title"&gt;手机壳 Top 10 产品&lt;/div&gt;
+  &lt;div class="note"&gt;固定 L4：Phone Cases, Covers, &amp;amp; Skins · ADO / ADG 采用区间脱敏展示&lt;/div&gt;
+  &lt;div class="wrap"&gt;&lt;table&gt;
+    &lt;thead&gt;&lt;tr&gt;&lt;th&gt;排名&lt;/th&gt;&lt;th&gt;图片&lt;/th&gt;&lt;th&gt;Item ID&lt;/th&gt;&lt;th&gt;站点&lt;/th&gt;&lt;th&gt;类目&lt;/th&gt;&lt;th&gt;价格&lt;/th&gt;&lt;th&gt;ADO&lt;/th&gt;&lt;th&gt;ADG&lt;/th&gt;&lt;th&gt;ADO MoM&lt;/th&gt;&lt;th&gt;ADG MoM&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+    &lt;tbody id="productBody"&gt;&lt;/tbody&gt;
+  &lt;/table&gt;&lt;/div&gt;
+&lt;/section&gt;
+
+&lt;section class="card keyword-card" id="keywordCard"&gt;
+  &lt;div class="title"&gt;热门关键词 Top 10&lt;/div&gt;
+  &lt;div class="note"&gt;跟随上方站点筛选 · 按 Item Click 降序排序&lt;/div&gt;
+  &lt;div class="wrap"&gt;&lt;table&gt;
+    &lt;thead&gt;&lt;tr&gt;&lt;th&gt;排名&lt;/th&gt;&lt;th&gt;站点&lt;/th&gt;&lt;th&gt;关键词&lt;/th&gt;&lt;th&gt;关键词中文翻译&lt;/th&gt;&lt;th&gt;Item Click&lt;/th&gt;&lt;th&gt;Click Growth&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+    &lt;tbody id="keywordBody"&gt;&lt;/tbody&gt;
+  &lt;/table&gt;&lt;/div&gt;
+&lt;/section&gt;
+&lt;/main&gt;
+
+&lt;div id="modal"&gt;&lt;img id="modalImg" src=""&gt;&lt;/div&gt;
+&lt;footer&gt;Shopee EL 选品指南 · 手机壳类目分享&lt;/footer&gt;
+
 &lt;script&gt;
-const UCB='./data_cb.json',UCN='./data_cnls.json',PHONE_CASE_L3='Cases, Covers, &amp; Skins';let cb=[],cn=[],typ='CB',metric='adg',cbError='',cnError='';const $=x=&gt;document.getElementById(x),n=v=&gt;parseFloat(String(v??'').replace(/,/g,''))||0,p=(a,b)=&gt;b?a/b*100:0,f=x=&gt;x.toFixed(1)+'%',esc=s=&gt;String(s??'').replace(/[&amp;&lt;&gt;"']/g,c=&gt;({'&amp;':'&amp;amp;','&lt;':'&amp;lt;','&gt;':'&amp;gt;','"':'&amp;quot;',"'":'&amp;#39;'}[c]));function ns(v){let s=String(v||'').toUpperCase();return ['BR','MX','MY','PH','SG','TH','TW','VN'].find(x=&gt;s===x||s.includes(x))||s}
-function NCB(r){return{id:String(r.item_id||''),site:ns(r.grass_region),l1:r.cb_level1_global_be_category||'',l2:r.level2_global_be_category||'',l3:r.level3_global_be_category||'',img:r.product_image||'',price:n(r['price_usd']),ado:n(r['ADO(SUM)']),adg:n(r['ADG_usd(SUM)']),mom:n(r['mom_ado_growth_contri(SUM)']),adgMom:n(r['mom_adg_growth_contri(SUM)']||r['mom_adgmv_growth_contri(SUM)']||r['adg_mom']||r['adgmv_mom']||0)}}function NCN(r){const diff=n(r['ado_diff(RAW)']),bench=n(r['benchmark_ado(RAW)']);return{id:String(r.item_id||''),site:ns(r.grass_region),l1:r.cb_level1_global_be_category||'',l2:r.level2_global_be_category||'',l3:r.level3_global_be_category||'',img:r.item_image||'',price:n(r['item_price_usd']),ado:n(r['current_ado(RAW)']),adg:n(r['current_adgmv(RAW)']),mom:bench?diff/bench*100:0,adgMom:(()=&gt;{const explicit=n(r['adg_mom']||r['adgmv_mom']||r['mom_adg_growth_contri(SUM)']||r['mom_adgmv_growth_contri(SUM)']||0);if(explicit)return explicit;const diff=n(r['adg_diff(RAW)']||r['adgmv_diff(RAW)']||0),benchAdg=n(r['benchmark_adg(RAW)']||r['benchmark_adgmv(RAW)']||0);if(benchAdg&amp;&amp;diff)return diff/benchAdg*100;const cur=n(r['current_adgmv(RAW)']),prev=n(r['benchmark_adgmv(RAW)']||r['benchmark_adg(RAW)']||0);return prev?(cur-prev)/prev*100:0})()}}
-function R(){return (typ==='CB'?cb:cn).filter(r=&gt;r.l3===PHONE_CASE_L3)}
-function currentError(){return typ==='CB'?cbError:cnError}
-function showTypeState(){
-  const err=currentError(),data=R(),label=typ==='CB'?'跨境 CB':'本土 CNLS';
-  if(err){
-    $('siteBubble').innerHTML='&lt;div class="empty"&gt;'+esc(label+' 数据加载失败：'+err)+'&lt;/div&gt;';
-    $('l1Bubble').innerHTML='&lt;div class="empty"&gt;暂无可用数据&lt;/div&gt;';
-    $('bars').innerHTML='&lt;div class="empty"&gt;暂无可用数据&lt;/div&gt;';
-    $('pt').innerHTML='&lt;tr&gt;&lt;td colspan="7" class="empty"&gt;暂无可用数据&lt;/td&gt;&lt;/tr&gt;';
-    $('sb').innerHTML='&lt;div class="empty"&gt;暂无可用数据&lt;/div&gt;';
-    $('ins').innerHTML='&lt;div class="empty"&gt;请检查对应 JSON 数据文件&lt;/div&gt;';
-    ['sa','sg','la','lg'].forEach(id=&gt;$(id).textContent='—');
-    return true;
-  }
-  if(!data.length){
-    $('siteBubble').innerHTML='&lt;div class="empty"&gt;'+label+' 暂无数据&lt;/div&gt;';
-    $('l1Bubble').innerHTML='&lt;div class="empty"&gt;暂无数据&lt;/div&gt;';
-    $('bars').innerHTML='&lt;div class="empty"&gt;暂无数据&lt;/div&gt;';
-    $('pt').innerHTML='&lt;tr&gt;&lt;td colspan="7" class="empty"&gt;暂无数据&lt;/td&gt;&lt;/tr&gt;';
-    $('sb').innerHTML='&lt;div class="empty"&gt;暂无数据&lt;/div&gt;';
-    $('ins').innerHTML='&lt;div class="empty"&gt;暂无数据&lt;/div&gt;';
-    return true;
-  }
-  return false;
-}function F(){let s=$('site').value,a=$('l1').value,b=$('l2').value,c=$('l3').value;return R().filter(r=&gt;(!s||r.site===s)&amp;&amp;(!a||r.l1===a)&amp;&amp;(!b||r.l2===b)&amp;&amp;(!c||r.l3===c))}function A(d,k){let m=new Map;d.forEach(r=&gt;{let z=r[k]||'未分类';if(!m.has(z))m.set(z,{name:z,ado:0,adg:0});let g=m.get(z);g.ado+=r.ado;g.adg+=r.adg});return[...m.values()]}function S(d,k){return d.reduce((a,r)=&gt;a+r[k],0)}
-function rangeStr(v,step){const x=Number(v);if(!Number.isFinite(x)||x===0)return '—';if(x&gt;=0){const lo=Math.floor(x/step)*step;return lo+'~'+(lo+step)}const hi=Math.ceil(x/step)*step;return (hi-step)+'~'+hi}
-function adoRange(v){const x=Number(v);if(!Number.isFinite(x)||x===0)return '—';return rangeStr(x,x&lt;100?10:x&lt;1000?50:100)}
-function adgRange(v){const x=Number(v);if(!Number.isFinite(x)||x===0)return '—';return rangeStr(x,x&lt;100?10:x&lt;500?50:x&lt;2000?100:x&lt;10000?500:1000)}
-function momText(v){const x=Number(v)||0;return (x&gt;0?'+':'')+x.toFixed(1)+'%'}
-function H(){if($('l2').value)return['l3','L3'];if($('l1').value)return['l2','L2'];return['l1','L1']}
-const pal=['#FFB5A7','#FCD5CE','#F9DCC4','#CDEAC0','#BDE0FE','#A2D2FF','#CDB4DB','#FFC8DD','#D8E2DC','#E8D7F1','#D0F4DE','#FFF1E6'];function B(id,pts){if(!pts.length){$(id).innerHTML='&lt;div class="empty"&gt;暂无数据&lt;/div&gt;';return}let ma=Math.max(...pts.map(x=&gt;x.ado),1),mg=Math.max(...pts.map(x=&gt;x.adg),1),d='';pts.forEach((q,i)=&gt;{let x=55+q.ado/ma*460,y=285-q.adg/mg*235,r=9+Math.sqrt((q.ado/ma+q.adg/mg)/2)*17,c=pal[i%pal.length],s=q.name.length&gt;13?q.name.slice(0,13)+'…':q.name;d+=`&lt;circle class="dot" cx="${x}" cy="${y}" r="${r}" fill="${c}"&gt;&lt;title&gt;${esc(q.name)}&lt;/title&gt;&lt;/circle&gt;&lt;text class="label" x="${x}" y="${y+3}" text-anchor="middle"&gt;${esc(s)}&lt;/text&gt;`});$(id).innerHTML=`&lt;svg viewBox="0 0 560 330"&gt;&lt;line x1="48" y1="290" x2="525" y2="290" stroke="#eadfe4"/&gt;&lt;line x1="48" y1="290" x2="48" y2="38" stroke="#eadfe4"/&gt;&lt;text class="axis" x="490" y="315"&gt;ADO 高 →&lt;/text&gt;&lt;text class="axis" x="12" y="50"&gt;ADGMV 高 ↑&lt;/text&gt;${d}&lt;/svg&gt;`}
-function bubbles(){B('siteBubble',A(R(),'site').filter(x=&gt;x.name!=='未分类'));B('l1Bubble',A(R(),'l1').filter(x=&gt;x.name!=='未分类'))}function kpi(){let d=F(),da=S(d,'ado'),dg=S(d,'adg'),s=A(d,'site'),l=A(d,'l1'),sa=s.sort((a,b)=&gt;b.ado-a.ado)[0],sg=[...s].sort((a,b)=&gt;b.adg-a.adg)[0],la=l.sort((a,b)=&gt;b.ado-a.ado)[0],lg=[...l].sort((a,b)=&gt;b.adg-a.adg)[0];$('sa').textContent=sa?f(p(sa.ado,da)):'—';$('san').textContent=sa?sa.name:'—';$('sg').textContent=sg?f(p(sg.adg,dg)):'—';$('sgn').textContent=sg?sg.name:'—';$('la').textContent=la?f(p(la.ado,da)):'—';$('lan').textContent=la?la.name:'—';$('lg').textContent=lg?f(p(lg.adg,dg)):'—';$('lgn').textContent=lg?lg.name:'—'}
-function contrib(){let d=F(),[k,l]=H(),g=A(d,k).sort((a,b)=&gt;b[metric]-a[metric]).slice(0,12),den=g.reduce((a,x)=&gt;a+x[metric],0);$('ct').textContent=l+' 类目贡献度';$('bars').innerHTML=g.map(x=&gt;{let q=p(x[metric],den);return`&lt;div class="bar"&gt;&lt;div class="bn"&gt;${esc(x.name)}&lt;/div&gt;&lt;div class="track"&gt;&lt;div class="fill" style="width:${Math.max(q,1)}%"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="bv"&gt;${f(q)}&lt;/div&gt;&lt;/div&gt;`}).join('')||'&lt;div class="empty"&gt;暂无数据&lt;/div&gt;'}
-function products(){
-  const isCB=typ==='CB';
-  $('productHead').innerHTML=isCB
-    ? '&lt;th&gt;排名&lt;/th&gt;&lt;th&gt;图片&lt;/th&gt;&lt;th&gt;Item ID&lt;/th&gt;&lt;th&gt;站点&lt;/th&gt;&lt;th class="cat-head"&gt;类目&lt;/th&gt;&lt;th&gt;价格&lt;/th&gt;&lt;th&gt;ADO&lt;/th&gt;&lt;th&gt;ADG&lt;/th&gt;&lt;th&gt;ADO MoM&lt;/th&gt;'
-    : '&lt;th&gt;排名&lt;/th&gt;&lt;th&gt;图片&lt;/th&gt;&lt;th&gt;Item ID&lt;/th&gt;&lt;th&gt;站点&lt;/th&gt;&lt;th class="cat-head"&gt;类目&lt;/th&gt;&lt;th&gt;价格&lt;/th&gt;&lt;th&gt;ADO&lt;/th&gt;&lt;th&gt;ADG&lt;/th&gt;&lt;th&gt;ADO MoM&lt;/th&gt;&lt;th&gt;ADG MoM&lt;/th&gt;';
-
-  const top=F().slice().sort((a,b)=&gt;b.adg-a.adg).slice(0,10);
-  $('pt').innerHTML=top.map((x,i)=&gt;{
-    const price=x.price?'$'+x.price.toFixed(2):'—';
-    const ado=adoRange(x.ado);
-    const adg=adgRange(x.adg);
-    const mom=momText(x.mom);
-    const momColor=x.mom&gt;0?'#27ae60':x.mom&lt;0?'#eb4d4b':'#9b8fa0';
-    const base=`&lt;td&gt;${i+1}&lt;/td&gt;&lt;td&gt;${x.img?`&lt;img class="thumb" src="${esc(x.img)}"&gt;`:'—'}&lt;/td&gt;&lt;td&gt;${esc(x.id)}&lt;/td&gt;&lt;td&gt;${esc(x.site)}&lt;/td&gt;&lt;td&gt;&lt;div class="cat"&gt;${esc([x.l1,x.l2,x.l3].filter(Boolean).join(' › '))}&lt;/div&gt;&lt;/td&gt;&lt;td&gt;${price}&lt;/td&gt;&lt;td&gt;${ado}&lt;/td&gt;&lt;td&gt;${adg==='—'?'—':'$'+adg}&lt;/td&gt;&lt;td style="font-weight:700;color:${momColor}"&gt;${mom}&lt;/td&gt;`;
-    if(isCB)return `&lt;tr&gt;${base}&lt;/tr&gt;`;
-    const adgMom=momText(x.adgMom);
-    const adgMomColor=x.adgMom&gt;0?'#27ae60':x.adgMom&lt;0?'#eb4d4b':'#9b8fa0';
-    return `&lt;tr&gt;${base}&lt;td style="font-weight:700;color:${adgMomColor}"&gt;${adgMom}&lt;/td&gt;&lt;/tr&gt;`;
-  }).join('')||`&lt;tr&gt;&lt;td colspan="${isCB?9:10}" class="empty"&gt;暂无数据&lt;/td&gt;&lt;/tr&gt;`;
+const UCB='./data_cb.json',UCN='./data_cnls.json',PHONE_URL='./phonecase_data.json';
+const PHONE_L3='Cases, Covers, &amp; Skins';
+let typ='CB',bubbleCB=[],bubbleCN=[],phoneData={cb:[],cnls:[],keywords:[]};
+const $=id=&gt;document.getElementById(id);
+const n=v=&gt;parseFloat(String(v??'').replace(/,/g,''))||0;
+const esc=s=&gt;String(s??'').replace(/[&amp;&lt;&gt;"']/g,c=&gt;({'&amp;':'&amp;amp;','&lt;':'&amp;lt;','&gt;':'&amp;gt;','"':'&amp;quot;',"'":'&amp;#39;'}[c]));
+function ns(v){let s=String(v||'').toUpperCase();return ['BR','MX','MY','PH','SG','TH','TW','VN'].find(x=&gt;s===x||s.includes(x))||s}
+function NCB(r){return{site:ns(r.grass_region),l1:r.cb_level1_global_be_category||'',l3:r.level3_global_be_category||'',ado:n(r['ADO(SUM)']),adg:n(r['ADG_usd(SUM)'])}}
+function NCN(r){return{site:ns(r.grass_region),l1:r.cb_level1_global_be_category||'',l3:r.level3_global_be_category||'',ado:n(r['current_ado(RAW)']),adg:n(r['current_adgmv(RAW)'])}}
+function bubbleRows(){return (typ==='CB'?bubbleCB:bubbleCN).filter(r=&gt;r.l3===PHONE_L3)}
+function agg(d,k){const m=new Map();d.forEach(r=&gt;{const z=r[k]||'未分类';if(!m.has(z))m.set(z,{name:z,ado:0,adg:0});const g=m.get(z);g.ado+=r.ado;g.adg+=r.adg});return [...m.values()]}
+const pal=['#FFB5A7','#FCD5CE','#F9DCC4','#CDEAC0','#BDE0FE','#A2D2FF','#CDB4DB','#FFC8DD','#D8E2DC','#E8D7F1','#D0F4DE','#FFF1E6'];
+function drawBubble(id,pts){
+ if(!pts.length){$(id).innerHTML='&lt;div class="empty"&gt;暂无数据&lt;/div&gt;';return}
+ const ma=Math.max(...pts.map(x=&gt;x.ado),1),mg=Math.max(...pts.map(x=&gt;x.adg),1);let d='';
+ pts.forEach((q,i)=&gt;{const x=55+q.ado/ma*460,y=285-q.adg/mg*235,r=9+Math.sqrt((q.ado/ma+q.adg/mg)/2)*17,c=pal[i%pal.length],s=q.name.length&gt;13?q.name.slice(0,13)+'…':q.name;d+=`&lt;circle class="dot" cx="${x}" cy="${y}" r="${r}" fill="${c}"&gt;&lt;title&gt;${esc(q.name)}&lt;/title&gt;&lt;/circle&gt;&lt;text class="label" x="${x}" y="${y+3}" text-anchor="middle"&gt;${esc(s)}&lt;/text&gt;`});
+ $(id).innerHTML=`&lt;svg viewBox="0 0 560 330"&gt;&lt;line x1="48" y1="290" x2="525" y2="290" stroke="#eadfe4"/&gt;&lt;line x1="48" y1="290" x2="48" y2="38" stroke="#eadfe4"/&gt;&lt;text class="axis" x="490" y="315"&gt;ADO 高 →&lt;/text&gt;&lt;text class="axis" x="12" y="50"&gt;ADGMV 高 ↑&lt;/text&gt;${d}&lt;/svg&gt;`;
 }
-function prevFromMom(cur,mom){
-  const rate=Number(mom);
-  const current=Number(cur)||0;
-  if(!Number.isFinite(rate)||rate&lt;=-100)return 0;
-  return current/(1+rate/100);
+function renderBubbles(){const d=bubbleRows();drawBubble('siteBubble',agg(d,'site').filter(x=&gt;x.name!=='未分类'));drawBubble('l1Bubble',agg(d,'l1').filter(x=&gt;x.name!=='未分类'))}
+
+function rangeStr(v,step){const x=Number(v);if(!Number.isFinite(x)||x===0)return '—';const lo=Math.floor(x/step)*step;return lo+'~'+(lo+step)}
+function adoRange(v){const x=Number(v);return !x?'—':rangeStr(x,x&lt;100?10:x&lt;1000?50:100)}
+function adgRange(v){const x=Number(v);return !x?'—':rangeStr(x,x&lt;100?10:x&lt;500?50:x&lt;2000?100:x&lt;10000?500:1000)}
+function momCell(v){const x=Number(v)||0,cls=x&gt;0?'mom-pos':x&lt;0?'mom-neg':'mom-zero';return `&lt;span class="${cls}"&gt;${x&gt;0?'+':''}${x.toFixed(1)}%&lt;/span&gt;`}
+function price(v){return Number(v)&gt;0?'$'+Number(v).toFixed(2):'—'}
+
+function currentProducts(){return typ==='CB'?phoneData.cb:phoneData.cnls}
+function refillSites(){
+ const sites=[...new Set(currentProducts().map(x=&gt;x.site).filter(Boolean))].sort();
+ const old=$('siteFilter').value;
+ $('siteFilter').innerHTML='&lt;option value=""&gt;全部站点&lt;/option&gt;'+sites.map(s=&gt;`&lt;option value="${esc(s)}"&gt;${esc(s)}&lt;/option&gt;`).join('');
+ if(sites.includes(old))$('siteFilter').value=old;
 }
-function growthByCategory(data,key){
-  const map=new Map();
-  data.forEach(r=&gt;{
-    const name=r[key]||'';
-    if(!name)return;
-    if(!map.has(name))map.set(name,{name,ado:0,adoPrev:0,adg:0,adgPrev:0});
-    const g=map.get(name);
-    g.ado+=Number(r.ado)||0;
-    g.adg+=Number(r.adg)||0;
-    g.adoPrev+=prevFromMom(r.ado,r.mom);
-    g.adgPrev+=prevFromMom(r.adg,r.adgMom);
-  });
-  return [...map.values()].map(g=&gt;({
-    ...g,
-    adoDelta:g.ado-g.adoPrev,
-    adgDelta:g.adg-g.adgPrev,
-    adoGrowth:g.adoPrev&gt;0?(g.ado/g.adoPrev-1)*100:NaN,
-    adgGrowth:g.adgPrev&gt;0?(g.adg/g.adgPrev-1)*100:NaN
-  }));
+function renderProducts(){
+ const site=$('siteFilter').value,metric=$('sortFilter').value;
+ let d=currentProducts().filter(x=&gt;!site||x.site===site);
+ d=d.slice().sort((a,b)=&gt;Number(b[metric]||0)-Number(a[metric]||0)).slice(0,10);
+ $('productBody').innerHTML=d.map((x,i)=&gt;`&lt;tr&gt;
+ &lt;td&gt;${i+1}&lt;/td&gt;
+ &lt;td&gt;${x.image?`&lt;img class="thumb" src="${esc(x.image)}" loading="lazy"&gt;`:'—'}&lt;/td&gt;
+ &lt;td&gt;${esc(x.itemid)}&lt;/td&gt;&lt;td&gt;${esc(x.site)}&lt;/td&gt;
+ &lt;td&gt;&lt;div class="cat"&gt;${esc([x.l3,x.l4].filter(Boolean).join(' › '))}&lt;/div&gt;&lt;/td&gt;
+ &lt;td&gt;${price(x.price)}&lt;/td&gt;&lt;td&gt;${adoRange(x.ado)}&lt;/td&gt;&lt;td&gt;${x.adg?'$'+adgRange(x.adg):'—'}&lt;/td&gt;
+ &lt;td&gt;${momCell(x.ado_mom)}&lt;/td&gt;&lt;td&gt;${momCell(x.adg_mom)}&lt;/td&gt;&lt;/tr&gt;`).join('')||'&lt;tr&gt;&lt;td colspan="10" class="empty"&gt;暂无数据&lt;/td&gt;&lt;/tr&gt;';
 }
-function growthText(v){
-  return Number.isFinite(v)?(v&gt;0?'+':'')+v.toFixed(1)+'%':'—';
+function renderKeywords(){
+ const card=$('keywordCard');
+ if(typ!=='CB'){card.style.display='none';return}
+ card.style.display='block';
+ const site=$('siteFilter').value;
+ let d=phoneData.keywords.filter(x=&gt;!site||x.site===site).slice().sort((a,b)=&gt;Number(b.clicks||0)-Number(a.clicks||0)).slice(0,10);
+ $('keywordBody').innerHTML=d.map((x,i)=&gt;`&lt;tr&gt;&lt;td&gt;${i+1}&lt;/td&gt;&lt;td&gt;${esc(x.site)}&lt;/td&gt;&lt;td class="kw"&gt;${esc(x.keyword)}&lt;/td&gt;&lt;td class="kw"&gt;${esc(x.zh||x.keyword)}&lt;/td&gt;&lt;td class="click-val"&gt;${Number(x.clicks||0).toFixed(1)}&lt;/td&gt;&lt;td&gt;${momCell(x.growth)}&lt;/td&gt;&lt;/tr&gt;`).join('')||'&lt;tr&gt;&lt;td colspan="6" class="empty"&gt;暂无关键词数据&lt;/td&gt;&lt;/tr&gt;';
 }
-function side(){
-  const d=F();
-  const sites=A(d,'site').sort((a,b)=&gt;b.adg-a.adg);
-  const den=S(d,'adg');
-
-  $('sb').innerHTML=sites.map(x=&gt;{
-    const q=p(x.adg,den);
-    return `&lt;div class="bar"&gt;&lt;div class="bn"&gt;${esc(x.name)}&lt;/div&gt;&lt;div class="track"&gt;&lt;div class="fill" style="width:${Math.max(q,1)}%"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="bv"&gt;${f(q)}&lt;/div&gt;&lt;/div&gt;`;
-  }).join('')||'&lt;div class="empty"&gt;暂无数据&lt;/div&gt;';
-
-  const l2Rows=growthByCategory(d,'l2');
-  const arr=[];
-
-  if(typ==='CNLS'){
-    const bestAdgL2=l2Rows
-      .filter(g=&gt;g.adgDelta&gt;0)
-      .sort((a,b)=&gt;b.adgDelta-a.adgDelta)[0];
-
-    if(bestAdgL2){
-      const l3s=growthByCategory(d.filter(r=&gt;r.l2===bestAdgL2.name),'l3')
-        .filter(g=&gt;g.adgDelta&gt;0)
-        .sort((a,b)=&gt;b.adgDelta-a.adgDelta)
-        .slice(0,3);
-      const l3Text=l3s.length
-        ? '&lt;br&gt;&lt;strong&gt;L3 销售额增长较好：&lt;/strong&gt;'+l3s.map(g=&gt;esc(g.name)+'（'+growthText(g.adgGrowth)+'）').join('、')+'。'
-        : '';
-      arr.push(`&lt;div class="ins"&gt;&lt;strong&gt;L2 销售额增长领先：&lt;/strong&gt;${esc(bestAdgL2.name)}（${growthText(bestAdgL2.adgGrowth)}）。${l3Text}&lt;/div&gt;`);
-    }else{
-      arr.push('&lt;div class="ins"&gt;&lt;strong&gt;销售额增长：&lt;/strong&gt;当前数据未识别到可计算的正增长类目。&lt;/div&gt;');
-    }
-  }
-
-  const bestAdoL2=l2Rows
-    .filter(g=&gt;g.adoDelta&gt;0)
-    .sort((a,b)=&gt;b.adoDelta-a.adoDelta)[0];
-
-  if(bestAdoL2){
-    const l3s=growthByCategory(d.filter(r=&gt;r.l2===bestAdoL2.name),'l3')
-      .filter(g=&gt;g.adoDelta&gt;0)
-      .sort((a,b)=&gt;b.adoDelta-a.adoDelta)
-      .slice(0,3);
-    const l3Text=l3s.length
-      ? '&lt;br&gt;&lt;strong&gt;L3 单量增长较好：&lt;/strong&gt;'+l3s.map(g=&gt;esc(g.name)+'（'+growthText(g.adoGrowth)+'）').join('、')+'。'
-      : '';
-    arr.push(`&lt;div class="ins"&gt;&lt;strong&gt;L2 单量增长领先：&lt;/strong&gt;${esc(bestAdoL2.name)}（${growthText(bestAdoL2.adoGrowth)}）。${l3Text}&lt;/div&gt;`);
-  }else{
-    arr.push('&lt;div class="ins"&gt;&lt;strong&gt;单量增长：&lt;/strong&gt;当前数据未识别到可计算的正增长类目。&lt;/div&gt;');
-  }
-
-  if(sites[0]){
-    arr.push(`&lt;div class="ins"&gt;&lt;strong&gt;核心站点：&lt;/strong&gt;${esc(sites[0].name)}，贡献 ${f(p(sites[0].adg,den))} 的 ADGMV。&lt;/div&gt;`);
-  }
-
-  $('ins').innerHTML=arr.join('')||'&lt;div class="empty"&gt;暂无数据&lt;/div&gt;';
-}
-function refill(){let r=R(),fill=(id,v,l)=&gt;{$(id).innerHTML=`&lt;option value=""&gt;全部 ${l}&lt;/option&gt;`+[...new Set(v.filter(Boolean))].sort().map(x=&gt;`&lt;option value="${esc(x)}"&gt;${esc(x)}&lt;/option&gt;`).join('')};fill('site',r.map(x=&gt;x.site),'站点');let a=r.filter(x=&gt;!$('site').value||x.site===$('site').value);fill('l1',a.map(x=&gt;x.l1),'L1');let b=a.filter(x=&gt;!$('l1').value||x.l1===$('l1').value);fill('l2',b.map(x=&gt;x.l2),'L2');let c=b.filter(x=&gt;!$('l2').value||x.l2===$('l2').value);fill('l3',c.map(x=&gt;x.l3),'L3')}
-function render(){
-  $('insightNote').textContent=typ==='CB'
-    ? '按本期较上期增长绝对量识别 ADO 增长较好的 L2 / L3 类目'
-    : '按本期较上期增长绝对量识别 ADO / ADG 增长较好的 L2 / L3 类目';
-  if(showTypeState())return;
-  bubbles();kpi();contrib();products();side();
-}function reset(){['site','l1','l2','l3'].forEach(x=&gt;$(x).value='');refill();render()}function init(){
-  document.querySelectorAll('.tab').forEach(b=&gt;b.addEventListener('click',()=&gt;{
-    document.querySelectorAll('.tab').forEach(x=&gt;x.classList.remove('active'));
-    b.classList.add('active');
-    typ=b.dataset.t;
-    ['site','l1','l2','l3'].forEach(id=&gt;$(id).value='');
-    refill();
-    render();
-  }));
-  $('site').addEventListener('change',()=&gt;{refill();render()});
-  $('l1').addEventListener('change',()=&gt;{$('l2').value='';$('l3').value='';refill();render()});
-  $('l2').addEventListener('change',()=&gt;{$('l3').value='';refill();render()});
-  $('l3').addEventListener('change',render);
-  $('reset').addEventListener('click',reset);
-  document.querySelectorAll('.metric').forEach(b=&gt;b.addEventListener('click',()=&gt;{metric=b.dataset.m;contrib()}));
-  $('pt').addEventListener('click',e=&gt;{let im=e.target.closest('.thumb');if(im){$('mi').src=im.src;$('modal').classList.add('show')}});
-  $('modal').addEventListener('click',()=&gt;{$('modal').classList.remove('show')});
-}
-
-async function fetchJson(url,label){
-  try{
-    const r=await fetch(url+'?t='+Date.now(),{cache:'no-store'});
-    if(!r.ok)throw new Error('HTTP '+r.status);
-    const j=await r.json();
-    return {rows:Array.isArray(j)?j:(j.data||[]),error:''};
-  }catch(e){
-    return {rows:[],error:label+' '+e.message};
-  }
-}
-
+function renderAll(){renderBubbles();refillSites();renderProducts();renderKeywords()}
 async function load(){
-  init();
-  $('update').textContent='数据加载中...';
-  const [cbResult,cnResult]=await Promise.all([
-    fetchJson(UCB,'CB'),
-    fetchJson(UCN,'CNLS')
+ try{
+  const [a,b,p]=await Promise.all([
+   fetch(UCB+'?t='+Date.now()).then(r=&gt;r.json()),
+   fetch(UCN+'?t='+Date.now()).then(r=&gt;r.json()),
+   fetch(PHONE_URL+'?t='+Date.now()).then(r=&gt;{if(!r.ok)throw Error('phonecase_data '+r.status);return r.json()})
   ]);
-  cbError=cbResult.error;
-  cnError=cnResult.error;
-  cb=cbResult.rows.map(NCB).filter(x=&gt;x.id);
-  cn=cnResult.rows.map(NCN).filter(x=&gt;x.id);
-  refill();
-  render();
-  $('update').textContent=(cb.length||cn.length)
-    ? '数据最后更新: '+new Date().toLocaleDateString('zh-CN')
-    : '数据加载失败';
+  bubbleCB=(Array.isArray(a)?a:a.data||[]).map(NCB);
+  bubbleCN=(Array.isArray(b)?b:b.data||[]).map(NCN);
+  phoneData=p;
+  renderAll();
+  $('update').textContent='数据最后更新: '+new Date().toLocaleDateString('zh-CN');
+ }catch(e){$('update').textContent='数据加载失败';$('productBody').innerHTML='&lt;tr&gt;&lt;td colspan="10" class="empty"&gt;'+esc(e.message)+'&lt;/td&gt;&lt;/tr&gt;'}
 }
+document.querySelectorAll('.tab').forEach(b=&gt;b.addEventListener('click',()=&gt;{document.querySelectorAll('.tab').forEach(x=&gt;x.classList.remove('active'));b.classList.add('active');typ=b.dataset.t;$('siteFilter').value='';renderAll()}));
+$('siteFilter').addEventListener('change',()=&gt;{renderProducts();renderKeywords()});
+$('sortFilter').addEventListener('change',renderProducts);
+$('resetBtn').addEventListener('click',()=&gt;{$('siteFilter').value='';$('sortFilter').value='ado';renderProducts();renderKeywords()});
+$('productBody').addEventListener('click',e=&gt;{const im=e.target.closest('.thumb');if(im){$('modalImg').src=im.src;$('modal').classList.add('show')}});
+$('modal').addEventListener('click',()=&gt;{$('modal').classList.remove('show');$('modalImg').src=''});
 window.addEventListener('load',load);
-&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;
+&lt;/script&gt;
+&lt;/body&gt;&lt;/html&gt;
 </textarea>
 <textarea id="trendSource" class="source-holder">
 &lt;!DOCTYPE html&gt;&lt;html lang="zh-CN"&gt;&lt;head&gt;&lt;meta charset="UTF-8"&gt;&lt;meta name="viewport" content="width=device-width,initial-scale=1.0"&gt;&lt;title&gt;Shopee EL 类目趋势分享&lt;/title&gt;&lt;style&gt;
