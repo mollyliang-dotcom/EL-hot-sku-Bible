@@ -583,7 +583,7 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:36px;border-t
   &lt;div class="title"&gt;手机壳 Top 10 产品&lt;/div&gt;
   &lt;div class="note"&gt;固定 L4：Phone Cases, Covers, &amp;amp; Skins · ADO / ADG 采用区间脱敏展示&lt;/div&gt;
   &lt;div class="wrap"&gt;&lt;table&gt;
-    &lt;thead&gt;&lt;tr&gt;&lt;th&gt;排名&lt;/th&gt;&lt;th&gt;图片&lt;/th&gt;&lt;th&gt;Item ID&lt;/th&gt;&lt;th&gt;站点&lt;/th&gt;&lt;th&gt;类目&lt;/th&gt;&lt;th&gt;价格&lt;/th&gt;&lt;th&gt;ADO&lt;/th&gt;&lt;th&gt;ADG&lt;/th&gt;&lt;th&gt;ADO MoM&lt;/th&gt;&lt;th&gt;ADG MoM&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+    &lt;thead&gt;&lt;tr&gt;&lt;th&gt;排名&lt;/th&gt;&lt;th&gt;图片&lt;/th&gt;&lt;th&gt;Item ID&lt;/th&gt;&lt;th&gt;站点&lt;/th&gt;&lt;th&gt;价格&lt;/th&gt;&lt;th&gt;ADO&lt;/th&gt;&lt;th&gt;ADG&lt;/th&gt;&lt;th&gt;ADO MoM&lt;/th&gt;&lt;th&gt;ADG MoM&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
     &lt;tbody id="productBody"&gt;&lt;/tbody&gt;
   &lt;/table&gt;&lt;/div&gt;
 &lt;/section&gt;
@@ -592,7 +592,7 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:36px;border-t
   &lt;div class="title"&gt;热门关键词 Top 10&lt;/div&gt;
   &lt;div class="note"&gt;跟随上方站点筛选 · 按 Item Click 降序排序&lt;/div&gt;
   &lt;div class="wrap"&gt;&lt;table&gt;
-    &lt;thead&gt;&lt;tr&gt;&lt;th&gt;排名&lt;/th&gt;&lt;th&gt;站点&lt;/th&gt;&lt;th&gt;关键词&lt;/th&gt;&lt;th&gt;关键词中文翻译&lt;/th&gt;&lt;th&gt;Item Click&lt;/th&gt;&lt;th&gt;Click Growth&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+    &lt;thead&gt;&lt;tr&gt;&lt;th&gt;排名&lt;/th&gt;&lt;th&gt;站点&lt;/th&gt;&lt;th&gt;关键词&lt;/th&gt;&lt;th&gt;关键词中文翻译&lt;/th&gt;&lt;th&gt;Click Growth&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
     &lt;tbody id="keywordBody"&gt;&lt;/tbody&gt;
   &lt;/table&gt;&lt;/div&gt;
 &lt;/section&gt;
@@ -643,9 +643,8 @@ function renderProducts(){
  &lt;td&gt;${i+1}&lt;/td&gt;
  &lt;td&gt;${x.image?`&lt;img class="thumb" src="${esc(x.image)}" loading="lazy"&gt;`:'—'}&lt;/td&gt;
  &lt;td&gt;${esc(x.itemid)}&lt;/td&gt;&lt;td&gt;${esc(x.site)}&lt;/td&gt;
- &lt;td&gt;&lt;div class="cat"&gt;${esc([x.l3,x.l4].filter(Boolean).join(' › '))}&lt;/div&gt;&lt;/td&gt;
  &lt;td&gt;${price(x.price)}&lt;/td&gt;&lt;td&gt;${adoRange(x.ado)}&lt;/td&gt;&lt;td&gt;${x.adg?'$'+adgRange(x.adg):'—'}&lt;/td&gt;
- &lt;td&gt;${momCell(x.ado_mom)}&lt;/td&gt;&lt;td&gt;${momCell(x.adg_mom)}&lt;/td&gt;&lt;/tr&gt;`).join('')||'&lt;tr&gt;&lt;td colspan="10" class="empty"&gt;暂无数据&lt;/td&gt;&lt;/tr&gt;';
+ &lt;td&gt;${momCell(x.ado_mom)}&lt;/td&gt;&lt;td&gt;${momCell(x.adg_mom)}&lt;/td&gt;&lt;/tr&gt;`).join('')||'&lt;tr&gt;&lt;td colspan="9" class="empty"&gt;暂无数据&lt;/td&gt;&lt;/tr&gt;';
 }
 function renderKeywords(){
  const card=$('keywordCard');
@@ -653,7 +652,7 @@ function renderKeywords(){
  card.style.display='block';
  const site=$('siteFilter').value;
  let d=phoneData.keywords.filter(x=&gt;!site||x.site===site).slice().sort((a,b)=&gt;Number(b.clicks||0)-Number(a.clicks||0)).slice(0,10);
- $('keywordBody').innerHTML=d.map((x,i)=&gt;`&lt;tr&gt;&lt;td&gt;${i+1}&lt;/td&gt;&lt;td&gt;${esc(x.site)}&lt;/td&gt;&lt;td class="kw"&gt;${esc(x.keyword)}&lt;/td&gt;&lt;td class="kw"&gt;${esc(x.zh||x.keyword)}&lt;/td&gt;&lt;td class="click-val"&gt;${Number(x.clicks||0).toFixed(1)}&lt;/td&gt;&lt;td&gt;${momCell(x.growth)}&lt;/td&gt;&lt;/tr&gt;`).join('')||'&lt;tr&gt;&lt;td colspan="6" class="empty"&gt;暂无关键词数据&lt;/td&gt;&lt;/tr&gt;';
+ $('keywordBody').innerHTML=d.map((x,i)=&gt;`&lt;tr&gt;&lt;td&gt;${i+1}&lt;/td&gt;&lt;td&gt;${esc(x.site)}&lt;/td&gt;&lt;td class="kw"&gt;${esc(x.keyword)}&lt;/td&gt;&lt;td class="kw"&gt;${esc(x.zh||'—')}&lt;/td&gt;&lt;td&gt;${momCell(x.growth)}&lt;/td&gt;&lt;/tr&gt;`).join('')||'&lt;tr&gt;&lt;td colspan="5" class="empty"&gt;暂无关键词数据&lt;/td&gt;&lt;/tr&gt;';
 }
 function renderAll(){renderBubbles();refillSites();renderProducts();renderKeywords()}
 async function load(){
@@ -682,14 +681,27 @@ window.addEventListener('load',load);
 </textarea>
 <textarea id="trendSource" class="source-holder">
 &lt;!DOCTYPE html&gt;&lt;html lang="zh-CN"&gt;&lt;head&gt;&lt;meta charset="UTF-8"&gt;&lt;meta name="viewport" content="width=device-width,initial-scale=1.0"&gt;&lt;title&gt;Shopee EL 类目趋势分享&lt;/title&gt;&lt;style&gt;
-:root{--p:#EE4D2D;--pd:#d73211;--bg:#faf8f9;--text:#2d2038;--muted:#9b8fa0;--border:#f0e8ed}*{box-sizing:border-box;margin:0;padding:0}body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',Arial;background:var(--bg);color:var(--text)}header{background:linear-gradient(135deg,#FF6633,#EE4D2D 50%,#D02D11);color:#fff;padding:36px 40px 28px}.inner,.container{max-width:1280px;margin:auto}.inner{position:relative}h1{font-family:Georgia,serif;font-size:32px}.desc{margin-top:14px;max-width:820px;background:#0000001a;padding:12px 16px;border-radius:8px;font-size:13px;line-height:1.8;border-left:3px solid #ffffffb3}.page-nav{display:flex;gap:8px;margin-top:17px;flex-wrap:wrap}.page-nav a{color:#fff;text-decoration:none;font-size:13px;font-weight:700;padding:8px 14px;border-radius:999px;border:1px solid #ffffff59}.page-nav a.active{background:#fff;color:var(--pd)}.update{position:absolute;right:0;top:0;background:#ffffff26;padding:6px 12px;border-radius:30px;font-size:12px}.container{padding:28px 24px}.list{display:flex;flex-direction:column;gap:22px}.article{background:#fff;border:1px solid var(--border);border-radius:18px;padding:26px}.meta{display:none}.txt{white-space:pre-wrap;line-height:1.9;font-size:14px}.imgs{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:18px}.imgs img{width:100%;max-height:520px;object-fit:contain;background:#fffafa;border:1px solid var(--border);border-radius:12px;cursor:zoom-in}.empty{padding:60px;text-align:center;color:var(--muted)}#modal{display:none;position:fixed;inset:0;background:#140e18e8;z-index:9999;align-items:center;justify-content:center}#modal.show{display:flex}#modal img{max-width:94vw;max-height:90vh;background:#fff;border-radius:14px}footer{text-align:center;color:var(--muted);font-size:11px;padding:36px}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;
-&lt;header&gt;&lt;div class="inner"&gt;&lt;h1&gt;Shopee EL 类目趋势分享&lt;/h1&gt;&lt;div class="desc"&gt;✨ 类目趋势动态分享，聚焦多站点天气与区域事件，帮你快速捕捉类目增长信号&lt;br&gt;📊 以 MoM 与 YoY 双维度展示类目及子类目整体表现&lt;br&gt;🌏 分站点拆解驱动因素，快速定位高潜力市场&lt;/div&gt;&lt;nav class="page-nav"&gt;&lt;a href="#" onclick="parent.switchPage('sku');return false"&gt;🔥 热门 SKU&lt;/a&gt;&lt;a href="#" onclick="parent.switchPage('phonecase');return false"&gt;📱 手机壳类目分享&lt;/a&gt;&lt;a class="active" href="#" onclick="parent.switchPage('trend');return false"&gt;📈 类目趋势分享&lt;/a&gt;&lt;a href="#" onclick="parent.switchPage('category');return false"&gt;📊 类目大盘&lt;/a&gt;&lt;/nav&gt;&lt;div class="update" id="update"&gt;数据加载中...&lt;/div&gt;&lt;/div&gt;&lt;/header&gt;
+:root{--p:#EE4D2D;--pd:#d73211;--bg:#faf8f9;--text:#2d2038;--muted:#9b8fa0;--border:#f0e8ed}*{box-sizing:border-box;margin:0;padding:0}body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',Arial;background:var(--bg);color:var(--text)}header{background:linear-gradient(135deg,#FF6633,#EE4D2D 50%,#D02D11);color:#fff;padding:36px 40px 28px}.inner,.container{max-width:1280px;margin:auto}.inner{position:relative}h1{font-family:Georgia,serif;font-size:32px}.badge{font:600 11px sans-serif;background:#ffffff38;padding:5px 10px;border-radius:20px;margin-left:8px;vertical-align:middle}.desc{margin-top:14px;max-width:820px;background:#0000001a;padding:12px 16px;border-radius:8px;font-size:13px;line-height:1.8;border-left:3px solid #ffffffb3}.page-nav{display:flex;gap:8px;margin-top:17px;flex-wrap:wrap}.page-nav a{color:#fff;text-decoration:none;font-size:13px;font-weight:700;padding:8px 14px;border-radius:999px;border:1px solid #ffffff59}.page-nav a.active{background:#fff;color:var(--pd)}.update{position:absolute;right:0;top:0;background:#ffffff26;padding:6px 12px;border-radius:30px;font-size:12px}.container{padding:28px 24px}.list{display:flex;flex-direction:column;gap:22px}.article{background:#fff;border:1px solid var(--border);border-radius:18px;padding:26px}.meta{display:none}.txt{white-space:pre-wrap;line-height:1.9;font-size:14px}.imgs{display:block;margin-top:18px}.imgs img{display:block;margin:0 auto 18px;width:100%;max-height:520px;object-fit:contain;background:#fffafa;border:1px solid var(--border);border-radius:12px;cursor:zoom-in}.empty{padding:60px;text-align:center;color:var(--muted)}#modal{display:none;position:fixed;inset:0;background:#140e18e8;z-index:9999;align-items:center;justify-content:center}#modal.show{display:flex}#modal img{max-width:94vw;max-height:90vh;background:#fff;border-radius:14px}footer{text-align:center;color:var(--muted);font-size:11px;padding:36px}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;
+&lt;header&gt;&lt;div class="inner"&gt;&lt;h1&gt;Shopee EL 类目趋势分享 &lt;span class="badge"&gt;External&lt;/span&gt;&lt;/h1&gt;&lt;div class="desc"&gt;✨ 类目趋势动态分享，聚焦多站点天气与区域事件，帮你快速捕捉类目增长信号&lt;br&gt;📊 以 MoM 与 YoY 双维度展示类目及子类目整体表现&lt;br&gt;🌏 分站点拆解驱动因素，快速定位高潜力市场&lt;/div&gt;&lt;nav class="page-nav"&gt;&lt;a href="#" onclick="parent.switchPage('sku');return false"&gt;🔥 热门 SKU&lt;/a&gt;&lt;a href="#" onclick="parent.switchPage('phonecase');return false"&gt;📱 手机壳类目分享&lt;/a&gt;&lt;a class="active" href="#" onclick="parent.switchPage('trend');return false"&gt;📈 类目趋势分享&lt;/a&gt;&lt;a href="#" onclick="parent.switchPage('category');return false"&gt;📊 类目大盘&lt;/a&gt;&lt;/nav&gt;&lt;div class="update" id="update"&gt;数据加载中...&lt;/div&gt;&lt;/div&gt;&lt;/header&gt;
 &lt;main class="container"&gt;&lt;div id="content" class="list"&gt;&lt;div class="empty"&gt;内容加载中...&lt;/div&gt;&lt;/div&gt;&lt;/main&gt;&lt;div id="modal"&gt;&lt;img id="modalImg"&gt;&lt;/div&gt;&lt;footer&gt;Shopee EL 选品指南 · 类目趋势分享&lt;/footer&gt;
-&lt;script&gt;const URL='./category_content.json',$=id=&gt;document.getElementById(id),esc=s=&gt;String(s??'').replace(/[&amp;&lt;&gt;"']/g,c=&gt;({'&amp;':'&amp;amp;','&lt;':'&amp;lt;','&gt;':'&amp;gt;','"':'&amp;quot;',"'":'&amp;#39;'}[c]));function block(b){
+&lt;script&gt;const URL='./category_content.json',$=id=&gt;document.getElementById(id),esc=s=&gt;String(s??'').replace(/[&amp;&lt;&gt;"']/g,c=&gt;({'&amp;':'&amp;amp;','&lt;':'&amp;lt;','&gt;':'&amp;gt;','"':'&amp;quot;',"'":'&amp;#39;'}[c]));function block(b,isFirstBlock){
   const text=(b.text||'').trim();
+  let textHtml='';
+  if(text){
+    if(isFirstBlock){
+      const lines=text.split(/\r?\n/);
+      const first=(lines.shift()||'').trim();
+      const rest=lines.join('\n').trim();
+      textHtml=`&lt;div class="txt"&gt;${first?`&lt;strong&gt;${esc(first)}&lt;/strong&gt;`:''}${rest?`\n${esc(rest)}`:''}&lt;/div&gt;`;
+    }else{
+      textHtml=`&lt;div class="txt"&gt;${esc(text)}&lt;/div&gt;`;
+    }
+  }
   const imgs=(b.images||[]).map(x=&gt;`&lt;img src="${esc(x)}" loading="lazy" alt="类目趋势图片"&gt;`).join('');
-  return `&lt;article class="article"&gt;${text?`&lt;div class="txt"&gt;${esc(text)}&lt;/div&gt;`:''}${imgs?`&lt;div class="imgs"&gt;${imgs}&lt;/div&gt;`:''}&lt;/article&gt;`;
-}async function load(){try{const r=await fetch(URL+'?t='+Date.now(),{cache:'no-store'});if(!r.ok)throw Error('HTTP '+r.status);const j=await r.json();const bs=(j.blocks||[]).filter(b=&gt;(b.text||'').trim()||(b.images||[]).length);$('content').innerHTML=bs.length?bs.map(block).join(''):'&lt;div class="empty"&gt;暂无同步内容&lt;/div&gt;';$('update').textContent='内容更新: '+(j.updated_at||'—')}catch(e){$('content').innerHTML='&lt;div class="empty"&gt;内容加载失败：'+esc(e.message)+'&lt;/div&gt;';$('update').textContent='数据加载失败'}}$('content').onclick=e=&gt;{const im=e.target.closest('.imgs img');if(im){$('modalImg').src=im.src;$('modal').classList.add('show')}};$('modal').onclick=()=&gt;{$('modal').classList.remove('show')};window.onload=load;&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;
+  return `&lt;article class="article"&gt;${textHtml}${imgs?`&lt;div class="imgs"&gt;${imgs}&lt;/div&gt;`:''}&lt;/article&gt;`;
+}async function load(){try{const r=await fetch(URL+'?t='+Date.now(),{cache:'no-store'});if(!r.ok)throw Error('HTTP '+r.status);const j=await r.json();const bs=(j.blocks||[]).filter(b=&gt;(b.text||'').trim()||(b.images||[]).length);$('content').innerHTML=bs.length?bs.map((b,i)=&gt;block(b,i===0)).join(''):'&lt;div class="empty"&gt;暂无同步内容&lt;/div&gt;';const rawDate=j.updated_at||'';
+    const dateOnly=rawDate?rawDate.slice(0,10):'—';
+    $('update').textContent='内容更新: '+dateOnly}catch(e){$('content').innerHTML='&lt;div class="empty"&gt;内容加载失败：'+esc(e.message)+'&lt;/div&gt;';$('update').textContent='数据加载失败'}}$('content').onclick=e=&gt;{const im=e.target.closest('.imgs img');if(im){$('modalImg').src=im.src;$('modal').classList.add('show')}};$('modal').onclick=()=&gt;{$('modal').classList.remove('show')};window.onload=load;&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;
 </textarea>
 <textarea id="categorySource" class="source-holder">
 &lt;!DOCTYPE html&gt;
