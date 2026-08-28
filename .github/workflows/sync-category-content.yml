@@ -30,10 +30,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install openpyxl pillow
 
-      - name: Download latest Google Sheet as XLSX
+      - name: Download published Google Sheet as XLSX
         run: |
           curl -L --fail --retry 3 --retry-delay 5 \
-            "https://docs.google.com/spreadsheets/d/19lDqIMFevcPr7QwYKuopEB1H-uQWK3s3NDKYQybwPfg/export?format=xlsx" \
+            "https://docs.google.com/spreadsheets/d/e/2PACX-1vQfzzSQX034XjZOdgE_FGg8QuIVLdjxTaVqQqN58vI7i3sL4Pr2FhP6qM9PKjL2fYAK136q7TeMeq49/pub?output=xlsx" \
             -o category_source.xlsx
 
           test -s category_source.xlsx
@@ -72,7 +72,7 @@ jobs:
           )
           PY
 
-      - name: Publish staged output atomically
+      - name: Publish staged output
         run: |
           rm -rf category_assets.new
           mv .category_sync_tmp/category_assets category_assets.new
