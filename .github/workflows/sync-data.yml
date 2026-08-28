@@ -110,15 +110,15 @@ jobs:
 
           # ============================================================
           # Phone Case page
-          # Source tab: EL HOT ITEM
-          # gid = 759893186
+          # Source tab: 手机壳飙升词
+          # gid = 1028592925
           # CB products: A:R
           # CNLS products: U:AM
           # Keywords: AP:AY
           # ============================================================
 
-          item_url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT2Z61Z0LxqcTmhjJe5KS_PimpDY4bM-aODeY0CuL9z3EX233KOqWMkXWJteyXQkexOMSqIO3O3rMI-/pub?gid=759893186&single=true&output=csv"
-          item_rows = fetch_csv(item_url, "PHONE_CASE")
+          item_url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT2Z61Z0LxqcTmhjJe5KS_PimpDY4bM-aODeY0CuL9z3EX233KOqWMkXWJteyXQkexOMSqIO3O3rMI-/pub?gid=1028592925&single=true&output=csv"
+          item_rows = fetch_csv(item_url, "PHONE_CASE_手机壳飙升词")
 
           TARGET_L4 = "Phone Cases, Covers, & Skins"
 
@@ -198,6 +198,11 @@ jobs:
 
           cb_products = dedupe_products(cb_products)
           cnls_products = dedupe_products(cnls_products)
+
+          if not cb_products and not cnls_products:
+              raise Exception(
+                  "PHONE_CASE 数据为空：请检查手机壳飙升词 tab 的 gid、发布状态及列范围"
+              )
 
           # De-duplicate keyword rows by site + keyword.
           # If duplicated, keep the row with the highest Item Click.
