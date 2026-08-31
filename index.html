@@ -665,6 +665,12 @@ function renderKeywords(){
  const elementExtra=all
    .slice(10)
    .filter(x=&gt;x.keyword_type==='element'&amp;&amp;!topKeys.has(`${x.site}||${x.keyword}`))
+   // Trendy IP/character factors first (蜘蛛侠 / 吉伊卡哇 / Hello Kitty...),
+   // then other style elements; within the same priority use Item Click.
+   .sort((a,b)=&gt;
+      Number(b.element_priority||0)-Number(a.element_priority||0) ||
+      Number(b.clicks||0)-Number(a.clicks||0)
+   )
    .slice(0,5);
 
  const d=[...top10,...elementExtra];
