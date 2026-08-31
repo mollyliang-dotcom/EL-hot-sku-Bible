@@ -301,8 +301,12 @@ jobs:
                       norm = re.sub(r"(?i)\bultra\b", "Ultra", norm)
                       return f"{norm} 手机壳"
 
-                  # Generic case query.
-                  return "手机壳"
+                  # Generic/non-model case keyword:
+                  # KEEP AY so trendy elements such as 蜘蛛侠 / Hello Kitty /
+                  # 吉伊卡哇 / BTS are not collapsed into a generic "手机壳".
+                  # Only correct obvious machine-translation mistakes for "case".
+                  out = re.sub(r"案件|案例|箱子|盒子", "手机壳", out)
+                  return out
 
               # If it is not clearly a phone-case term, keep AY unchanged.
               return out
@@ -405,13 +409,30 @@ jobs:
                   # Same site + same normalized model = duplicate.
                   key = (x["site"], "MODEL", model_key)
               else:
-                  # Non-model keywords still use normalized Chinese translation.
+                  # Non-model keywords are the trendy-element pool.
+                  # Build a semantic element key from AY:
+                  #   蜘蛛侠 / 蜘蛛侠手机壳 / 蜘蛛侠保护壳 -> 蜘蛛侠
+                  #   Hello Kitty iPhone手机壳 -> hello kitty
+                  # This keeps the element itself while removing generic
+                  # phone/case wording. Same element is de-duped only within
+                  # the same site, keeping the highest Item Click.
+                  zh_key = str(x.get("zh") or "").strip().lower()
                   zh_key = re.sub(
-                      r"\\s+",
+                      r"手机壳|手機殼|保护壳|保護殼|手机保护壳|"
+                      r"案件|案例|箱子|盒子",
                       "",
-                      str(x.get("zh") or "").strip().lower()
+                      zh_key
                   )
-                  key = (x["site"], "TEXT", zh_key)
+                  zh_key = re.sub(r"(?i)\biphone\b", "", zh_key)
+                  zh_key = re.sub(r"(?i)\bphone\b", "", zh_key)
+                  zh_key = re.sub(r"[\s·|/,_\-]+", "", zh_key)
+
+                  # If stripping generic words leaves nothing, keep a stable
+                  # generic key rather than dropping the row.
+                  if not zh_key:
+                      zh_key = "generic-phone-case"
+
+                  key = (x["site"], "ELEMENT", zh_key)
 
               prev = kw_map.get(key)
               if prev is None or x["clicks"] > prev["clicks"]:
