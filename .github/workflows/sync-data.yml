@@ -507,7 +507,9 @@ jobs:
                   "airpod", "airpods",
                   "earbud", "earbuds",
                   "headphone", "headphones",
+                  "kindle",
                   "平板", "耳机", "耳機", "耳塞",
+                  "电子书", "電子書", "阅读器", "閱讀器",
               ]
               return any(term in raw for term in blocked)
 
