@@ -136,7 +136,7 @@ jobs:
           # AI link / AJ image / AK L3 / AL L4
           #
           # Keywords AP:AY
-          # AQ site / AS L2 / AT keyword / AV item click / AX click growth / AY Chinese translation
+          # AQ site / AS L2 / AT keyword / AV item click / AX click growth / AY Chinese translation / AY Chinese translation
 
           for row in item_rows[1:]:
 
@@ -193,7 +193,7 @@ jobs:
                       "keyword": keyword,
                       "clicks": clean_num(cell(row, 47)),    # AV
                       "growth": clean_pct(cell(row, 49)),    # AX
-                      "zh": cell(row, 50) or keyword,        # AY
+                      "zh": cell(row, 50),                   # AY - strict source, no fallback
                   })
 
           cb_products = dedupe_products(cb_products)
@@ -204,15 +204,30 @@ jobs:
                   "PHONE_CASE 数据为空：请检查手机壳飙升词 tab 的 gid、发布状态及列范围"
               )
 
-          # De-duplicate keyword rows by site + keyword.
+          # De-duplicate keyword rows by site + AY Chinese translation.
+          # Same translated phone-case model within the same site is treated
+          # as the same keyword; different sites are kept separately.
           # If duplicated, keep the row with the highest Item Click.
           kw_map = {}
           for x in keywords:
-              key = (x["site"], x["keyword"].strip().lower())
+              zh_key = str(x.get("zh") or "").strip().lower()
+              key = (x["site"], zh_key)
               prev = kw_map.get(key)
               if prev is None or x["clicks"] > prev["clicks"]:
                   kw_map[key] = x
           keywords = list(kw_map.values())
+
+          # Strict validation: Chinese translation must come from AY only.
+          # Never substitute AT/original keyword into the Chinese column.
+          missing_zh = [
+              x for x in keywords
+              if not str(x.get("zh") or "").strip()
+          ]
+          if missing_zh:
+              sample = ", ".join(x["keyword"] for x in missing_zh[:5])
+              raise Exception(
+                  f"PHONE_CASE AY中文翻译为空: {len(missing_zh)} rows; sample: {sample}"
+              )
 
           phonecase_data = {
               "category": TARGET_L4,
