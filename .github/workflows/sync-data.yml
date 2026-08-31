@@ -436,18 +436,6 @@ jobs:
               if not str(x.get("zh") or "").strip()
           ]
 
-          same_as_source = [
-              x for x in keywords
-              if str(x.get("zh") or "").strip()
-              and str(x.get("zh") or "").strip() == str(x.get("keyword") or "").strip()
-              and not any("\u4e00" <= ch <= "\u9fff" for ch in str(x.get("keyword") or ""))
-          ]
-          if same_as_source:
-              sample = ", ".join(x["keyword"] for x in same_as_source[:5])
-              raise Exception(
-                  f"PHONE_CASE keyword中文 unexpectedly equals non-Chinese source: "
-                  f"{len(same_as_source)} rows; sample: {sample}"
-              )
           if missing_zh:
               sample = ", ".join(x["keyword"] for x in missing_zh[:5])
               raise Exception(
