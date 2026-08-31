@@ -522,6 +522,35 @@ jobs:
               )
           ]
 
+          def trendy_priority(keyword, zh, element_key):
+              raw = f"{keyword or ''} {zh or ''} {element_key or ''}".lower()
+
+              # IP / character / fandom factors should be surfaced before
+              # generic styles such as mirror, anti-drop, magnetic, etc.
+              ip_aliases = [
+                  "spiderman", "spider man", "蜘蛛人", "蜘蛛侠",
+                  "hello kitty", "hellokitty",
+                  "吉伊卡哇", "chiikawa",
+                  "bts",
+                  "kuromi", "酷洛米", "库洛米",
+                  "sanrio", "三丽鸥",
+                  "disney", "迪士尼",
+                  "mickey", "米奇",
+                  "minnie", "米妮",
+                  "stitch", "史迪奇",
+                  "pokemon", "pokémon", "宝可梦",
+                  "snoopy", "史努比",
+                  "batman", "蝙蝠侠",
+                  "marvel", "漫威",
+                  "my melody",
+                  "cinnamoroll",
+              ]
+              if any(x in raw for x in ip_aliases):
+                  return 2
+
+              # Other real style/brand/trend factors remain eligible, but lower.
+              return 1 if element_key else 0
+
           for x in keywords:
               model_key = phone_model_key(x.get("keyword"), x.get("zh"))
               element_key = trend_element_key(x.get("keyword"), x.get("zh"))
@@ -529,12 +558,19 @@ jobs:
               if model_key:
                   x["keyword_type"] = "model"
                   x["element_key"] = ""
+                  x["element_priority"] = 0
               elif element_key:
                   x["keyword_type"] = "element"
                   x["element_key"] = element_key
+                  x["element_priority"] = trendy_priority(
+                      x.get("keyword"),
+                      x.get("zh"),
+                      element_key
+                  )
               else:
                   x["keyword_type"] = "generic"
                   x["element_key"] = ""
+                  x["element_priority"] = 0
 
           # Second pass for element rows: same site + same element is one trend.
           # Keep the highest Item Click occurrence.
