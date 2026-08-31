@@ -120,6 +120,36 @@ jobs:
           item_url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT2Z61Z0LxqcTmhjJe5KS_PimpDY4bM-aODeY0CuL9z3EX233KOqWMkXWJteyXQkexOMSqIO3O3rMI-/pub?gid=1028592925&single=true&output=csv"
           item_rows = fetch_csv(item_url, "PHONE_CASE_手机壳飙升词")
 
+          # Resolve keyword columns from the CSV header instead of relying on
+          # hard-coded positions. AY / "keyword中文" is the ONLY source for zh.
+          if not item_rows:
+              raise Exception("PHONE_CASE CSV is empty")
+
+          item_header = [str(x or "").strip() for x in item_rows[0]]
+
+          def header_idx(name):
+              try:
+                  return item_header.index(name)
+              except ValueError:
+                  raise Exception(f"PHONE_CASE missing required column: {name}")
+
+          KW_SITE_IDX = header_idx("grass_region")
+          KW_L2_IDX = header_idx("level2_global_be_category")
+          KW_TEXT_IDX = header_idx("keyword")
+          KW_CLICK_IDX = header_idx("current_daily_item_click(SUM)")
+          KW_GROWTH_IDX = header_idx("daily_item_click_growth(SUM)")
+          KW_ZH_IDX = header_idx("keyword中文")
+
+          print(
+              "Keyword columns:",
+              "site=", KW_SITE_IDX,
+              "L2=", KW_L2_IDX,
+              "keyword=", KW_TEXT_IDX,
+              "click=", KW_CLICK_IDX,
+              "growth=", KW_GROWTH_IDX,
+              "zh=", KW_ZH_IDX
+          )
+
           TARGET_L4 = "Phone Cases, Covers, & Skins"
 
           cb_products = []
@@ -177,9 +207,9 @@ jobs:
                   })
 
               # ---------------- Keywords ----------------
-              keyword = cell(row, 45)      # AT
-              site = cell(row, 42)         # AQ
-              keyword_l2 = cell(row, 44)   # AS
+              keyword = cell(row, KW_TEXT_IDX)      # AT / keyword
+              site = cell(row, KW_SITE_IDX)          # AQ / grass_region
+              keyword_l2 = cell(row, KW_L2_IDX)      # AS / level2_global_be_category
 
               # Phone-case keyword scope:
               # L2 = Accessories-Cases, Covers, & Skins
@@ -191,9 +221,9 @@ jobs:
                   keywords.append({
                       "site": site,
                       "keyword": keyword,
-                      "clicks": clean_num(cell(row, 47)),    # AV
-                      "growth": clean_pct(cell(row, 49)),    # AX
-                      "zh": cell(row, 50),                   # AY - strict source, no fallback
+                      "clicks": clean_num(cell(row, KW_CLICK_IDX)),     # AV
+                      "growth": clean_pct(cell(row, KW_GROWTH_IDX)),  # AX
+                      "zh": cell(row, KW_ZH_IDX),                      # AY / keyword中文 ONLY
                   })
 
           cb_products = dedupe_products(cb_products)
@@ -400,6 +430,19 @@ jobs:
               x for x in keywords
               if not str(x.get("zh") or "").strip()
           ]
+
+          same_as_source = [
+              x for x in keywords
+              if str(x.get("zh") or "").strip()
+              and str(x.get("zh") or "").strip() == str(x.get("keyword") or "").strip()
+              and not any("\u4e00" <= ch <= "\u9fff" for ch in str(x.get("keyword") or ""))
+          ]
+          if same_as_source:
+              sample = ", ".join(x["keyword"] for x in same_as_source[:5])
+              raise Exception(
+                  f"PHONE_CASE keyword中文 unexpectedly equals non-Chinese source: "
+                  f"{len(same_as_source)} rows; sample: {sample}"
+              )
           if missing_zh:
               sample = ", ".join(x["keyword"] for x in missing_zh[:5])
               raise Exception(
@@ -439,3 +482,4 @@ jobs:
 
           git commit -m "Auto sync data"
           git push
+
