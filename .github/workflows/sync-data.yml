@@ -301,8 +301,13 @@ jobs:
                       norm = re.sub(r"(?i)\bultra\b", "Ultra", norm)
                       return f"{norm} 手机壳"
 
-                  # Generic case query.
-                  return "手机壳"
+                  # Generic/non-model case keyword:
+                  # KEEP AY so theme/IP words survive, e.g.
+                  # 吉伊卡哇 手機殼 -> 吉伊卡哇 手机壳
+                  # 蜘蛛人手機殼 -> 蜘蛛人手机壳
+                  # Only fix obvious MT mistakes for "case".
+                  out = re.sub(r"案件|案例|箱子|盒子", "手机壳", out)
+                  return out
 
               # If it is not clearly a phone-case term, keep AY unchanged.
               return out
@@ -508,8 +513,10 @@ jobs:
                   "earbud", "earbuds",
                   "headphone", "headphones",
                   "kindle",
+                  "airtag", "smarttag", "smart tag",
                   "平板", "耳机", "耳機", "耳塞",
                   "电子书", "電子書", "阅读器", "閱讀器",
+                  "追踪器", "追蹤器", "定位器",
               ]
               return any(term in raw for term in blocked)
 
