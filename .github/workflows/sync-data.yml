@@ -384,6 +384,16 @@ jobs:
 
           keywords = list(kw_map.values())
 
+          # Tag retained keywords for frontend ranking:
+          # model   = a recognized phone/device model keyword
+          # element = a non-model keyword, used as trendy-element supplement
+          for x in keywords:
+              x["keyword_type"] = (
+                  "model"
+                  if phone_model_key(x.get("keyword"), x.get("zh"))
+                  else "element"
+              )
+
           # Strict validation: Chinese translation must come from AY only.
           # Never substitute AT/original keyword into the Chinese column.
           missing_zh = [
