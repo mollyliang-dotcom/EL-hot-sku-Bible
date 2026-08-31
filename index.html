@@ -648,7 +648,8 @@ function renderProducts(){
 }
 function renderKeywords(){
  const card=$('keywordCard');
- if(typ!=='CB'){card.style.display='none';return}
+ // Keyword data is site-level market data, so show the same module
+ // on both CB and CNLS. The site filter follows the active CB/CNLS tab.
  card.style.display='block';
  const site=$('siteFilter').value;
  let all=phoneData.keywords
