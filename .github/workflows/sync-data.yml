@@ -127,18 +127,23 @@ jobs:
 
           item_header = [str(x or "").strip() for x in item_rows[0]]
 
-          def header_idx(name):
-              try:
-                  return item_header.index(name)
-              except ValueError:
-                  raise Exception(f"PHONE_CASE missing required column: {name}")
+          # IMPORTANT: this sheet contains repeated header names in the
+          # CB / CNLS / keyword sections. Keyword fields must be resolved
+          # ONLY inside AP:AY (0-based columns 41:50).
+          def keyword_header_idx(name):
+              for idx in range(41, min(len(item_header), 51)):
+                  if item_header[idx] == name:
+                      return idx
+              raise Exception(
+                  f"PHONE_CASE keyword section AP:AY missing required column: {name}"
+              )
 
-          KW_SITE_IDX = header_idx("grass_region")
-          KW_L2_IDX = header_idx("level2_global_be_category")
-          KW_TEXT_IDX = header_idx("keyword")
-          KW_CLICK_IDX = header_idx("current_daily_item_click(SUM)")
-          KW_GROWTH_IDX = header_idx("daily_item_click_growth(SUM)")
-          KW_ZH_IDX = header_idx("keyword中文")
+          KW_SITE_IDX = keyword_header_idx("grass_region")                    # AQ
+          KW_L2_IDX = keyword_header_idx("level2_global_be_category")         # AS
+          KW_TEXT_IDX = keyword_header_idx("keyword")                         # AT
+          KW_CLICK_IDX = keyword_header_idx("current_daily_item_click(SUM)")  # AV
+          KW_GROWTH_IDX = keyword_header_idx("daily_item_click_growth(SUM)")  # AX
+          KW_ZH_IDX = keyword_header_idx("keyword中文")                        # AY
 
           print(
               "Keyword columns:",
@@ -482,4 +487,3 @@ jobs:
 
           git commit -m "Auto sync data"
           git push
-
