@@ -301,12 +301,8 @@ jobs:
                       norm = re.sub(r"(?i)\bultra\b", "Ultra", norm)
                       return f"{norm} 手机壳"
 
-                  # Generic/non-model case keyword:
-                  # KEEP AY so trendy elements such as 蜘蛛侠 / Hello Kitty /
-                  # 吉伊卡哇 / BTS are not collapsed into a generic "手机壳".
-                  # Only correct obvious machine-translation mistakes for "case".
-                  out = re.sub(r"案件|案例|箱子|盒子", "手机壳", out)
-                  return out
+                  # Generic case query.
+                  return "手机壳"
 
               # If it is not clearly a phone-case term, keep AY unchanged.
               return out
@@ -377,28 +373,6 @@ jobs:
               if m:
                   return f"fold|{m.group(1)}"
 
-              # iPad family. Preserve Air / Pro / Mini as different variants.
-              m = re.search(
-                  r"\\bipad(?:\\s*(air|pro|mini))?\\s*(\\d+(?:\\.\\d+)?)?",
-                  raw,
-                  flags=re.I
-              )
-              if m:
-                  variant = (m.group(1) or "base").lower()
-                  size_or_gen = m.group(2) or ""
-                  return f"ipad|{variant}|{size_or_gen}"
-
-              # AirPods family.
-              m = re.search(
-                  r"\\bairpods(?:\\s*(pro))?\\s*(\\d+)?",
-                  raw,
-                  flags=re.I
-              )
-              if m:
-                  variant = "pro" if m.group(1) else "base"
-                  gen = m.group(2) or ""
-                  return f"airpods|{variant}|{gen}"
-
               return ""
 
           kw_map = {}
@@ -409,30 +383,13 @@ jobs:
                   # Same site + same normalized model = duplicate.
                   key = (x["site"], "MODEL", model_key)
               else:
-                  # Non-model keywords are the trendy-element pool.
-                  # Build a semantic element key from AY:
-                  #   蜘蛛侠 / 蜘蛛侠手机壳 / 蜘蛛侠保护壳 -> 蜘蛛侠
-                  #   Hello Kitty iPhone手机壳 -> hello kitty
-                  # This keeps the element itself while removing generic
-                  # phone/case wording. Same element is de-duped only within
-                  # the same site, keeping the highest Item Click.
-                  zh_key = str(x.get("zh") or "").strip().lower()
+                  # Non-model keywords still use normalized Chinese translation.
                   zh_key = re.sub(
-                      r"手机壳|手機殼|保护壳|保護殼|手机保护壳|"
-                      r"案件|案例|箱子|盒子",
+                      r"\\s+",
                       "",
-                      zh_key
+                      str(x.get("zh") or "").strip().lower()
                   )
-                  zh_key = re.sub(r"(?i)\biphone\b", "", zh_key)
-                  zh_key = re.sub(r"(?i)\bphone\b", "", zh_key)
-                  zh_key = re.sub(r"[\s·|/,_\-]+", "", zh_key)
-
-                  # If stripping generic words leaves nothing, keep a stable
-                  # generic key rather than dropping the row.
-                  if not zh_key:
-                      zh_key = "generic-phone-case"
-
-                  key = (x["site"], "ELEMENT", zh_key)
+                  key = (x["site"], "TEXT", zh_key)
 
               prev = kw_map.get(key)
               if prev is None or x["clicks"] > prev["clicks"]:
@@ -440,15 +397,151 @@ jobs:
 
           keywords = list(kw_map.values())
 
-          # Tag retained keywords for frontend ranking:
-          # model   = a recognized phone/device model keyword
-          # element = a non-model keyword, used as trendy-element supplement
-          for x in keywords:
-              x["keyword_type"] = (
-                  "model"
-                  if phone_model_key(x.get("keyword"), x.get("zh"))
-                  else "element"
+          # ------------------------------------------------------------
+          # Tag retained keywords for frontend ranking.
+          #
+          # "element" means a REAL trendy/theme factor after removing:
+          # - phone/device model wording
+          # - generic product words such as phone case / tablet case / earbud case
+          #
+          # This prevents generic terms like "平板保护壳", "fold8手机壳",
+          # "iPad a16保护壳" from occupying the Top 11-15 element slots.
+          # ------------------------------------------------------------
+          def trend_element_key(keyword, zh):
+              raw = f"{keyword or ''} {zh or ''}".lower()
+
+              # Normalize separators.
+              raw = re.sub(r"[_|/,·\-]+", " ", raw)
+
+              # Remove common phone/device model families, including compact forms.
+              model_remove = [
+                  r"(?i)\b(?:iphone|ip)\s*\d{1,2}"
+                  r"(?:\s*pro)?(?:\s*max)?(?:\s*plus)?(?:\s*mini)?\b",
+                  r"(?i)\b(?:samsung\s*)?(?:galaxy\s*)?s\s*\d{1,2}"
+                  r"(?:\s*(?:ultra|plus|fe))?\b",
+                  r"(?i)\b(?:samsung\s*)?(?:galaxy\s*)?(?:z\s*)?fold\s*\d{1,2}\b",
+                  r"(?i)\bfold\s*\d{1,2}\b",
+                  r"(?i)\bipad(?:\s*(?:air|pro|mini))?"
+                  r"(?:\s*[a-z]?\d+(?:\.\d+)?)?(?:\s*inch|\s*吋|\s*寸)?\b",
+                  r"(?i)\bairpods(?:\s*pro)?(?:\s*\d+)?\b",
+                  r"(?i)\b(?:galaxy\s*)?buds(?:\s*\d+|\s*pro)?\b",
+              ]
+              for pat in model_remove:
+                  raw = re.sub(pat, " ", raw)
+
+              # Remove generic device/product wording.
+              generic_terms = [
+                  r"(?i)\bphone\b", r"(?i)\bmobile\b",
+                  r"(?i)\btablet\b", r"(?i)\bearbuds?\b",
+                  r"(?i)\bheadphones?\b",
+                  r"(?i)\bcase\b", r"(?i)\bcases\b",
+                  r"(?i)\bcasing\b", r"(?i)\bcover\b", r"(?i)\bcovers\b",
+                  r"手机壳", r"手機殼", r"保护壳", r"保護殼",
+                  r"平板保护壳", r"平板保護殼",
+                  r"耳机壳", r"耳機殼",
+                  r"手机", r"手機", r"平板", r"耳机", r"耳機",
+                  r"capinha", r"funda", r"ốp\s*lưng", r"ốp", r"เคส",
+              ]
+              for pat in generic_terms:
+                  raw = re.sub(pat, " ", raw)
+
+              # Remove common meaningless modifiers.
+              for pat in [
+                  r"(?i)\bofficial\b", r"(?i)\boriginal\b",
+                  r"(?i)\bnew\b", r"(?i)\bcheap\b",
+                  r"(?i)\bfor\b", r"(?i)\bwith\b",
+              ]:
+                  raw = re.sub(pat, " ", raw)
+
+              raw = re.sub(r"\s+", " ", raw).strip()
+
+              # Nothing meaningful left => not a trendy element.
+              if not raw:
+                  return ""
+
+              # Known element aliases are normalized for same-site de-duplication.
+              aliases = {
+                  "spiderman": "蜘蛛侠",
+                  "spider man": "蜘蛛侠",
+                  "蜘蛛人": "蜘蛛侠",
+                  "蜘蛛侠": "蜘蛛侠",
+                  "hello kitty": "hello kitty",
+                  "hellokitty": "hello kitty",
+                  "吉伊卡哇": "吉伊卡哇",
+                  "chiikawa": "吉伊卡哇",
+                  "bts": "bts",
+                  "kuromi": "kuromi",
+                  "酷洛米": "kuromi",
+                  "库洛米": "kuromi",
+                  "sanrio": "sanrio",
+                  "三丽鸥": "sanrio",
+                  "casetify": "casetify",
+                  "disney": "disney",
+                  "迪士尼": "disney",
+              }
+
+              for k, v in aliases.items():
+                  if k in raw:
+                      # Keep additional style factor if present, e.g. casetify pink.
+                      extra = raw.replace(k, " ").strip()
+                      extra = re.sub(r"\s+", " ", extra)
+                      return (v + (" " + extra if extra else "")).strip()
+
+              # Unknown residual words are still valid trend/style factors,
+              # e.g. pink, floral, glitter, cartoon, character names.
+              return raw
+
+          def is_non_phone_accessory_keyword(keyword, zh):
+              raw = f"{keyword or ''} {zh or ''}".lower()
+              # This page is phone-case only. Exclude tablet / earbuds / headphone
+              # case queries entirely from the keyword pool.
+              return bool(re.search(
+                  r"(?i)\\bipad\\b|\\btablet\\b|\\bairpods?\\b|"
+                  r"\\bearbuds?\\b|\\bheadphones?\\b|"
+                  r"平板|耳机|耳機|耳塞",
+                  raw
+              ))
+
+          # Remove non-phone accessory keywords before Top 10 / element supplement.
+          keywords = [
+              x for x in keywords
+              if not is_non_phone_accessory_keyword(
+                  x.get("keyword"),
+                  x.get("zh")
               )
+          ]
+
+          for x in keywords:
+              model_key = phone_model_key(x.get("keyword"), x.get("zh"))
+              element_key = trend_element_key(x.get("keyword"), x.get("zh"))
+
+              if model_key:
+                  x["keyword_type"] = "model"
+                  x["element_key"] = ""
+              elif element_key:
+                  x["keyword_type"] = "element"
+                  x["element_key"] = element_key
+              else:
+                  x["keyword_type"] = "generic"
+                  x["element_key"] = ""
+
+          # Second pass for element rows: same site + same element is one trend.
+          # Keep the highest Item Click occurrence.
+          final_keywords = []
+          element_map = {}
+
+          for x in keywords:
+              if x.get("keyword_type") != "element":
+                  final_keywords.append(x)
+                  continue
+
+              key = (x["site"], x.get("element_key", "").strip().lower())
+              prev = element_map.get(key)
+              if prev is None or x["clicks"] > prev["clicks"]:
+                  element_map[key] = x
+
+          final_keywords.extend(element_map.values())
+          keywords = final_keywords
 
           # Strict validation: Chinese translation must come from AY only.
           # Never substitute AT/original keyword into the Chinese column.
