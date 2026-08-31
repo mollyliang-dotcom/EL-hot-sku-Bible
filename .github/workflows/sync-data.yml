@@ -204,17 +204,184 @@ jobs:
                   "PHONE_CASE 数据为空：请检查手机壳飙升词 tab 的 gid、发布状态及列范围"
               )
 
-          # De-duplicate keyword rows by site + AY Chinese translation.
-          # Same translated phone-case model within the same site is treated
-          # as the same keyword; different sites are kept separately.
-          # If duplicated, keep the row with the highest Item Click.
+          # ------------------------------------------------------------
+          # Phone-case keyword translation normalization
+          # AY remains the source translation; this only fixes obvious
+          # category-context mistranslations while preserving model names.
+          # ------------------------------------------------------------
+          import re
+
+          def normalize_phonecase_translation(keyword, zh):
+              kw = str(keyword or "").strip()
+              out = str(zh or "").strip()
+
+              if not kw:
+                  return out
+
+              low = kw.lower()
+
+              # Preserve common device/model tokens from the original keyword.
+              model_patterns = [
+                  r"iphone\s*\d+(?:\s*(?:pro|max|plus|mini)){0,2}",
+                  r"z\s*fold\s*\d+",
+                  r"fold\s*\d+",
+                  r"s\d+\s*ultra",
+                  r"ipad(?:\s*air|\s*pro|\s*mini)?(?:\s*\d+(?:\.\d+)?)?(?:\s*inch)?",
+                  r"airpods(?:\s*pro)?(?:\s*\d+)?",
+              ]
+
+              models = []
+              for pat in model_patterns:
+                  for m in re.finditer(pat, low, flags=re.I):
+                      token = kw[m.start():m.end()].strip()
+                      if token and token.lower() not in [x.lower() for x in models]:
+                          models.append(token)
+
+              # In this fixed L2 phone-case scope, these terms mean phone case.
+              case_terms = [
+                  "case", "cases", "casing", "cover", "covers",
+                  "capinha", "funda", "ốp", "ốp lưng",
+                  "เคส", "手機殼", "手机壳", "保護殼", "保护壳"
+              ]
+              is_case = any(term in low for term in [
+                  "case", "casing", "cover", "capinha", "funda",
+                  "ốp", "เคส", "手機殼", "手机壳"
+              ])
+
+              if is_case:
+                  # For model-specific queries, construct a clean translation
+                  # from the original model name instead of trusting ambiguous MT.
+                  if models:
+                      # Prefer the longest/more specific model token.
+                      model = sorted(models, key=len, reverse=True)[0]
+                      # Normalize capitalization for the common product families.
+                      norm = model
+                      norm = re.sub(r"(?i)\biphone\b", "iPhone", norm)
+                      norm = re.sub(r"(?i)\bipad\b", "iPad", norm)
+                      norm = re.sub(r"(?i)\bairpods\b", "AirPods", norm)
+                      norm = re.sub(r"(?i)\bz\s*fold\b", "Z Fold", norm)
+                      norm = re.sub(r"(?i)\bfold\b", "Fold", norm)
+                      norm = re.sub(r"(?i)\bpro\b", "Pro", norm)
+                      norm = re.sub(r"(?i)\bmax\b", "Max", norm)
+                      norm = re.sub(r"(?i)\bultra\b", "Ultra", norm)
+                      return f"{norm} 手机壳"
+
+                  # Generic case query.
+                  return "手机壳"
+
+              # If it is not clearly a phone-case term, keep AY unchanged.
+              return out
+
+          for x in keywords:
+              x["zh"] = normalize_phonecase_translation(
+                  x.get("keyword"),
+                  x.get("zh")
+              )
+
+          # ------------------------------------------------------------
+          # Similar phone-model de-duplication within the SAME site.
+          #
+          # Examples treated as the same model:
+          #   iPhone 15 / iphone15 / ip 15  -> iphone|15|base
+          #
+          # Examples kept as different models:
+          #   iPhone 15      -> iphone|15|base
+          #   iPhone 15 Pro  -> iphone|15|pro
+          #   iPhone 15 Pro Max -> iphone|15|pro-max
+          #
+          # Different sites are NEVER merged.
+          # If several keywords map to the same model, keep the one with
+          # the highest Item Click.
+          # ------------------------------------------------------------
+          def phone_model_key(keyword, zh):
+              raw = f"{keyword or ''} {zh or ''}".lower()
+              raw = re.sub(r"[_\\-]+", " ", raw)
+              raw = re.sub(r"\\s+", " ", raw).strip()
+
+              # iPhone aliases: iphone / ip + generation number.
+              m = re.search(
+                  r"\\b(?:iphone|ip)\\s*(\\d{1,2})"
+                  r"(?:\\s*(pro))?"
+                  r"(?:\\s*(max))?"
+                  r"(?:\\s*(plus))?"
+                  r"(?:\\s*(mini))?\\b",
+                  raw,
+                  flags=re.I
+              )
+              if m:
+                  gen = m.group(1)
+                  variants = []
+                  if m.group(2):
+                      variants.append("pro")
+                  if m.group(3):
+                      variants.append("max")
+                  if m.group(4):
+                      variants.append("plus")
+                  if m.group(5):
+                      variants.append("mini")
+                  variant = "-".join(variants) if variants else "base"
+                  return f"iphone|{gen}|{variant}"
+
+              # Samsung Galaxy S-series, e.g. S26 / S26 Ultra / Galaxy S26 Ultra.
+              m = re.search(
+                  r"\\b(?:samsung\\s*)?(?:galaxy\\s*)?s\\s*(\\d{1,2})"
+                  r"(?:\\s*(ultra|plus|fe))?\\b",
+                  raw,
+                  flags=re.I
+              )
+              if m:
+                  return f"samsung-s|{m.group(1)}|{(m.group(2) or 'base').lower()}"
+
+              # Fold family: Fold 8 / Z Fold 8 / Samsung Fold 8 are treated
+              # as the same Fold generation unless another explicit variant exists.
+              m = re.search(r"\\b(?:samsung\\s*)?(?:galaxy\\s*)?(?:z\\s*)?fold\\s*(\\d{1,2})\\b", raw, flags=re.I)
+              if m:
+                  return f"fold|{m.group(1)}"
+
+              # iPad family. Preserve Air / Pro / Mini as different variants.
+              m = re.search(
+                  r"\\bipad(?:\\s*(air|pro|mini))?\\s*(\\d+(?:\\.\\d+)?)?",
+                  raw,
+                  flags=re.I
+              )
+              if m:
+                  variant = (m.group(1) or "base").lower()
+                  size_or_gen = m.group(2) or ""
+                  return f"ipad|{variant}|{size_or_gen}"
+
+              # AirPods family.
+              m = re.search(
+                  r"\\bairpods(?:\\s*(pro))?\\s*(\\d+)?",
+                  raw,
+                  flags=re.I
+              )
+              if m:
+                  variant = "pro" if m.group(1) else "base"
+                  gen = m.group(2) or ""
+                  return f"airpods|{variant}|{gen}"
+
+              return ""
+
           kw_map = {}
           for x in keywords:
-              zh_key = str(x.get("zh") or "").strip().lower()
-              key = (x["site"], zh_key)
+              model_key = phone_model_key(x.get("keyword"), x.get("zh"))
+
+              if model_key:
+                  # Same site + same normalized model = duplicate.
+                  key = (x["site"], "MODEL", model_key)
+              else:
+                  # Non-model keywords still use normalized Chinese translation.
+                  zh_key = re.sub(
+                      r"\\s+",
+                      "",
+                      str(x.get("zh") or "").strip().lower()
+                  )
+                  key = (x["site"], "TEXT", zh_key)
+
               prev = kw_map.get(key)
               if prev is None or x["clicks"] > prev["clicks"]:
                   kw_map[key] = x
+
           keywords = list(kw_map.values())
 
           # Strict validation: Chinese translation must come from AY only.
