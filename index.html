@@ -589,8 +589,8 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:36px;border-t
 &lt;/section&gt;
 
 &lt;section class="card keyword-card" id="keywordCard"&gt;
-  &lt;div class="title"&gt;热门关键词 Top 10&lt;/div&gt;
-  &lt;div class="note"&gt;跟随上方站点筛选 · 按 Item Click 降序排序&lt;/div&gt;
+  &lt;div class="title"&gt;热门关键词 Top 10 + Trendy 元素补充&lt;/div&gt;
+  &lt;div class="note"&gt;Top 10 按 Item Click 降序排序 · Top 10 以外补充非型号元素关键词 · 总数最多 15 个&lt;/div&gt;
   &lt;div class="wrap"&gt;&lt;table&gt;
     &lt;thead&gt;&lt;tr&gt;&lt;th&gt;排名&lt;/th&gt;&lt;th&gt;站点&lt;/th&gt;&lt;th&gt;关键词&lt;/th&gt;&lt;th&gt;关键词中文翻译&lt;/th&gt;&lt;th&gt;Click Growth&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
     &lt;tbody id="keywordBody"&gt;&lt;/tbody&gt;
@@ -651,7 +651,24 @@ function renderKeywords(){
  if(typ!=='CB'){card.style.display='none';return}
  card.style.display='block';
  const site=$('siteFilter').value;
- let d=phoneData.keywords.filter(x=&gt;!site||x.site===site).slice().sort((a,b)=&gt;Number(b.clicks||0)-Number(a.clicks||0)).slice(0,10);
+ let all=phoneData.keywords
+   .filter(x=&gt;!site||x.site===site)
+   .slice()
+   .sort((a,b)=&gt;Number(b.clicks||0)-Number(a.clicks||0));
+
+ // Main ranking: Top 10 by Item Click.
+ const top10=all.slice(0,10);
+
+ // Supplement only NON-MODEL keywords that are outside Top 10.
+ // Add as many as available, but at most 5 so total &lt;= 15.
+ const topKeys=new Set(top10.map(x=&gt;`${x.site}||${x.keyword}`));
+ const elementExtra=all
+   .slice(10)
+   .filter(x=&gt;x.keyword_type==='element'&amp;&amp;!topKeys.has(`${x.site}||${x.keyword}`))
+   .slice(0,5);
+
+ const d=[...top10,...elementExtra];
+
  $('keywordBody').innerHTML=d.map((x,i)=&gt;`&lt;tr&gt;&lt;td&gt;${i+1}&lt;/td&gt;&lt;td&gt;${esc(x.site)}&lt;/td&gt;&lt;td class="kw"&gt;${esc(x.keyword)}&lt;/td&gt;&lt;td class="kw"&gt;${esc(x.zh||'—')}&lt;/td&gt;&lt;td&gt;${momCell(x.growth)}&lt;/td&gt;&lt;/tr&gt;`).join('')||'&lt;tr&gt;&lt;td colspan="5" class="empty"&gt;暂无关键词数据&lt;/td&gt;&lt;/tr&gt;';
 }
 function renderAll(){renderBubbles();refillSites();renderProducts();renderKeywords()}
