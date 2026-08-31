@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<!-- Google Analytics 4 -->
+<!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q794R5X0RK"></script>
 <script>
-window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'G-Q794R5X0RK', {send_page_view:true});
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-Q794R5X0RK');
 </script>
 
 <meta charset="UTF-8">
@@ -960,30 +960,14 @@ window.addEventListener('load',load);
 &lt;/script&gt;&lt;/body&gt;&lt;/html&gt;
 </textarea>
 <script>
-function gaEvent(name, params={}){
-  try{ if(typeof gtag==='function') gtag('event',name,params); }catch(e){}
-}
-const SECTION_NAMES={sku:'热门 SKU',phonecase:'手机壳类目分享',trend:'类目趋势分享',category:'类目大盘'};
-
-function analyticsBridge(section){
-  const safeSection=JSON.stringify(section);
-  return '<script>(function(){'+
-    'const section='+safeSection+';'+
-    'function clean(v){return String(v||"").trim().replace(/\\\\s+/g," ").slice(0,100);}'+
-    'function send(type,data){try{parent.postMessage({source:"el-hot-sku-bible",section:section,type:type,data:data||{}},"*");}catch(e){}}'+
-    'document.addEventListener("change",function(e){const el=e.target;if(!el)return;if(el.tagName==="SELECT"){send("filter_change",{control:clean(el.id||el.name||"select"),value:clean(el.value),text:clean(el.options&&el.options[el.selectedIndex]?el.options[el.selectedIndex].text:"")});}},true);'+
-    'document.addEventListener("click",function(e){const el=e.target.closest("button,a,.tab,.thumb");if(!el)return;if(el.classList&&el.classList.contains("thumb")){const row=el.closest("tr");const cells=row?Array.from(row.querySelectorAll("td")).map(x=>clean(x.innerText)):[];send("product_image_click",{item_id:cells.length>2?cells[2]:"",site:cells.length>3?cells[3]:""});return;}const text=clean(el.innerText||el.getAttribute("aria-label")||el.title);if(text)send("ui_click",{control_id:clean(el.id),control_text:text});},true);'+
-    'let sent=false;const obs=new MutationObserver(function(){if(sent)return;const b=document.getElementById("keywordBody");if(b&&b.querySelector("tr")&&!b.innerText.includes("暂无关键词数据")){sent=true;send("keyword_module_view",{rows:b.querySelectorAll("tr").length});}});obs.observe(document.documentElement,{childList:true,subtree:true});'+
-  '})();<\\/script>';
-}
-function withBase(t,section){
+function withBase(t){
   const b=new URL('.',location.href).href;
-  return t.replace(/<head([^>]*)>/i,'<head$1><base href="'+b+'">'+analyticsBridge(section));
+  return t.replace(/<head([^>]*)>/i,'<head$1><base href="'+b+'">');
 }
-skuFrame.srcdoc=withBase(hotSkuSource.value.trim(),'sku');
-phoneCaseFrame.srcdoc=withBase(phoneCaseSource.value.trim(),'phonecase');
-trendFrame.srcdoc=withBase(trendSource.value.trim(),'trend');
-categoryFrame.srcdoc=withBase(categorySource.value.trim(),'category');
+skuFrame.srcdoc=withBase(hotSkuSource.value.trim());
+phoneCaseFrame.srcdoc=withBase(phoneCaseSource.value.trim());
+trendFrame.srcdoc=withBase(trendSource.value.trim());
+categoryFrame.srcdoc=withBase(categorySource.value.trim());
 
 function switchPage(p){
   skuFrame.classList.toggle('active',p==='sku');
@@ -991,21 +975,18 @@ function switchPage(p){
   trendFrame.classList.toggle('active',p==='trend');
   categoryFrame.classList.toggle('active',p==='category');
   history.replaceState(null,'','#'+p);
-  gaEvent('page_section_view',{section_name:p,section_title:SECTION_NAMES[p]||p,page_location:location.href});
+
+  // GA4: track the four main sections only.
+  if (typeof gtag === 'function') {
+    gtag('event', 'page_section_view', {
+      section_name: p,
+      page_location: window.location.href
+    });
+  }
 }
-window.addEventListener('message',function(e){
-  const m=e.data;if(!m||m.source!=='el-hot-sku-bible')return;
-  const c={section_name:m.section,section_title:SECTION_NAMES[m.section]||m.section};
-  if(m.type==='filter_change')gaEvent('filter_change',{...c,control:m.data.control||'',filter_value:m.data.value||'',filter_text:m.data.text||''});
-  else if(m.type==='product_image_click')gaEvent('product_image_click',{...c,item_id:m.data.item_id||'',site:m.data.site||''});
-  else if(m.type==='keyword_module_view')gaEvent('keyword_module_view',{...c,keyword_rows:Number(m.data.rows||0)});
-  else if(m.type==='ui_click')gaEvent('ui_click',{...c,control_id:m.data.control_id||'',control_text:m.data.control_text||''});
-});
-let initial='sku';
-if(location.hash==='#phonecase')initial='phonecase';
-else if(location.hash==='#trend')initial='trend';
-else if(location.hash==='#category')initial='category';
-switchPage(initial);
+if(location.hash==='#phonecase')switchPage('phonecase');
+else if(location.hash==='#trend')switchPage('trend');
+else if(location.hash==='#category')switchPage('category');
 </script>
 </body>
 </html>
