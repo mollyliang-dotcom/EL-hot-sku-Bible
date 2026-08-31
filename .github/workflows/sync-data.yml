@@ -313,6 +313,13 @@ jobs:
                   x.get("zh")
               )
 
+              if x.get("keyword") == "มือถือ 1 บาท ลูกค้า ใหม่":
+                  print(
+                      "DEBUG TH keyword:",
+                      "AT=", repr(x.get("keyword")),
+                      "AY=", repr(x.get("zh"))
+                  )
+
           # ------------------------------------------------------------
           # Similar phone-model de-duplication within the SAME site.
           #
@@ -331,15 +338,15 @@ jobs:
           def phone_model_key(keyword, zh):
               raw = f"{keyword or ''} {zh or ''}".lower()
               raw = re.sub(r"[_\\-]+", " ", raw)
-              raw = re.sub(r"\\s+", " ", raw).strip()
+              raw = re.sub(r"\s+", " ", raw).strip()
 
               # iPhone aliases: iphone / ip + generation number.
               m = re.search(
-                  r"\\b(?:iphone|ip)\\s*(\\d{1,2})"
-                  r"(?:\\s*(pro))?"
-                  r"(?:\\s*(max))?"
-                  r"(?:\\s*(plus))?"
-                  r"(?:\\s*(mini))?\\b",
+                  r"\b(?:iphone|ip)\s*(\d{1,2})"
+                  r"(?:\s*(pro))?"
+                  r"(?:\s*(max))?"
+                  r"(?:\s*(plus))?"
+                  r"(?:\s*(mini))?\b",
                   raw,
                   flags=re.I
               )
@@ -359,8 +366,8 @@ jobs:
 
               # Samsung Galaxy S-series, e.g. S26 / S26 Ultra / Galaxy S26 Ultra.
               m = re.search(
-                  r"\\b(?:samsung\\s*)?(?:galaxy\\s*)?s\\s*(\\d{1,2})"
-                  r"(?:\\s*(ultra|plus|fe))?\\b",
+                  r"\b(?:samsung\s*)?(?:galaxy\s*)?s\s*(\d{1,2})"
+                  r"(?:\s*(ultra|plus|fe))?\b",
                   raw,
                   flags=re.I
               )
@@ -369,7 +376,7 @@ jobs:
 
               # Fold family: Fold 8 / Z Fold 8 / Samsung Fold 8 are treated
               # as the same Fold generation unless another explicit variant exists.
-              m = re.search(r"\\b(?:samsung\\s*)?(?:galaxy\\s*)?(?:z\\s*)?fold\\s*(\\d{1,2})\\b", raw, flags=re.I)
+              m = re.search(r"\b(?:samsung\s*)?(?:galaxy\s*)?(?:z\s*)?fold\s*(\d{1,2})\b", raw, flags=re.I)
               if m:
                   return f"fold|{m.group(1)}"
 
@@ -385,7 +392,7 @@ jobs:
               else:
                   # Non-model keywords still use normalized Chinese translation.
                   zh_key = re.sub(
-                      r"\\s+",
+                      r"\s+",
                       "",
                       str(x.get("zh") or "").strip().lower()
                   )
@@ -493,14 +500,16 @@ jobs:
 
           def is_non_phone_accessory_keyword(keyword, zh):
               raw = f"{keyword or ''} {zh or ''}".lower()
-              # This page is phone-case only. Exclude tablet / earbuds / headphone
-              # case queries entirely from the keyword pool.
-              return bool(re.search(
-                  r"(?i)\\bipad\\b|\\btablet\\b|\\bairpods?\\b|"
-                  r"\\bearbuds?\\b|\\bheadphones?\\b|"
-                  r"平板|耳机|耳機|耳塞",
-                  raw
-              ))
+
+              # This page is PHONE CASE only.
+              blocked = [
+                  "ipad", "tablet",
+                  "airpod", "airpods",
+                  "earbud", "earbuds",
+                  "headphone", "headphones",
+                  "平板", "耳机", "耳機", "耳塞",
+              ]
+              return any(term in raw for term in blocked)
 
           # Remove non-phone accessory keywords before Top 10 / element supplement.
           keywords = [
