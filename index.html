@@ -578,7 +578,7 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:36px;border-t
 &lt;header&gt;&lt;div class="inner"&gt;&lt;h1&gt;Shopee EL 手机壳类目分享 &lt;span class="badge"&gt;External&lt;/span&gt;&lt;/h1&gt;&lt;div class="desc"&gt;✨ 手机壳类目数据分享，涵盖多站点，帮你快速识别潜力站点与热门产品&lt;br&gt;📊 聚焦手机壳类目分享，以 ADO 与 ADGMV 展示整体表现&lt;br&gt;🔒 跨境 CB 与本土 CNLS 分开展示&lt;/div&gt;&lt;nav class="page-nav"&gt;&lt;a href="#" onclick="parent.switchPage('sku');return false"&gt;🔥 热门 SKU&lt;/a&gt;&lt;a class="active" href="#" onclick="parent.switchPage('phonecase');return false"&gt;📱 手机壳类目分享&lt;/a&gt;&lt;a href="#" onclick="parent.switchPage('trend');return false"&gt;📈 类目趋势分享&lt;/a&gt;&lt;a href="#" onclick="parent.switchPage('category');return false"&gt;📊 类目大盘&lt;/a&gt;&lt;/nav&gt;&lt;div class="update" id="update"&gt;数据加载中...&lt;/div&gt;&lt;/div&gt;&lt;/header&gt;
 &lt;main class="container"&gt;
 &lt;div class="tabs"&gt;&lt;button class="tab active" data-t="CB"&gt;跨境 CB&lt;/button&gt;&lt;button class="tab" data-t="CNLS"&gt;本土 CNLS&lt;/button&gt;&lt;/div&gt;
-&lt;section class="grid2"&gt;&lt;div class="card bubble-card"&gt;&lt;div class="title"&gt;各站点手机壳规模分布&lt;/div&gt;&lt;div class="note"&gt;X：ADO · Y：ADGMV · 每个气泡代表一个站点&lt;/div&gt;&lt;div class="bubble" id="siteBubble"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="card bubble-card"&gt;&lt;div class="title"&gt;手机壳 L1 类目规模分布&lt;/div&gt;&lt;div class="note"&gt;汇总所有站点，每个气泡代表一个 L1 类目&lt;/div&gt;&lt;div class="bubble" id="l1Bubble"&gt;&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;
+&lt;section class="grid2"&gt;&lt;div class="card bubble-card"&gt;&lt;div class="title"&gt;跨境各站点手机壳规模分布&lt;/div&gt;&lt;div class="note"&gt;X：ADO · Y：ADGMV · 每个气泡代表一个跨境 CB 站点&lt;/div&gt;&lt;div class="bubble" id="cbSiteBubble"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="card bubble-card"&gt;&lt;div class="title"&gt;本土各站点手机壳规模分布&lt;/div&gt;&lt;div class="note"&gt;X：ADO · Y：ADGMV · 每个气泡代表一个本土 CNLS 站点&lt;/div&gt;&lt;div class="bubble" id="cnlsSiteBubble"&gt;&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;
 
 &lt;section class="filters"&gt;
   &lt;span class="fl"&gt;站点&lt;/span&gt;
@@ -620,7 +620,10 @@ const esc=s=&gt;String(s??'').replace(/[&amp;&lt;&gt;"']/g,c=&gt;({'&amp;':'&amp
 function ns(v){let s=String(v||'').toUpperCase();return ['BR','MX','MY','PH','SG','TH','TW','VN'].find(x=&gt;s===x||s.includes(x))||s}
 function NCB(r){return{site:ns(r.grass_region),l1:r.cb_level1_global_be_category||'',l3:r.level3_global_be_category||'',ado:n(r['ADO(SUM)']),adg:n(r['ADG_usd(SUM)'])}}
 function NCN(r){return{site:ns(r.grass_region),l1:r.cb_level1_global_be_category||'',l3:r.level3_global_be_category||'',ado:n(r['current_ado(RAW)']),adg:n(r['current_adgmv(RAW)'])}}
-function bubbleRows(){return (typ==='CB'?bubbleCB:bubbleCN).filter(r=&gt;r.l3===PHONE_L3)}
+function bubbleRowsByType(type){
+ const src=type==='CB'?bubbleCB:bubbleCN;
+ return src.filter(r=&gt;r.l3===PHONE_L3);
+}
 function agg(d,k){const m=new Map();d.forEach(r=&gt;{const z=r[k]||'未分类';if(!m.has(z))m.set(z,{name:z,ado:0,adg:0});const g=m.get(z);g.ado+=r.ado;g.adg+=r.adg});return [...m.values()]}
 const pal=['#FFB5A7','#FCD5CE','#F9DCC4','#CDEAC0','#BDE0FE','#A2D2FF','#CDB4DB','#FFC8DD','#D8E2DC','#E8D7F1','#D0F4DE','#FFF1E6'];
 function drawBubble(id,pts){
@@ -629,7 +632,12 @@ function drawBubble(id,pts){
  pts.forEach((q,i)=&gt;{const x=55+q.ado/ma*460,y=285-q.adg/mg*235,r=9+Math.sqrt((q.ado/ma+q.adg/mg)/2)*17,c=pal[i%pal.length],s=q.name.length&gt;13?q.name.slice(0,13)+'…':q.name;d+=`&lt;circle class="dot" cx="${x}" cy="${y}" r="${r}" fill="${c}"&gt;&lt;title&gt;${esc(q.name)}&lt;/title&gt;&lt;/circle&gt;&lt;text class="label" x="${x}" y="${y+3}" text-anchor="middle"&gt;${esc(s)}&lt;/text&gt;`});
  $(id).innerHTML=`&lt;svg viewBox="0 0 560 330"&gt;&lt;line x1="48" y1="290" x2="525" y2="290" stroke="#eadfe4"/&gt;&lt;line x1="48" y1="290" x2="48" y2="38" stroke="#eadfe4"/&gt;&lt;text class="axis" x="490" y="315"&gt;ADO 高 →&lt;/text&gt;&lt;text class="axis" x="12" y="50"&gt;ADGMV 高 ↑&lt;/text&gt;${d}&lt;/svg&gt;`;
 }
-function renderBubbles(){const d=bubbleRows();drawBubble('siteBubble',agg(d,'site').filter(x=&gt;x.name!=='未分类'));drawBubble('l1Bubble',agg(d,'l1').filter(x=&gt;x.name!=='未分类'))}
+function renderBubbles(){
+ const cbRows=bubbleRowsByType('CB');
+ const cnlsRows=bubbleRowsByType('CNLS');
+ drawBubble('cbSiteBubble',agg(cbRows,'site').filter(x=&gt;x.name!=='未分类'));
+ drawBubble('cnlsSiteBubble',agg(cnlsRows,'site').filter(x=&gt;x.name!=='未分类'));
+}
 
 function rangeStr(v,step){const x=Number(v);if(!Number.isFinite(x)||x===0)return '—';const lo=Math.floor(x/step)*step;return lo+'~'+(lo+step)}
 function adoRange(v){const x=Number(v);return !x?'—':rangeStr(x,x&lt;100?10:x&lt;1000?50:100)}
