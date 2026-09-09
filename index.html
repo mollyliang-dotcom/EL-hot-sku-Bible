@@ -754,9 +754,9 @@ window.addEventListener('load',load);
 header{background:linear-gradient(135deg,#FF6633,#EE4D2D 50%,#D02D11);color:#fff;padding:36px 40px 28px}.inner,.container{max-width:1280px;margin:auto}.inner{position:relative}h1{font-family:Georgia,serif;font-size:32px}.badge{font:600 11px sans-serif;background:#ffffff38;padding:5px 10px;border-radius:20px}.desc{margin-top:14px;max-width:760px;background:#0000001a;padding:12px 16px;border-radius:8px;font-size:13px;line-height:1.8;border-left:3px solid #ffffffb3}.update{position:absolute;right:0;top:0;background:#ffffff26;padding:6px 12px;border-radius:30px;font-size:12px}
 .page-nav{display:flex;gap:8px;margin-top:17px}.page-nav a{color:#fff;text-decoration:none;font-size:13px;font-weight:700;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.35)}.page-nav a.active{background:#fff;color:#d73211}.container{padding:26px 24px}.tabs{display:flex;gap:10px;margin-bottom:18px}.tab{padding:10px 20px;border:1.5px solid var(--border);background:#fff;border-radius:999px;cursor:pointer;font-weight:800;color:var(--muted)}.tab.active{background:var(--p);border-color:var(--p);color:#fff}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:20px}.card,.filters{background:#fff;border:1px solid var(--border);box-shadow:var(--shadow);border-radius:16px}.card{padding:20px;margin-bottom:18px}.bubble-card{height:420px}.title{font-size:16px;font-weight:800}.note{font-size:11px;color:var(--muted);margin:3px 0 14px}.bubble{height:330px;border:1px solid var(--border);border-radius:12px;background:#fffafa}.bubble svg{width:100%;height:100%}.dot{fill-opacity:.76;stroke:#fff;stroke-width:2}.axis{font-size:10px;fill:#9b8fa0}.label{font-size:9px;font-weight:800;fill:#2d2038}
-.filters{padding:17px 19px;margin-bottom:18px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}.fl{font-size:11px;color:var(--muted);font-weight:700}select,button{font:inherit;font-size:13px;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text)}
+.filters{padding:20px 22px;margin-bottom:18px;background:#fff;border:1px solid var(--border);box-shadow:var(--shadow);border-radius:16px}.filter-row{display:flex;align-items:center;gap:12px;flex-wrap:nowrap}.filter-row+.filter-row{margin-top:14px}.fl{font-size:11px;color:var(--muted);font-weight:700;white-space:nowrap}.keyword-search{display:flex;align-items:center;gap:12px}.search-icon{font-size:15px;line-height:1;display:inline-flex;align-items:center;justify-content:center;width:24px;flex:0 0 24px}.keyword-box{font:inherit;font-size:13px;width:300px;min-width:300px;height:50px;padding:0 18px;border:1.5px solid var(--border);border-radius:14px;background:var(--bg);color:var(--text);outline:none}.keyword-box:focus{border-color:var(--p);box-shadow:0 0 0 3px var(--pl)}select,button{font:inherit;font-size:13px;padding:9px 10px;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);min-height:38px}button{cursor:pointer;white-space:nowrap}.ai-btn{height:50px;padding:0 18px;background:var(--p);border-color:var(--p);color:#fff;font-weight:800}.ai-btn:disabled{opacity:.55;cursor:wait}.count-badge{display:inline-flex;align-items:center;justify-content:center;background:#fff0eb;color:#e43d16;font-weight:800;font-size:13px;padding:9px 18px;border-radius:999px;white-space:nowrap}.category-row{gap:8px}.category-row #site{width:118px;min-width:118px}.category-row #l1,.category-row #l2,.category-row #l3{width:178px;min-width:178px}.category-row #reset{padding-left:14px;padding-right:14px}@media(max-width:980px){.filter-row{overflow-x:auto;padding-bottom:2px}.category-row{overflow-x:auto}}
 .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}.kpi{padding:17px}.kl{font-size:11px;color:var(--muted);font-weight:700}.kv{font-size:27px;font-weight:800;margin-top:7px}.ks{font-size:11px;color:var(--muted);margin-top:5px}
-.dash{display:grid;grid-template-columns:1.25fr .75fr;gap:18px}.bars{display:flex;flex-direction:column;gap:12px}.bar{display:grid;grid-template-columns:minmax(130px,1.15fr) 3fr 68px;gap:10px;align-items:center}.bn{font-size:12px;font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.track{height:11px;background:#f5eef1;border-radius:999px;overflow:hidden}.fill{height:100%;background:linear-gradient(90deg,#ffb5a7,#EE4D2D)}.bv{text-align:right;font-size:12px;font-weight:750;color:#d73211}
+.dash{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-bottom:18px}.dash>.card{margin-bottom:0;min-width:0}.bars{display:flex;flex-direction:column;gap:12px}.bar{display:grid;grid-template-columns:minmax(105px,1.15fr) 2.2fr 58px;gap:8px;align-items:center}.bn{font-size:12px;font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.track{height:11px;background:#f5eef1;border-radius:999px;overflow:hidden}.fill{height:100%;background:linear-gradient(90deg,#ffb5a7,#EE4D2D)}.bv{text-align:right;font-size:12px;font-weight:750;color:#d73211}
 table{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:10px 9px;border-bottom:1px solid var(--border);text-align:center;white-space:nowrap}th{font-size:10px;color:var(--muted);background:#fffafa}.wrap{overflow:auto}.thumb{width:58px;height:58px;object-fit:contain;border-radius:10px;border:1px solid var(--border);cursor:zoom-in}.cat{max-width:260px;white-space:normal;line-height:1.45;color:var(--muted);text-align:center;margin:0 auto}.cat-head{text-align:center!important}.ins{padding:12px 14px;border:1px solid var(--border);background:#fffafa;border-radius:10px;font-size:12px;line-height:1.6;margin-bottom:10px}.empty{padding:40px;text-align:center;color:var(--muted)}
 #modal{display:none;position:fixed;inset:0;background:#140e18e6;z-index:9999;align-items:center;justify-content:center}#modal.show{display:flex}#modal img{max-width:92vw;max-height:88vh;background:#fff;border-radius:14px}
 footer{text-align:center;color:var(--muted);font-size:11px;padding:36px;border-top:1px solid var(--border)}
@@ -767,13 +767,15 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:36px;border-t
 &lt;div class="tabs"&gt;&lt;button class="tab active" data-t="CB"&gt;跨境 CB&lt;/button&gt;&lt;button class="tab" data-t="CNLS"&gt;本土 CNLS&lt;/button&gt;&lt;/div&gt;
 &lt;section class="grid2"&gt;&lt;div class="card bubble-card"&gt;&lt;div class="title"&gt;各站点规模分布&lt;/div&gt;&lt;div class="note"&gt;X：ADO · Y：ADGMV · 每个气泡代表一个站点&lt;/div&gt;&lt;div class="bubble" id="siteBubble"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="card bubble-card"&gt;&lt;div class="title"&gt;L1 类目规模分布&lt;/div&gt;&lt;div class="note"&gt;汇总所有站点，每个气泡代表一个 L1 类目&lt;/div&gt;&lt;div class="bubble" id="l1Bubble"&gt;&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;
 &lt;section class="filters"&gt;
-&lt;div class="filter-row"&gt;
-  &lt;span class="search-icon"&gt;🔍&lt;/span&gt;
-  &lt;input type="text" id="titleKeyword" placeholder="关键词"&gt;
+&lt;div class="filter-row keyword-row"&gt;
+  &lt;div class="keyword-search"&gt;
+    &lt;span class="search-icon"&gt;🔍&lt;/span&gt;
+    &lt;input type="text" id="titleKeyword" class="keyword-box" placeholder="关键词"&gt;
+  &lt;/div&gt;
   &lt;button id="aiSearch" class="ai-btn"&gt;AI 查询&lt;/button&gt;
   &lt;span class="count-badge" id="categoryCount"&gt;共 — 款&lt;/span&gt;
 &lt;/div&gt;
-&lt;div class="filter-row"&gt;
+&lt;div class="filter-row category-row"&gt;
   &lt;span class="fl"&gt;站点&lt;/span&gt;
   &lt;select id="site"&gt;&lt;option value=""&gt;全部站点&lt;/option&gt;&lt;/select&gt;
   &lt;span class="fl"&gt;L1 类目&lt;/span&gt;
@@ -786,7 +788,29 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:36px;border-t
 &lt;/div&gt;
 &lt;/section&gt;
 &lt;section class="kpis"&gt;&lt;div class="card kpi"&gt;&lt;div class="kl"&gt;Top Site ADO 占比&lt;/div&gt;&lt;div class="kv" id="sa"&gt;—&lt;/div&gt;&lt;div class="ks" id="san"&gt;—&lt;/div&gt;&lt;/div&gt;&lt;div class="card kpi"&gt;&lt;div class="kl"&gt;Top Site ADGMV 占比&lt;/div&gt;&lt;div class="kv" id="sg"&gt;—&lt;/div&gt;&lt;div class="ks" id="sgn"&gt;—&lt;/div&gt;&lt;/div&gt;&lt;div class="card kpi"&gt;&lt;div class="kl"&gt;Top L1 ADO 占比&lt;/div&gt;&lt;div class="kv" id="la"&gt;—&lt;/div&gt;&lt;div class="ks" id="lan"&gt;—&lt;/div&gt;&lt;/div&gt;&lt;div class="card kpi"&gt;&lt;div class="kl"&gt;Top L1 ADGMV 占比&lt;/div&gt;&lt;div class="kv" id="lg"&gt;—&lt;/div&gt;&lt;div class="ks" id="lgn"&gt;—&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;
-&lt;section class="dash"&gt;&lt;div&gt;&lt;div class="card"&gt;&lt;div class="title" id="ct"&gt;L1 类目贡献度&lt;/div&gt;&lt;div class="note"&gt;可切换 ADO / ADGMV&lt;/div&gt;&lt;button class="metric" data-m="adg"&gt;ADGMV&lt;/button&gt; &lt;button class="metric" data-m="ado"&gt;ADO&lt;/button&gt;&lt;div id="bars" class="bars" style="margin-top:15px"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="card"&gt;&lt;div class="title"&gt;当前筛选类目 Top 10 产品&lt;/div&gt;&lt;div class="note"&gt;按 ADGMV 降序排序 · ADO / ADG 采用区间脱敏展示&lt;/div&gt;&lt;div class="wrap"&gt;&lt;table&gt;&lt;thead&gt;&lt;tr id="productHead"&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody id="pt"&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div class="card"&gt;&lt;div class="title"&gt;站点销售额贡献&lt;/div&gt;&lt;div class="note"&gt;当前筛选下各站点 ADGMV 占比&lt;/div&gt;&lt;div id="sb" class="bars"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="card"&gt;&lt;div class="title"&gt;类目洞察&lt;/div&gt;&lt;div class="note" id="insightNote"&gt;按本期较上期增长绝对量识别类目增长表现&lt;/div&gt;&lt;div id="ins"&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;
+&lt;section class="dash"&gt;
+  &lt;div class="card"&gt;
+    &lt;div class="title" id="ct"&gt;L1 类目贡献度&lt;/div&gt;
+    &lt;div class="note"&gt;可切换 ADO / ADGMV&lt;/div&gt;
+    &lt;button class="metric" data-m="adg"&gt;ADGMV&lt;/button&gt; &lt;button class="metric" data-m="ado"&gt;ADO&lt;/button&gt;
+    &lt;div id="bars" class="bars" style="margin-top:15px"&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="card"&gt;
+    &lt;div class="title"&gt;站点销售额贡献&lt;/div&gt;
+    &lt;div class="note"&gt;当前筛选下各站点 ADGMV 占比&lt;/div&gt;
+    &lt;div id="sb" class="bars"&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="card"&gt;
+    &lt;div class="title"&gt;类目洞察&lt;/div&gt;
+    &lt;div class="note" id="insightNote"&gt;按本期较上期增长绝对量识别类目增长表现&lt;/div&gt;
+    &lt;div id="ins"&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/section&gt;
+&lt;section class="card"&gt;
+  &lt;div class="title"&gt;当前筛选类目 Top 10 产品&lt;/div&gt;
+  &lt;div class="note"&gt;按 ADGMV 降序排序 · ADO / ADG 采用区间脱敏展示&lt;/div&gt;
+  &lt;div class="wrap"&gt;&lt;table&gt;&lt;thead&gt;&lt;tr id="productHead"&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody id="pt"&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;
+&lt;/section&gt;
 &lt;/main&gt;&lt;div id="modal"&gt;&lt;img id="mi"&gt;&lt;/div&gt;&lt;footer&gt;Shopee EL 选品指南 · Category Overview&lt;/footer&gt;
 &lt;script&gt;
 const UCB='./data_cb.json',UCN='./data_cnls.json';const AI_URL='https://hot-sku-keyword-ai.molly-liang.workers.dev/';let cb=[],cn=[],typ='CB',metric='adg',cbError='',cnError='',aiRule=null,aiRuleQuery='';const $=x=&gt;document.getElementById(x),n=v=&gt;parseFloat(String(v??'').replace(/,/g,''))||0,p=(a,b)=&gt;b?a/b*100:0,f=x=&gt;x.toFixed(1)+'%',esc=s=&gt;String(s??'').replace(/[&amp;&lt;&gt;"']/g,c=&gt;({'&amp;':'&amp;amp;','&lt;':'&amp;lt;','&gt;':'&amp;gt;','"':'&amp;quot;',"'":'&amp;#39;'}[c]));function ns(v){let s=String(v||'').toUpperCase();return ['BR','MX','MY','PH','SG','TH','TW','VN'].find(x=&gt;s===x||s.includes(x))||s}
