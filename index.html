@@ -567,7 +567,7 @@ header{background:linear-gradient(135deg,#FF6633,#EE4D2D 50%,#D02D11);color:#fff
 .page-nav{display:flex;gap:8px;margin-top:17px}.page-nav a{color:#fff;text-decoration:none;font-size:13px;font-weight:700;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.35)}.page-nav a.active{background:#fff;color:#d73211}
 .container{padding:26px 24px}.tabs{display:flex;gap:10px;margin-bottom:18px}.tab{padding:10px 20px;border:1.5px solid var(--border);background:#fff;border-radius:999px;cursor:pointer;font-weight:800;color:var(--muted)}.tab.active{background:var(--p);border-color:var(--p);color:#fff}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:20px}.card,.filters{background:#fff;border:1px solid var(--border);box-shadow:var(--shadow);border-radius:16px}.card{padding:20px;margin-bottom:18px}.bubble-card{height:420px}.title{font-size:16px;font-weight:800}.note{font-size:11px;color:var(--muted);margin:3px 0 14px}.bubble{height:330px;border:1px solid var(--border);border-radius:12px;background:#fffafa}.bubble svg{width:100%;height:100%}.dot{fill-opacity:.76;stroke:#fff;stroke-width:2}.axis{font-size:10px;fill:#9b8fa0}.label{font-size:9px;font-weight:800;fill:#2d2038}
-.filters{padding:17px 19px;margin-bottom:18px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}.fl{font-size:11px;color:var(--muted);font-weight:700}select,button{font:inherit;font-size:13px;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text)}button{cursor:pointer}
+.filters{padding:17px 19px;margin-bottom:18px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}.fl{font-size:11px;color:var(--muted);font-weight:700}select,button,input[type="text"]{font:inherit;font-size:13px;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text)}input[type="text"]{min-width:280px;outline:none}input[type="text"]:focus{border-color:var(--p);box-shadow:0 0 0 3px var(--pl)}button{cursor:pointer}.ai-btn{background:var(--p);border-color:var(--p);color:#fff;font-weight:800}.ai-btn:disabled{opacity:.55;cursor:wait}.ai-hint{margin:-8px 4px 18px;color:var(--muted);font-size:12px;line-height:1.6}.ai-hint strong{color:#d73211}button{cursor:pointer}
 .wrap{overflow:auto}table{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:10px 9px;border-bottom:1px solid var(--border);text-align:center;white-space:nowrap}th{font-size:10px;color:var(--muted);background:#fffafa}.thumb{width:62px;height:62px;object-fit:contain;border-radius:10px;border:1px solid var(--border);background:#fff;cursor:zoom-in}.cat{max-width:245px;white-space:normal;line-height:1.45;color:var(--muted);margin:auto}.mom-pos{color:#27ae60;font-weight:700}.mom-neg{color:#eb4d4b;font-weight:700}.mom-zero{color:var(--muted);font-weight:700}.empty{padding:40px;text-align:center;color:var(--muted)}.keyword-card{margin-top:18px}.kw{max-width:300px;white-space:normal;text-align:center;font-weight:650}.click-val{font-weight:800;color:#d73211}
 #modal{display:none;position:fixed;inset:0;background:#140e18e6;z-index:9999;align-items:center;justify-content:center}#modal.show{display:flex}#modal img{max-width:92vw;max-height:88vh;background:#fff;border-radius:14px}
 footer{text-align:center;color:var(--muted);font-size:11px;padding:36px;border-top:1px solid var(--border)}
@@ -766,13 +766,13 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:36px;border-t
 &lt;main class="container"&gt;
 &lt;div class="tabs"&gt;&lt;button class="tab active" data-t="CB"&gt;跨境 CB&lt;/button&gt;&lt;button class="tab" data-t="CNLS"&gt;本土 CNLS&lt;/button&gt;&lt;/div&gt;
 &lt;section class="grid2"&gt;&lt;div class="card bubble-card"&gt;&lt;div class="title"&gt;各站点规模分布&lt;/div&gt;&lt;div class="note"&gt;X：ADO · Y：ADGMV · 每个气泡代表一个站点&lt;/div&gt;&lt;div class="bubble" id="siteBubble"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="card bubble-card"&gt;&lt;div class="title"&gt;L1 类目规模分布&lt;/div&gt;&lt;div class="note"&gt;汇总所有站点，每个气泡代表一个 L1 类目&lt;/div&gt;&lt;div class="bubble" id="l1Bubble"&gt;&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;
-&lt;section class="filters"&gt;&lt;span class="fl"&gt;站点&lt;/span&gt;&lt;select id="site"&gt;&lt;option value=""&gt;全部站点&lt;/option&gt;&lt;/select&gt;&lt;span class="fl"&gt;L1 类目&lt;/span&gt;&lt;select id="l1"&gt;&lt;option value=""&gt;全部 L1&lt;/option&gt;&lt;/select&gt;&lt;span class="fl"&gt;L2 类目&lt;/span&gt;&lt;select id="l2"&gt;&lt;option value=""&gt;全部 L2&lt;/option&gt;&lt;/select&gt;&lt;span class="fl"&gt;L3 类目&lt;/span&gt;&lt;select id="l3"&gt;&lt;option value=""&gt;全部 L3&lt;/option&gt;&lt;/select&gt;&lt;button id="reset"&gt;✕ 重置&lt;/button&gt;&lt;/section&gt;
+&lt;section class="filters"&gt;&lt;span class="fl"&gt;标题关键词&lt;/span&gt;&lt;input type="text" id="titleKeyword" placeholder="输入任意关键词，如 儿童手表"&gt;&lt;button id="aiSearch" class="ai-btn"&gt;AI 查询&lt;/button&gt;&lt;span class="fl"&gt;站点&lt;/span&gt;&lt;select id="site"&gt;&lt;option value=""&gt;全部站点&lt;/option&gt;&lt;/select&gt;&lt;span class="fl"&gt;L1 类目&lt;/span&gt;&lt;select id="l1"&gt;&lt;option value=""&gt;全部 L1&lt;/option&gt;&lt;/select&gt;&lt;span class="fl"&gt;L2 类目&lt;/span&gt;&lt;select id="l2"&gt;&lt;option value=""&gt;全部 L2&lt;/option&gt;&lt;/select&gt;&lt;span class="fl"&gt;L3 类目&lt;/span&gt;&lt;select id="l3"&gt;&lt;option value=""&gt;全部 L3&lt;/option&gt;&lt;/select&gt;&lt;button id="reset"&gt;✕ 重置&lt;/button&gt;&lt;/section&gt;&lt;div id="aiHint" class="ai-hint"&gt;输入任意产品关键词后点击“AI 查询”，系统会自动生成各站点多语言标题词并排除配件，再按命中商品汇总市场体量。&lt;/div&gt;
 &lt;section class="kpis"&gt;&lt;div class="card kpi"&gt;&lt;div class="kl"&gt;Top Site ADO 占比&lt;/div&gt;&lt;div class="kv" id="sa"&gt;—&lt;/div&gt;&lt;div class="ks" id="san"&gt;—&lt;/div&gt;&lt;/div&gt;&lt;div class="card kpi"&gt;&lt;div class="kl"&gt;Top Site ADGMV 占比&lt;/div&gt;&lt;div class="kv" id="sg"&gt;—&lt;/div&gt;&lt;div class="ks" id="sgn"&gt;—&lt;/div&gt;&lt;/div&gt;&lt;div class="card kpi"&gt;&lt;div class="kl"&gt;Top L1 ADO 占比&lt;/div&gt;&lt;div class="kv" id="la"&gt;—&lt;/div&gt;&lt;div class="ks" id="lan"&gt;—&lt;/div&gt;&lt;/div&gt;&lt;div class="card kpi"&gt;&lt;div class="kl"&gt;Top L1 ADGMV 占比&lt;/div&gt;&lt;div class="kv" id="lg"&gt;—&lt;/div&gt;&lt;div class="ks" id="lgn"&gt;—&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;
 &lt;section class="dash"&gt;&lt;div&gt;&lt;div class="card"&gt;&lt;div class="title" id="ct"&gt;L1 类目贡献度&lt;/div&gt;&lt;div class="note"&gt;可切换 ADO / ADGMV&lt;/div&gt;&lt;button class="metric" data-m="adg"&gt;ADGMV&lt;/button&gt; &lt;button class="metric" data-m="ado"&gt;ADO&lt;/button&gt;&lt;div id="bars" class="bars" style="margin-top:15px"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="card"&gt;&lt;div class="title"&gt;当前筛选类目 Top 10 产品&lt;/div&gt;&lt;div class="note"&gt;按 ADGMV 降序排序 · ADO / ADG 采用区间脱敏展示&lt;/div&gt;&lt;div class="wrap"&gt;&lt;table&gt;&lt;thead&gt;&lt;tr id="productHead"&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody id="pt"&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div class="card"&gt;&lt;div class="title"&gt;站点销售额贡献&lt;/div&gt;&lt;div class="note"&gt;当前筛选下各站点 ADGMV 占比&lt;/div&gt;&lt;div id="sb" class="bars"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="card"&gt;&lt;div class="title"&gt;类目洞察&lt;/div&gt;&lt;div class="note" id="insightNote"&gt;按本期较上期增长绝对量识别类目增长表现&lt;/div&gt;&lt;div id="ins"&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;
 &lt;/main&gt;&lt;div id="modal"&gt;&lt;img id="mi"&gt;&lt;/div&gt;&lt;footer&gt;Shopee EL 选品指南 · Category Overview&lt;/footer&gt;
 &lt;script&gt;
-const UCB='./data_cb.json',UCN='./data_cnls.json';let cb=[],cn=[],typ='CB',metric='adg',cbError='',cnError='';const $=x=&gt;document.getElementById(x),n=v=&gt;parseFloat(String(v??'').replace(/,/g,''))||0,p=(a,b)=&gt;b?a/b*100:0,f=x=&gt;x.toFixed(1)+'%',esc=s=&gt;String(s??'').replace(/[&amp;&lt;&gt;"']/g,c=&gt;({'&amp;':'&amp;amp;','&lt;':'&amp;lt;','&gt;':'&amp;gt;','"':'&amp;quot;',"'":'&amp;#39;'}[c]));function ns(v){let s=String(v||'').toUpperCase();return ['BR','MX','MY','PH','SG','TH','TW','VN'].find(x=&gt;s===x||s.includes(x))||s}
-function NCB(r){return{id:String(r.item_id||''),site:ns(r.grass_region),l1:r.cb_level1_global_be_category||'',l2:r.level2_global_be_category||'',l3:r.level3_global_be_category||'',img:r.product_image||'',price:n(r['price_usd']),ado:n(r['ADO(SUM)']),adg:n(r['ADG_usd(SUM)']),mom:n(r['mom_ado_growth_contri(SUM)']),adgMom:n(r['mom_adg_growth_contri(SUM)']||r['mom_adgmv_growth_contri(SUM)']||r['adg_mom']||r['adgmv_mom']||0)}}function NCN(r){const diff=n(r['ado_diff(RAW)']),bench=n(r['benchmark_ado(RAW)']);return{id:String(r.item_id||''),site:ns(r.grass_region),l1:r.cb_level1_global_be_category||'',l2:r.level2_global_be_category||'',l3:r.level3_global_be_category||'',img:r.item_image||'',price:n(r['item_price_usd']),ado:n(r['current_ado(RAW)']),adg:n(r['current_adgmv(RAW)']),mom:bench?diff/bench*100:0,adgMom:(()=&gt;{const explicit=n(r['adg_mom']||r['adgmv_mom']||r['mom_adg_growth_contri(SUM)']||r['mom_adgmv_growth_contri(SUM)']||0);if(explicit)return explicit;const diff=n(r['adg_diff(RAW)']||r['adgmv_diff(RAW)']||0),benchAdg=n(r['benchmark_adg(RAW)']||r['benchmark_adgmv(RAW)']||0);if(benchAdg&amp;&amp;diff)return diff/benchAdg*100;const cur=n(r['current_adgmv(RAW)']),prev=n(r['benchmark_adgmv(RAW)']||r['benchmark_adg(RAW)']||0);return prev?(cur-prev)/prev*100:0})()}}
+const UCB='./data_cb.json',UCN='./data_cnls.json';const AI_URL='https://hot-sku-keyword-ai.molly-liang.workers.dev/';let cb=[],cn=[],typ='CB',metric='adg',cbError='',cnError='',aiRule=null,aiRuleQuery='';const $=x=&gt;document.getElementById(x),n=v=&gt;parseFloat(String(v??'').replace(/,/g,''))||0,p=(a,b)=&gt;b?a/b*100:0,f=x=&gt;x.toFixed(1)+'%',esc=s=&gt;String(s??'').replace(/[&amp;&lt;&gt;"']/g,c=&gt;({'&amp;':'&amp;amp;','&lt;':'&amp;lt;','&gt;':'&amp;gt;','"':'&amp;quot;',"'":'&amp;#39;'}[c]));function ns(v){let s=String(v||'').toUpperCase();return ['BR','MX','MY','PH','SG','TH','TW','VN'].find(x=&gt;s===x||s.includes(x))||s}
+function NCB(r){return{id:String(r.item_id||''),title:String(r.item_name||''),site:ns(r.grass_region),l1:r.cb_level1_global_be_category||'',l2:r.level2_global_be_category||'',l3:r.level3_global_be_category||'',img:r.product_image||'',price:n(r['price_usd']),ado:n(r['ADO(SUM)']),adg:n(r['ADG_usd(SUM)']),mom:n(r['mom_ado_growth_contri(SUM)']),adgMom:n(r['mom_adg_growth_contri(SUM)']||r['mom_adgmv_growth_contri(SUM)']||r['adg_mom']||r['adgmv_mom']||0)}}function NCN(r){const diff=n(r['ado_diff(RAW)']),bench=n(r['benchmark_ado(RAW)']);return{id:String(r.item_id||''),title:String(r.item_name||''),site:ns(r.grass_region),l1:r.cb_level1_global_be_category||'',l2:r.level2_global_be_category||'',l3:r.level3_global_be_category||'',img:r.item_image||'',price:n(r['item_price_usd']),ado:n(r['current_ado(RAW)']),adg:n(r['current_adgmv(RAW)']),mom:bench?diff/bench*100:0,adgMom:(()=&gt;{const explicit=n(r['adg_mom']||r['adgmv_mom']||r['mom_adg_growth_contri(SUM)']||r['mom_adgmv_growth_contri(SUM)']||0);if(explicit)return explicit;const diff=n(r['adg_diff(RAW)']||r['adgmv_diff(RAW)']||0),benchAdg=n(r['benchmark_adg(RAW)']||r['benchmark_adgmv(RAW)']||0);if(benchAdg&amp;&amp;diff)return diff/benchAdg*100;const cur=n(r['current_adgmv(RAW)']),prev=n(r['benchmark_adgmv(RAW)']||r['benchmark_adg(RAW)']||0);return prev?(cur-prev)/prev*100:0})()}}
 function R(){return typ==='CB'?cb:cn}
 function currentError(){return typ==='CB'?cbError:cnError}
 function showTypeState(){
@@ -797,14 +797,33 @@ function showTypeState(){
     return true;
   }
   return false;
-}function F(){let s=$('site').value,a=$('l1').value,b=$('l2').value,c=$('l3').value;return R().filter(r=&gt;(!s||r.site===s)&amp;&amp;(!a||r.l1===a)&amp;&amp;(!b||r.l2===b)&amp;&amp;(!c||r.l3===c))}function A(d,k){let m=new Map;d.forEach(r=&gt;{let z=r[k]||'未分类';if(!m.has(z))m.set(z,{name:z,ado:0,adg:0});let g=m.get(z);g.ado+=r.ado;g.adg+=r.adg});return[...m.values()]}function S(d,k){return d.reduce((a,r)=&gt;a+r[k],0)}
+}
+function normTitle(v){return String(v||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ').trim()}
+function cleanRuleTerms(list){return Array.isArray(list)?list.map(normTitle).filter(Boolean):[]}
+function aiTitleMatch(r){
+  const rawQ=($('titleKeyword').value||'').trim();
+  if(!rawQ)return true;
+  const title=normTitle(r.title);
+  if(!aiRule||aiRuleQuery!==rawQ)return true;
+  const site=r.site;
+  let inc=cleanRuleTerms(aiRule.include?.[site]||[]);
+  let exc=cleanRuleTerms(aiRule.exclude?.[site]||[]);
+  if(!inc.length){
+    inc=cleanRuleTerms([aiRule.english_concept,rawQ]);
+  }
+  const hit=inc.some(w=&gt;title.includes(w));
+  const blocked=exc.some(w=&gt;title.includes(w));
+  return hit&amp;&amp;!blocked;
+}
+function F(){let s=$('site').value,a=$('l1').value,b=$('l2').value,c=$('l3').value;return R().filter(r=&gt;aiTitleMatch(r)&amp;&amp;(!s||r.site===s)&amp;&amp;(!a||r.l1===a)&amp;&amp;(!b||r.l2===b)&amp;&amp;(!c||r.l3===c))}
+function A(d,k){let m=new Map;d.forEach(r=&gt;{let z=r[k]||'未分类';if(!m.has(z))m.set(z,{name:z,ado:0,adg:0});let g=m.get(z);g.ado+=r.ado;g.adg+=r.adg});return[...m.values()]}function S(d,k){return d.reduce((a,r)=&gt;a+r[k],0)}
 function rangeStr(v,step){const x=Number(v);if(!Number.isFinite(x)||x===0)return '—';if(x&gt;=0){const lo=Math.floor(x/step)*step;return lo+'~'+(lo+step)}const hi=Math.ceil(x/step)*step;return (hi-step)+'~'+hi}
 function adoRange(v){const x=Number(v);if(!Number.isFinite(x)||x===0)return '—';return rangeStr(x,x&lt;100?10:x&lt;1000?50:100)}
 function adgRange(v){const x=Number(v);if(!Number.isFinite(x)||x===0)return '—';return rangeStr(x,x&lt;100?10:x&lt;500?50:x&lt;2000?100:x&lt;10000?500:1000)}
 function momText(v){const x=Number(v)||0;return (x&gt;0?'+':'')+x.toFixed(1)+'%'}
 function H(){if($('l2').value)return['l3','L3'];if($('l1').value)return['l2','L2'];return['l1','L1']}
 const pal=['#FFB5A7','#FCD5CE','#F9DCC4','#CDEAC0','#BDE0FE','#A2D2FF','#CDB4DB','#FFC8DD','#D8E2DC','#E8D7F1','#D0F4DE','#FFF1E6'];function B(id,pts){if(!pts.length){$(id).innerHTML='&lt;div class="empty"&gt;暂无数据&lt;/div&gt;';return}let ma=Math.max(...pts.map(x=&gt;x.ado),1),mg=Math.max(...pts.map(x=&gt;x.adg),1),d='';pts.forEach((q,i)=&gt;{let x=55+q.ado/ma*460,y=285-q.adg/mg*235,r=9+Math.sqrt((q.ado/ma+q.adg/mg)/2)*17,c=pal[i%pal.length],s=q.name.length&gt;13?q.name.slice(0,13)+'…':q.name;d+=`&lt;circle class="dot" cx="${x}" cy="${y}" r="${r}" fill="${c}"&gt;&lt;title&gt;${esc(q.name)}&lt;/title&gt;&lt;/circle&gt;&lt;text class="label" x="${x}" y="${y+3}" text-anchor="middle"&gt;${esc(s)}&lt;/text&gt;`});$(id).innerHTML=`&lt;svg viewBox="0 0 560 330"&gt;&lt;line x1="48" y1="290" x2="525" y2="290" stroke="#eadfe4"/&gt;&lt;line x1="48" y1="290" x2="48" y2="38" stroke="#eadfe4"/&gt;&lt;text class="axis" x="490" y="315"&gt;ADO 高 →&lt;/text&gt;&lt;text class="axis" x="12" y="50"&gt;ADGMV 高 ↑&lt;/text&gt;${d}&lt;/svg&gt;`}
-function bubbles(){B('siteBubble',A(R(),'site').filter(x=&gt;x.name!=='未分类'));B('l1Bubble',A(R(),'l1').filter(x=&gt;x.name!=='未分类'))}function kpi(){let d=F(),da=S(d,'ado'),dg=S(d,'adg'),s=A(d,'site'),l=A(d,'l1'),sa=s.sort((a,b)=&gt;b.ado-a.ado)[0],sg=[...s].sort((a,b)=&gt;b.adg-a.adg)[0],la=l.sort((a,b)=&gt;b.ado-a.ado)[0],lg=[...l].sort((a,b)=&gt;b.adg-a.adg)[0];$('sa').textContent=sa?f(p(sa.ado,da)):'—';$('san').textContent=sa?sa.name:'—';$('sg').textContent=sg?f(p(sg.adg,dg)):'—';$('sgn').textContent=sg?sg.name:'—';$('la').textContent=la?f(p(la.ado,da)):'—';$('lan').textContent=la?la.name:'—';$('lg').textContent=lg?f(p(lg.adg,dg)):'—';$('lgn').textContent=lg?lg.name:'—'}
+function bubbles(){const d=F();B('siteBubble',A(d,'site').filter(x=&gt;x.name!=='未分类'));B('l1Bubble',A(d,'l1').filter(x=&gt;x.name!=='未分类'))}function kpi(){let d=F(),da=S(d,'ado'),dg=S(d,'adg'),s=A(d,'site'),l=A(d,'l1'),sa=s.sort((a,b)=&gt;b.ado-a.ado)[0],sg=[...s].sort((a,b)=&gt;b.adg-a.adg)[0],la=l.sort((a,b)=&gt;b.ado-a.ado)[0],lg=[...l].sort((a,b)=&gt;b.adg-a.adg)[0];$('sa').textContent=sa?f(p(sa.ado,da)):'—';$('san').textContent=sa?sa.name:'—';$('sg').textContent=sg?f(p(sg.adg,dg)):'—';$('sgn').textContent=sg?sg.name:'—';$('la').textContent=la?f(p(la.ado,da)):'—';$('lan').textContent=la?la.name:'—';$('lg').textContent=lg?f(p(lg.adg,dg)):'—';$('lgn').textContent=lg?lg.name:'—'}
 function contrib(){let d=F(),[k,l]=H(),g=A(d,k).sort((a,b)=&gt;b[metric]-a[metric]).slice(0,12),den=g.reduce((a,x)=&gt;a+x[metric],0);$('ct').textContent=l+' 类目贡献度';$('bars').innerHTML=g.map(x=&gt;{let q=p(x[metric],den);return`&lt;div class="bar"&gt;&lt;div class="bn"&gt;${esc(x.name)}&lt;/div&gt;&lt;div class="track"&gt;&lt;div class="fill" style="width:${Math.max(q,1)}%"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="bv"&gt;${f(q)}&lt;/div&gt;&lt;/div&gt;`}).join('')||'&lt;div class="empty"&gt;暂无数据&lt;/div&gt;'}
 function products(){
   const isCB=typ==='CB';
@@ -910,6 +929,51 @@ function side(){
 
   $('ins').innerHTML=arr.join('')||'&lt;div class="empty"&gt;暂无数据&lt;/div&gt;';
 }
+function cacheKey(q){return 'hotSkuAiRule::'+q.trim().toLowerCase()}
+function readAiCache(q){
+  try{const raw=localStorage.getItem(cacheKey(q));return raw?JSON.parse(raw):null}catch(e){return null}
+}
+function writeAiCache(q,rule){
+  try{localStorage.setItem(cacheKey(q),JSON.stringify(rule))}catch(e){}
+}
+async function runAiSearch(){
+  const q=($('titleKeyword').value||'').trim();
+  if(!q){
+    aiRule=null;aiRuleQuery='';
+    $('aiHint').textContent='请输入产品关键词后再点击“AI 查询”。';
+    render();
+    return;
+  }
+  const btn=$('aiSearch');
+  btn.disabled=true;
+  btn.textContent='AI 识别中...';
+  $('aiHint').innerHTML='AI 正在识别 &lt;strong&gt;'+esc(q)+'&lt;/strong&gt; 的多语言商品标题词并生成配件排除规则...';
+  try{
+    let rule=readAiCache(q);
+    let source='缓存';
+    if(!rule){
+      const r=await fetch(AI_URL+'?q='+encodeURIComponent(q));
+      if(!r.ok)throw new Error('AI HTTP '+r.status);
+      const j=await r.json();
+      if(!j.ok||!j.result)throw new Error(j.error||'AI 未返回有效规则');
+      rule=j.result;
+      writeAiCache(q,rule);
+      source='AI';
+    }
+    aiRule=rule;
+    aiRuleQuery=q;
+    render();
+    const matched=F().length;
+    $('aiHint').innerHTML='已识别细分市场：&lt;strong&gt;'+esc(rule.concept||q)+'&lt;/strong&gt; · '+source+' 多语言规则 · 当前 '+(typ==='CB'?'跨境 CB':'本土 CNLS')+' 筛选匹配 &lt;strong&gt;'+matched+'&lt;/strong&gt; 款商品';
+  }catch(e){
+    aiRule=null;aiRuleQuery='';
+    $('aiHint').innerHTML='AI 查询失败：'+esc(e.message||String(e))+'。请稍后重试。';
+    render();
+  }finally{
+    btn.disabled=false;
+    btn.textContent='AI 查询';
+  }
+}
 function refill(){let r=R(),fill=(id,v,l)=&gt;{$(id).innerHTML=`&lt;option value=""&gt;全部 ${l}&lt;/option&gt;`+[...new Set(v.filter(Boolean))].sort().map(x=&gt;`&lt;option value="${esc(x)}"&gt;${esc(x)}&lt;/option&gt;`).join('')};fill('site',r.map(x=&gt;x.site),'站点');let a=r.filter(x=&gt;!$('site').value||x.site===$('site').value);fill('l1',a.map(x=&gt;x.l1),'L1');let b=a.filter(x=&gt;!$('l1').value||x.l1===$('l1').value);fill('l2',b.map(x=&gt;x.l2),'L2');let c=b.filter(x=&gt;!$('l2').value||x.l2===$('l2').value);fill('l3',c.map(x=&gt;x.l3),'L3')}
 function render(){
   $('insightNote').textContent=typ==='CB'
@@ -917,7 +981,7 @@ function render(){
     : '按本期较上期增长绝对量识别 ADO / ADG 增长较好的 L2 / L3 类目';
   if(showTypeState())return;
   bubbles();kpi();contrib();products();side();
-}function reset(){['site','l1','l2','l3'].forEach(x=&gt;$(x).value='');refill();render()}function init(){
+}function reset(){$('titleKeyword').value='';aiRule=null;aiRuleQuery='';$('aiHint').textContent='输入任意产品关键词后点击“AI 查询”，系统会自动生成各站点多语言标题词并排除配件，再按命中商品汇总市场体量。';['site','l1','l2','l3'].forEach(x=&gt;$(x).value='');refill();render()}function init(){
   document.querySelectorAll('.tab').forEach(b=&gt;b.addEventListener('click',()=&gt;{
     document.querySelectorAll('.tab').forEach(x=&gt;x.classList.remove('active'));
     b.classList.add('active');
@@ -925,7 +989,20 @@ function render(){
     ['site','l1','l2','l3'].forEach(id=&gt;$(id).value='');
     refill();
     render();
+    if(aiRule&amp;&amp;aiRuleQuery){
+      $('aiHint').innerHTML='已识别细分市场：&lt;strong&gt;'+esc(aiRule.concept||aiRuleQuery)+'&lt;/strong&gt; · 当前 '+(typ==='CB'?'跨境 CB':'本土 CNLS')+' 筛选匹配 &lt;strong&gt;'+F().length+'&lt;/strong&gt; 款商品';
+    }
   }));
+  $('aiSearch').addEventListener('click',runAiSearch);
+  $('titleKeyword').addEventListener('keydown',e=&gt;{if(e.key==='Enter'){e.preventDefault();runAiSearch()}});
+  $('titleKeyword').addEventListener('input',()=&gt;{
+    const q=$('titleKeyword').value.trim();
+    if(q!==aiRuleQuery){
+      aiRule=null;
+      aiRuleQuery='';
+      $('aiHint').textContent=q?'关键词已修改，点击“AI 查询”后更新市场体量。':'输入任意产品关键词后点击“AI 查询”，系统会自动生成各站点多语言标题词并排除配件，再按命中商品汇总市场体量。';
+    }
+  });
   $('site').addEventListener('change',()=&gt;{refill();render()});
   $('l1').addEventListener('change',()=&gt;{$('l2').value='';$('l3').value='';refill();render()});
   $('l2').addEventListener('change',()=&gt;{$('l3').value='';refill();render()});
