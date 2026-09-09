@@ -567,7 +567,7 @@ header{background:linear-gradient(135deg,#FF6633,#EE4D2D 50%,#D02D11);color:#fff
 .page-nav{display:flex;gap:8px;margin-top:17px}.page-nav a{color:#fff;text-decoration:none;font-size:13px;font-weight:700;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.35)}.page-nav a.active{background:#fff;color:#d73211}
 .container{padding:26px 24px}.tabs{display:flex;gap:10px;margin-bottom:18px}.tab{padding:10px 20px;border:1.5px solid var(--border);background:#fff;border-radius:999px;cursor:pointer;font-weight:800;color:var(--muted)}.tab.active{background:var(--p);border-color:var(--p);color:#fff}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:20px}.card,.filters{background:#fff;border:1px solid var(--border);box-shadow:var(--shadow);border-radius:16px}.card{padding:20px;margin-bottom:18px}.bubble-card{height:420px}.title{font-size:16px;font-weight:800}.note{font-size:11px;color:var(--muted);margin:3px 0 14px}.bubble{height:330px;border:1px solid var(--border);border-radius:12px;background:#fffafa}.bubble svg{width:100%;height:100%}.dot{fill-opacity:.76;stroke:#fff;stroke-width:2}.axis{font-size:10px;fill:#9b8fa0}.label{font-size:9px;font-weight:800;fill:#2d2038}
-.filters{padding:17px 19px;margin-bottom:18px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}.fl{font-size:11px;color:var(--muted);font-weight:700}select,button,input[type="text"]{font:inherit;font-size:13px;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text)}input[type="text"]{min-width:280px;outline:none}input[type="text"]:focus{border-color:var(--p);box-shadow:0 0 0 3px var(--pl)}button{cursor:pointer}.ai-btn{background:var(--p);border-color:var(--p);color:#fff;font-weight:800}.ai-btn:disabled{opacity:.55;cursor:wait}.ai-hint{margin:-8px 4px 18px;color:var(--muted);font-size:12px;line-height:1.6}.ai-hint strong{color:#d73211}button{cursor:pointer}
+.filters{padding:17px 19px;margin-bottom:18px;background:#fff;border:1px solid var(--border);box-shadow:var(--shadow);border-radius:16px}.filter-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.filter-row+.filter-row{margin-top:12px}.fl{font-size:11px;color:var(--muted);font-weight:700;white-space:nowrap}.search-icon{font-size:14px;line-height:1;display:inline-flex;align-items:center;justify-content:center;width:24px}select,button,input[type="text"]{font:inherit;font-size:13px;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);min-height:38px}input[type="text"]{width:290px;min-width:290px;outline:none}input[type="text"]:focus{border-color:var(--p);box-shadow:0 0 0 3px var(--pl)}button{cursor:pointer}.ai-btn{background:var(--p);border-color:var(--p);color:#fff;font-weight:800}.ai-btn:disabled{opacity:.55;cursor:wait}.count-badge{margin-left:auto;background:var(--pl);color:#d73211;font-weight:800;font-size:13px;padding:7px 14px;border-radius:999px;white-space:nowrap}button{cursor:pointer}
 .wrap{overflow:auto}table{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:10px 9px;border-bottom:1px solid var(--border);text-align:center;white-space:nowrap}th{font-size:10px;color:var(--muted);background:#fffafa}.thumb{width:62px;height:62px;object-fit:contain;border-radius:10px;border:1px solid var(--border);background:#fff;cursor:zoom-in}.cat{max-width:245px;white-space:normal;line-height:1.45;color:var(--muted);margin:auto}.mom-pos{color:#27ae60;font-weight:700}.mom-neg{color:#eb4d4b;font-weight:700}.mom-zero{color:var(--muted);font-weight:700}.empty{padding:40px;text-align:center;color:var(--muted)}.keyword-card{margin-top:18px}.kw{max-width:300px;white-space:normal;text-align:center;font-weight:650}.click-val{font-weight:800;color:#d73211}
 #modal{display:none;position:fixed;inset:0;background:#140e18e6;z-index:9999;align-items:center;justify-content:center}#modal.show{display:flex}#modal img{max-width:92vw;max-height:88vh;background:#fff;border-radius:14px}
 footer{text-align:center;color:var(--muted);font-size:11px;padding:36px;border-top:1px solid var(--border)}
@@ -766,7 +766,25 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:36px;border-t
 &lt;main class="container"&gt;
 &lt;div class="tabs"&gt;&lt;button class="tab active" data-t="CB"&gt;跨境 CB&lt;/button&gt;&lt;button class="tab" data-t="CNLS"&gt;本土 CNLS&lt;/button&gt;&lt;/div&gt;
 &lt;section class="grid2"&gt;&lt;div class="card bubble-card"&gt;&lt;div class="title"&gt;各站点规模分布&lt;/div&gt;&lt;div class="note"&gt;X：ADO · Y：ADGMV · 每个气泡代表一个站点&lt;/div&gt;&lt;div class="bubble" id="siteBubble"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="card bubble-card"&gt;&lt;div class="title"&gt;L1 类目规模分布&lt;/div&gt;&lt;div class="note"&gt;汇总所有站点，每个气泡代表一个 L1 类目&lt;/div&gt;&lt;div class="bubble" id="l1Bubble"&gt;&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;
-&lt;section class="filters"&gt;&lt;span class="fl"&gt;标题关键词&lt;/span&gt;&lt;input type="text" id="titleKeyword" placeholder="输入任意关键词，如 儿童手表"&gt;&lt;button id="aiSearch" class="ai-btn"&gt;AI 查询&lt;/button&gt;&lt;span class="fl"&gt;站点&lt;/span&gt;&lt;select id="site"&gt;&lt;option value=""&gt;全部站点&lt;/option&gt;&lt;/select&gt;&lt;span class="fl"&gt;L1 类目&lt;/span&gt;&lt;select id="l1"&gt;&lt;option value=""&gt;全部 L1&lt;/option&gt;&lt;/select&gt;&lt;span class="fl"&gt;L2 类目&lt;/span&gt;&lt;select id="l2"&gt;&lt;option value=""&gt;全部 L2&lt;/option&gt;&lt;/select&gt;&lt;span class="fl"&gt;L3 类目&lt;/span&gt;&lt;select id="l3"&gt;&lt;option value=""&gt;全部 L3&lt;/option&gt;&lt;/select&gt;&lt;button id="reset"&gt;✕ 重置&lt;/button&gt;&lt;/section&gt;&lt;div id="aiHint" class="ai-hint"&gt;输入任意产品关键词后点击“AI 查询”，系统会自动生成各站点多语言标题词并排除配件，再按命中商品汇总市场体量。&lt;/div&gt;
+&lt;section class="filters"&gt;
+&lt;div class="filter-row"&gt;
+  &lt;span class="search-icon"&gt;🔍&lt;/span&gt;
+  &lt;input type="text" id="titleKeyword" placeholder="关键词"&gt;
+  &lt;button id="aiSearch" class="ai-btn"&gt;AI 查询&lt;/button&gt;
+  &lt;span class="count-badge" id="categoryCount"&gt;共 — 款&lt;/span&gt;
+&lt;/div&gt;
+&lt;div class="filter-row"&gt;
+  &lt;span class="fl"&gt;站点&lt;/span&gt;
+  &lt;select id="site"&gt;&lt;option value=""&gt;全部站点&lt;/option&gt;&lt;/select&gt;
+  &lt;span class="fl"&gt;L1 类目&lt;/span&gt;
+  &lt;select id="l1"&gt;&lt;option value=""&gt;全部 L1&lt;/option&gt;&lt;/select&gt;
+  &lt;span class="fl"&gt;L2 类目&lt;/span&gt;
+  &lt;select id="l2"&gt;&lt;option value=""&gt;全部 L2&lt;/option&gt;&lt;/select&gt;
+  &lt;span class="fl"&gt;L3 类目&lt;/span&gt;
+  &lt;select id="l3"&gt;&lt;option value=""&gt;全部 L3&lt;/option&gt;&lt;/select&gt;
+  &lt;button id="reset"&gt;✕ 重置&lt;/button&gt;
+&lt;/div&gt;
+&lt;/section&gt;
 &lt;section class="kpis"&gt;&lt;div class="card kpi"&gt;&lt;div class="kl"&gt;Top Site ADO 占比&lt;/div&gt;&lt;div class="kv" id="sa"&gt;—&lt;/div&gt;&lt;div class="ks" id="san"&gt;—&lt;/div&gt;&lt;/div&gt;&lt;div class="card kpi"&gt;&lt;div class="kl"&gt;Top Site ADGMV 占比&lt;/div&gt;&lt;div class="kv" id="sg"&gt;—&lt;/div&gt;&lt;div class="ks" id="sgn"&gt;—&lt;/div&gt;&lt;/div&gt;&lt;div class="card kpi"&gt;&lt;div class="kl"&gt;Top L1 ADO 占比&lt;/div&gt;&lt;div class="kv" id="la"&gt;—&lt;/div&gt;&lt;div class="ks" id="lan"&gt;—&lt;/div&gt;&lt;/div&gt;&lt;div class="card kpi"&gt;&lt;div class="kl"&gt;Top L1 ADGMV 占比&lt;/div&gt;&lt;div class="kv" id="lg"&gt;—&lt;/div&gt;&lt;div class="ks" id="lgn"&gt;—&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;
 &lt;section class="dash"&gt;&lt;div&gt;&lt;div class="card"&gt;&lt;div class="title" id="ct"&gt;L1 类目贡献度&lt;/div&gt;&lt;div class="note"&gt;可切换 ADO / ADGMV&lt;/div&gt;&lt;button class="metric" data-m="adg"&gt;ADGMV&lt;/button&gt; &lt;button class="metric" data-m="ado"&gt;ADO&lt;/button&gt;&lt;div id="bars" class="bars" style="margin-top:15px"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="card"&gt;&lt;div class="title"&gt;当前筛选类目 Top 10 产品&lt;/div&gt;&lt;div class="note"&gt;按 ADGMV 降序排序 · ADO / ADG 采用区间脱敏展示&lt;/div&gt;&lt;div class="wrap"&gt;&lt;table&gt;&lt;thead&gt;&lt;tr id="productHead"&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody id="pt"&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div class="card"&gt;&lt;div class="title"&gt;站点销售额贡献&lt;/div&gt;&lt;div class="note"&gt;当前筛选下各站点 ADGMV 占比&lt;/div&gt;&lt;div id="sb" class="bars"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="card"&gt;&lt;div class="title"&gt;类目洞察&lt;/div&gt;&lt;div class="note" id="insightNote"&gt;按本期较上期增长绝对量识别类目增长表现&lt;/div&gt;&lt;div id="ins"&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;
 &lt;/main&gt;&lt;div id="modal"&gt;&lt;img id="mi"&gt;&lt;/div&gt;&lt;footer&gt;Shopee EL 选品指南 · Category Overview&lt;/footer&gt;
@@ -940,14 +958,14 @@ async function runAiSearch(){
   const q=($('titleKeyword').value||'').trim();
   if(!q){
     aiRule=null;aiRuleQuery='';
-    $('aiHint').textContent='请输入产品关键词后再点击“AI 查询”。';
+    $('categoryCount').textContent='请输入关键词';
     render();
     return;
   }
   const btn=$('aiSearch');
   btn.disabled=true;
   btn.textContent='AI 识别中...';
-  $('aiHint').innerHTML='AI 正在识别 &lt;strong&gt;'+esc(q)+'&lt;/strong&gt; 的多语言商品标题词并生成配件排除规则...';
+  $('categoryCount').textContent='AI 识别中...';
   try{
     let rule=readAiCache(q);
     let source='缓存';
@@ -964,24 +982,65 @@ async function runAiSearch(){
     aiRuleQuery=q;
     render();
     const matched=F().length;
-    $('aiHint').innerHTML='已识别细分市场：&lt;strong&gt;'+esc(rule.concept||q)+'&lt;/strong&gt; · '+source+' 多语言规则 · 当前 '+(typ==='CB'?'跨境 CB':'本土 CNLS')+' 筛选匹配 &lt;strong&gt;'+matched+'&lt;/strong&gt; 款商品';
+    $('categoryCount').textContent='共 '+matched+' 款';
   }catch(e){
     aiRule=null;aiRuleQuery='';
-    $('aiHint').innerHTML='AI 查询失败：'+esc(e.message||String(e))+'。请稍后重试。';
+    $('categoryCount').textContent='AI 查询失败';
     render();
   }finally{
     btn.disabled=false;
     btn.textContent='AI 查询';
   }
 }
-function refill(){let r=R(),fill=(id,v,l)=&gt;{$(id).innerHTML=`&lt;option value=""&gt;全部 ${l}&lt;/option&gt;`+[...new Set(v.filter(Boolean))].sort().map(x=&gt;`&lt;option value="${esc(x)}"&gt;${esc(x)}&lt;/option&gt;`).join('')};fill('site',r.map(x=&gt;x.site),'站点');let a=r.filter(x=&gt;!$('site').value||x.site===$('site').value);fill('l1',a.map(x=&gt;x.l1),'L1');let b=a.filter(x=&gt;!$('l1').value||x.l1===$('l1').value);fill('l2',b.map(x=&gt;x.l2),'L2');let c=b.filter(x=&gt;!$('l2').value||x.l2===$('l2').value);fill('l3',c.map(x=&gt;x.l3),'L3')}
+function setSelectOptions(id,vals,label,keepValue){
+  const el=$(id);
+  const unique=[...new Set(vals.filter(Boolean))].sort();
+  el.innerHTML=`&lt;option value=""&gt;全部 ${label}&lt;/option&gt;`+
+    unique.map(v=&gt;`&lt;option value="${esc(v)}"&gt;${esc(v)}&lt;/option&gt;`).join('');
+  if(keepValue&amp;&amp;unique.includes(keepValue))el.value=keepValue;
+}
+function refill(){
+  const r=R();
+  const site=$('site').value,l1=$('l1').value,l2=$('l2').value,l3=$('l3').value;
+
+  setSelectOptions('site',r.map(x=&gt;x.site),'站点',site);
+
+  const a=r.filter(x=&gt;!$('site').value||x.site===$('site').value);
+  setSelectOptions('l1',a.map(x=&gt;x.l1),'L1',l1);
+
+  const b=a.filter(x=&gt;!$('l1').value||x.l1===$('l1').value);
+  setSelectOptions('l2',b.map(x=&gt;x.l2),'L2',l2);
+
+  const c=b.filter(x=&gt;!$('l2').value||x.l2===$('l2').value);
+  setSelectOptions('l3',c.map(x=&gt;x.l3),'L3',l3);
+}
+function updateAfterSite(){
+  const r=R();
+  const a=r.filter(x=&gt;!$('site').value||x.site===$('site').value);
+  setSelectOptions('l1',a.map(x=&gt;x.l1),'L1','');
+  const b=a;
+  setSelectOptions('l2',b.map(x=&gt;x.l2),'L2','');
+  setSelectOptions('l3',b.map(x=&gt;x.l3),'L3','');
+}
+function updateAfterL1(){
+  const r=R();
+  const a=r.filter(x=&gt;(!$('site').value||x.site===$('site').value)&amp;&amp;(!$('l1').value||x.l1===$('l1').value));
+  setSelectOptions('l2',a.map(x=&gt;x.l2),'L2','');
+  setSelectOptions('l3',a.map(x=&gt;x.l3),'L3','');
+}
+function updateAfterL2(){
+  const r=R();
+  const a=r.filter(x=&gt;(!$('site').value||x.site===$('site').value)&amp;&amp;(!$('l1').value||x.l1===$('l1').value)&amp;&amp;(!$('l2').value||x.l2===$('l2').value));
+  setSelectOptions('l3',a.map(x=&gt;x.l3),'L3','');
+}
 function render(){
+  $('categoryCount').textContent='共 '+F().length+' 款';
   $('insightNote').textContent=typ==='CB'
     ? '按本期较上期增长绝对量识别 ADO 增长较好的 L2 / L3 类目'
     : '按本期较上期增长绝对量识别 ADO / ADG 增长较好的 L2 / L3 类目';
   if(showTypeState())return;
   bubbles();kpi();contrib();products();side();
-}function reset(){$('titleKeyword').value='';aiRule=null;aiRuleQuery='';$('aiHint').textContent='输入任意产品关键词后点击“AI 查询”，系统会自动生成各站点多语言标题词并排除配件，再按命中商品汇总市场体量。';['site','l1','l2','l3'].forEach(x=&gt;$(x).value='');refill();render()}function init(){
+}function reset(){$('titleKeyword').value='';aiRule=null;aiRuleQuery='';['site','l1','l2','l3'].forEach(x=&gt;$(x).value='');refill();render()}function init(){
   document.querySelectorAll('.tab').forEach(b=&gt;b.addEventListener('click',()=&gt;{
     document.querySelectorAll('.tab').forEach(x=&gt;x.classList.remove('active'));
     b.classList.add('active');
@@ -990,7 +1049,7 @@ function render(){
     refill();
     render();
     if(aiRule&amp;&amp;aiRuleQuery){
-      $('aiHint').innerHTML='已识别细分市场：&lt;strong&gt;'+esc(aiRule.concept||aiRuleQuery)+'&lt;/strong&gt; · 当前 '+(typ==='CB'?'跨境 CB':'本土 CNLS')+' 筛选匹配 &lt;strong&gt;'+F().length+'&lt;/strong&gt; 款商品';
+      $('categoryCount').textContent='共 '+F().length+' 款';
     }
   }));
   $('aiSearch').addEventListener('click',runAiSearch);
@@ -1000,12 +1059,12 @@ function render(){
     if(q!==aiRuleQuery){
       aiRule=null;
       aiRuleQuery='';
-      $('aiHint').textContent=q?'关键词已修改，点击“AI 查询”后更新市场体量。':'输入任意产品关键词后点击“AI 查询”，系统会自动生成各站点多语言标题词并排除配件，再按命中商品汇总市场体量。';
+      $('categoryCount').textContent=q?'点击 AI 查询':'共 '+F().length+' 款';
     }
   });
-  $('site').addEventListener('change',()=&gt;{refill();render()});
-  $('l1').addEventListener('change',()=&gt;{$('l2').value='';$('l3').value='';refill();render()});
-  $('l2').addEventListener('change',()=&gt;{$('l3').value='';refill();render()});
+  $('site').addEventListener('change',()=&gt;{updateAfterSite();render()});
+  $('l1').addEventListener('change',()=&gt;{updateAfterL1();render()});
+  $('l2').addEventListener('change',()=&gt;{updateAfterL2();render()});
   $('l3').addEventListener('change',render);
   $('reset').addEventListener('click',reset);
   document.querySelectorAll('.metric').forEach(b=&gt;b.addEventListener('click',()=&gt;{metric=b.dataset.m;contrib()}));
