@@ -200,7 +200,7 @@ footer { text-align: center; color: var(--text-muted); font-size: 11px; padding:
 &lt;div class="filter-section"&gt;
 &lt;div class="filter-row"&gt;
 &lt;span class="filter-label"&gt;🔍&lt;/span&gt;
-&lt;input type="text" id="searchInput" placeholder="搜索标题 / ID..." oninput="debouncedFilter()"&gt;
+&lt;input type="text" id="searchInput" placeholder="关键词" oninput="debouncedFilter()"&gt;
 &lt;select id="l1Filter" onchange="updateL2(); applyFilters()"&gt;&lt;option value=""&gt;L1 类目&lt;/option&gt;&lt;/select&gt;
 &lt;select id="l2Filter" onchange="updateL3(); applyFilters()"&gt;&lt;option value=""&gt;L2 类目&lt;/option&gt;&lt;/select&gt;
 &lt;select id="l3Filter" onchange="applyFilters()"&gt;&lt;option value=""&gt;L3 类目&lt;/option&gt;&lt;/select&gt;
@@ -258,7 +258,9 @@ footer { text-align: center; color: var(--text-muted); font-size: 11px; padding:
 &lt;script&gt;
 const CB_DATA_URL   = './data_cb.json';
 const CNLS_DATA_URL = './data_cnls.json';
+const SMART_SEARCH_AI_URL = 'https://hot-sku-keyword-ai.molly-liang.workers.dev/';
 let products = [], filteredData = [], currentPage = 1;
+let smartSearchRule = null, smartSearchQuery = '', smartSearchSeq = 0;
 const pageSize = 40;
 function getFlagImgHtml(countryCode) {
 if (!countryCode || countryCode.length !== 2) return '';
@@ -509,8 +511,84 @@ document.getElementById('pagination').innerHTML =
 + '&lt;button onclick="changePage(1)" ' + (currentPage&gt;=tp?'disabled':'') + '&gt;→&lt;/button&gt;';
 }
 function changePage(d) { render(filteredData, currentPage+d); window.scrollTo(0,0); }
+function normalizeSearchText(v) {
+return String(v || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^\p{L}\p{N}]+/gu, ' ').replace(/\s+/g, ' ').trim();
+}
+function smartCacheKey(q) { return 'hotSkuAiRule::' + normalizeSearchText(q); }
+function readSmartCache(q) {
+try {
+const raw = localStorage.getItem(smartCacheKey(q));
+return raw ? JSON.parse(raw) : null;
+} catch (e) { return null; }
+}
+function writeSmartCache(q, rule) {
+try { localStorage.setItem(smartCacheKey(q), JSON.stringify(rule)); } catch (e) {}
+}
+function directKeywordMatch(p, q) {
+if (!q) return true;
+const nq = normalizeSearchText(q);
+if (!nq) return true;
+if (/^\d+$/.test(nq) &amp;&amp; String(p.itemid || '').indexOf(nq) !== -1) return true;
+const title = normalizeSearchText(p.title);
+if (title.indexOf(nq) !== -1) return true;
+const tokens = nq.split(' ').filter(Boolean);
+return tokens.length &gt; 1 &amp;&amp; tokens.every(function(t) { return title.indexOf(t) !== -1; });
+}
+function aiKeywordMatch(p, q) {
+if (!q) return true;
+if (directKeywordMatch(p, q)) return true;
+if (!smartSearchRule || smartSearchQuery !== q) return false;
+const title = normalizeSearchText(p.title);
+const site = p.site;
+let include = Array.isArray(smartSearchRule.include &amp;&amp; smartSearchRule.include[site])
+? smartSearchRule.include[site] : [];
+let exclude = Array.isArray(smartSearchRule.exclude &amp;&amp; smartSearchRule.exclude[site])
+? smartSearchRule.exclude[site] : [];
+if (!include.length) include = [smartSearchRule.english_concept || '', q];
+include = include.map(normalizeSearchText).filter(Boolean);
+exclude = exclude.map(normalizeSearchText).filter(Boolean);
+const hit = include.some(function(term) { return title.indexOf(term) !== -1; });
+const blocked = exclude.some(function(term) { return title.indexOf(term) !== -1; });
+return hit &amp;&amp; !blocked;
+}
+async function enrichKeywordSearch(q, seq) {
+const nq = q.trim();
+if (!nq) return;
+
+const cached = readSmartCache(nq);
+if (cached) {
+if (seq !== smartSearchSeq) return;
+smartSearchRule = cached;
+smartSearchQuery = nq;
+applyFilters();
+return;
+}
+
+// If the original keyword already finds enough products, keep the fast local result.
+// AI is used automatically when the direct title search is too narrow.
+const directCount = products.reduce(function(total, p) {
+return total + (directKeywordMatch(p, nq) ? 1 : 0);
+}, 0);
+if (directCount &gt;= 20) return;
+
+try {
+document.getElementById('countDisplay').textContent = '智能匹配中...';
+const r = await fetch(SMART_SEARCH_AI_URL + '?q=' + encodeURIComponent(nq));
+if (!r.ok) throw new Error('AI HTTP ' + r.status);
+const j = await r.json();
+if (!j.ok || !j.result) throw new Error(j.error || 'AI 未返回有效规则');
+if (seq !== smartSearchSeq) return;
+smartSearchRule = j.result;
+smartSearchQuery = nq;
+writeSmartCache(nq, smartSearchRule);
+applyFilters();
+} catch (e) {
+// AI unavailable: silently keep the local keyword result.
+if (seq === smartSearchSeq) applyFilters();
+}
+}
 function applyFilters() {
-const q        = document.getElementById('searchInput').value.toLowerCase();
+const q        = document.getElementById('searchInput').value.trim();
 const l1       = document.getElementById('l1Filter').value;
 const l2       = document.getElementById('l2Filter').value;
 const l3       = document.getElementById('l3Filter').value;
@@ -520,7 +598,7 @@ const isTopNew = document.getElementById('topNewFilter').checked;
 const sort     = document.getElementById('sortOrder').value;
 const mom      = document.getElementById('momFilter').value;
 const filtered = products.filter(function(p) {
-return (!q       || p.title.toLowerCase().indexOf(q) !== -1 || p.itemid.indexOf(q) !== -1) &amp;&amp;
+return aiKeywordMatch(p, q) &amp;&amp;
 (!l1      || p.l1 === l1) &amp;&amp;
 (!l2      || p.l2 === l2) &amp;&amp;
 (!l3      || p.l3 === l3) &amp;&amp;
@@ -539,6 +617,7 @@ render(filteredData, 1);
 }
 function clearFilters() {
 document.getElementById('searchInput').value = '';
+smartSearchRule = null; smartSearchQuery = ''; smartSearchSeq++;
 ['l1Filter','l2Filter','l3Filter','siteFilter','productTypeFilter','momFilter'].forEach(function(id) {
 document.getElementById(id).value = '';
 });
@@ -548,7 +627,35 @@ window._todayMs = null;
 updateL2(); applyFilters();
 }
 let timer;
-function debouncedFilter() { clearTimeout(timer); timer = setTimeout(applyFilters, 300); }
+function debouncedFilter() {
+clearTimeout(timer);
+const q = document.getElementById('searchInput').value.trim();
+smartSearchSeq++;
+const seq = smartSearchSeq;
+
+if (!q) {
+smartSearchRule = null;
+smartSearchQuery = '';
+applyFilters();
+return;
+}
+
+const cached = readSmartCache(q);
+if (cached) {
+smartSearchRule = cached;
+smartSearchQuery = q;
+applyFilters();
+return;
+}
+
+smartSearchRule = null;
+smartSearchQuery = '';
+applyFilters();
+
+timer = setTimeout(function() {
+enrichKeywordSearch(q, seq);
+}, 550);
+}
 window.onload = loadData;
 &lt;/script&gt;
 &lt;/body&gt;
