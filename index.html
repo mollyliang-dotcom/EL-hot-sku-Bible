@@ -879,7 +879,6 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:36px;border-t
     &lt;span class="search-icon"&gt;🔍&lt;/span&gt;
     &lt;input type="text" id="titleKeyword" class="keyword-box" placeholder="关键词"&gt;
   &lt;/div&gt;
-  &lt;button id="aiSearch" class="ai-btn"&gt;AI 查询&lt;/button&gt;
   &lt;span class="count-badge" id="categoryCount"&gt;共 — 款&lt;/span&gt;
 &lt;/div&gt;
 &lt;div class="filter-row category-row"&gt;
@@ -1089,17 +1088,15 @@ async function runAiSearch(){
   const q=($('titleKeyword').value||'').trim();
   if(!q){
     aiRule=null;aiRuleQuery='';
-    $('categoryCount').textContent='请输入关键词';
     render();
     return;
   }
-  const btn=$('aiSearch');
-  btn.disabled=true;
-  btn.textContent='AI 识别中...';
-  $('categoryCount').textContent='AI 识别中...';
+
+  $('categoryCount').textContent='智能匹配中...';
+
   try{
     let rule=readAiCache(q);
-    let source='缓存';
+
     if(!rule){
       const r=await fetch(AI_URL+'?q='+encodeURIComponent(q));
       if(!r.ok)throw new Error('AI HTTP '+r.status);
@@ -1107,20 +1104,18 @@ async function runAiSearch(){
       if(!j.ok||!j.result)throw new Error(j.error||'AI 未返回有效规则');
       rule=j.result;
       writeAiCache(q,rule);
-      source='AI';
     }
+
+    // 用户在 AI 返回前已经继续输入时，丢弃旧关键词结果。
+    if(($('titleKeyword').value||'').trim()!==q)return;
+
     aiRule=rule;
     aiRuleQuery=q;
     render();
-    const matched=F().length;
-    $('categoryCount').textContent='共 '+matched+' 款';
   }catch(e){
+    if(($('titleKeyword').value||'').trim()!==q)return;
     aiRule=null;aiRuleQuery='';
-    $('categoryCount').textContent='AI 查询失败';
-    render();
-  }finally{
-    btn.disabled=false;
-    btn.textContent='AI 查询';
+    $('categoryCount').textContent='智能匹配失败';
   }
 }
 function setSelectOptions(id,vals,label,keepValue){
@@ -1183,15 +1178,32 @@ function render(){
       $('categoryCount').textContent='共 '+F().length+' 款';
     }
   }));
-  $('aiSearch').addEventListener('click',runAiSearch);
-  $('titleKeyword').addEventListener('keydown',e=&gt;{if(e.key==='Enter'){e.preventDefault();runAiSearch()}});
+  let categoryAiTimer;
+  $('titleKeyword').addEventListener('keydown',e=&gt;{
+    if(e.key==='Enter'){
+      e.preventDefault();
+      clearTimeout(categoryAiTimer);
+      runAiSearch();
+    }
+  });
   $('titleKeyword').addEventListener('input',()=&gt;{
+    clearTimeout(categoryAiTimer);
     const q=$('titleKeyword').value.trim();
+
+    if(!q){
+      aiRule=null;
+      aiRuleQuery='';
+      render();
+      return;
+    }
+
     if(q!==aiRuleQuery){
       aiRule=null;
       aiRuleQuery='';
-      $('categoryCount').textContent=q?'点击 AI 查询':'共 '+F().length+' 款';
+      $('categoryCount').textContent='智能匹配中...';
     }
+
+    categoryAiTimer=setTimeout(runAiSearch,550);
   });
   $('site').addEventListener('change',()=&gt;{updateAfterSite();render()});
   $('l1').addEventListener('change',()=&gt;{updateAfterL1();render()});
