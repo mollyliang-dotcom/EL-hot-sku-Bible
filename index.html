@@ -1302,26 +1302,49 @@ async function fetchJson(url,label){
   }
 }
 
-async function load(){
-  init();
+async function loadMainData(){
   $('update').textContent='数据加载中...';
-  const [cbResult,cnResult,kwResult]=await Promise.all([
+
+  // Category Overview 主数据独立加载：
+  // category_keywords.json 即使异常，也绝不能影响原有 CB / CNLS。
+  const [cbResult,cnResult]=await Promise.all([
     fetchJson(UCB,'CB'),
-    fetchJson(UCN,'CNLS'),
-    fetchJson(UKW,'Keywords')
+    fetchJson(UCN,'CNLS')
   ]);
+
   cbError=cbResult.error;
   cnError=cnResult.error;
-  kwError=kwResult.error;
+
   cb=cbResult.rows.map(NCB).filter(x=&gt;x.id);
   cn=cnResult.rows.map(NCN).filter(x=&gt;x.id);
-  kw=kwResult.rows.map(NKW).filter(x=&gt;x.keyword);
+
   refill();
   render();
+
   $('update').textContent=(cb.length||cn.length)
     ? '数据最后更新: '+new Date().toLocaleDateString('zh-CN')
     : '数据加载失败';
 }
+
+async function loadKeywordData(){
+  // 新增关键词模块单独加载，只刷新关键词表格。
+  // 不参与、也不阻塞原有类目大盘数据加载。
+  const kwResult=await fetchJson(UKW,'Keywords');
+  kwError=kwResult.error;
+  kw=kwResult.rows.map(NKW).filter(x=&gt;x.keyword);
+  keywords();
+}
+
+async function load(){
+  init();
+
+  // 先恢复并渲染原有类目大盘。
+  await loadMainData();
+
+  // 再独立加载新增关键词数据。
+  loadKeywordData();
+}
+
 window.addEventListener('load',load);
 &lt;/script&gt;&lt;/body&gt;&lt;/html&gt;
 </textarea>
