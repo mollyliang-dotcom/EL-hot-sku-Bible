@@ -150,10 +150,8 @@ jobs:
           print(
               "Keyword columns:",
               "site=", KW_SITE_IDX,
-              "L1=", KW_L1_IDX,
               "L2=", KW_L2_IDX,
               "keyword=", KW_TEXT_IDX,
-              "rank=", KW_RANK_IDX,
               "click=", KW_CLICK_IDX,
               "growth=", KW_GROWTH_IDX,
               "zh=", KW_ZH_IDX
@@ -164,8 +162,6 @@ jobs:
           cb_products = []
           cnls_products = []
           keywords = []
-
-          # All-category keyword data for Category Overview
           category_keywords = []
 
           # Column indexes, 0-based:
@@ -234,24 +230,20 @@ jobs:
                       "site": site,
                       "keyword": keyword,
                       "clicks": clean_num(cell(row, KW_CLICK_IDX)),     # AV
-                      "growth": clean_pct(cell(row, KW_GROWTH_IDX)),    # AX
-                      "zh": cell(row, KW_ZH_IDX),                       # AY / keyword中文 ONLY
+                      "growth": clean_pct(cell(row, KW_GROWTH_IDX)),  # AX
+                      "zh": cell(row, KW_ZH_IDX),                      # AY / keyword中文 ONLY
                   })
 
-              # ---------------- Category Overview Keywords ----------------
-              # AP:AY contains keywords for ALL categories.
-              category_keyword = cell(row, KW_TEXT_IDX)
-              category_site = cell(row, KW_SITE_IDX)
-              category_l1 = cell(row, KW_L1_IDX)
-              category_l2 = cell(row, KW_L2_IDX)
-
-              if category_keyword and category_site:
+              # ---------------- Category Overview Keywords (NEW ONLY) ----------------
+              # AP:AY contains all-category keywords. Existing CB/CNLS/phone-case
+              # processing above is intentionally unchanged.
+              if keyword and site:
                   category_keywords.append({
-                      "site": category_site,
-                      "l1": category_l1,
-                      "l2": category_l2,
+                      "site": site,
+                      "l1": cell(row, KW_L1_IDX),
+                      "l2": keyword_l2,
                       "l3": "",
-                      "keyword": category_keyword,
+                      "keyword": keyword,
                       "rank": clean_num(cell(row, KW_RANK_IDX)),
                       "clicks": clean_num(cell(row, KW_CLICK_IDX)),
                       "growth": clean_pct(cell(row, KW_GROWTH_IDX)),
@@ -655,11 +647,10 @@ jobs:
           )
 
           # ============================================================
-          # Category Overview keyword data
-          # Source: same tab "手机壳飙升词", columns AP:AY
+          # NEW ONLY: Category Overview keyword JSON
+          # Existing outputs above remain unchanged.
           # ============================================================
           category_kw_map = {}
-
           for x in category_keywords:
               key = (
                   str(x.get("site") or "").strip().upper(),
@@ -672,7 +663,6 @@ jobs:
                   category_kw_map[key] = x
 
           category_keywords = list(category_kw_map.values())
-
           category_keywords.sort(
               key=lambda x: (
                   str(x.get("site") or ""),
@@ -685,11 +675,7 @@ jobs:
           with open("category_keywords.json", "w", encoding="utf-8") as f:
               json.dump(category_keywords, f, ensure_ascii=False)
 
-          print(
-              "OK CATEGORY_KEYWORDS:",
-              len(category_keywords),
-              "keywords"
-          )
+          print("OK CATEGORY_KEYWORDS:", len(category_keywords), "keywords")
 
           EOF
 
