@@ -864,7 +864,7 @@ header{background:linear-gradient(135deg,#FF6633,#EE4D2D 50%,#D02D11);color:#fff
 .filters{padding:20px 22px;margin-bottom:18px;background:#fff;border:1px solid var(--border);box-shadow:var(--shadow);border-radius:16px}.filter-row{display:flex;align-items:center;gap:12px;flex-wrap:nowrap}.filter-row+.filter-row{margin-top:14px}.fl{font-size:11px;color:var(--muted);font-weight:700;white-space:nowrap}.keyword-search{display:flex;align-items:center;gap:12px}.search-icon{font-size:15px;line-height:1;display:inline-flex;align-items:center;justify-content:center;width:24px;flex:0 0 24px}.keyword-box{font:inherit;font-size:13px;width:300px;min-width:300px;height:50px;padding:0 18px;border:1.5px solid var(--border);border-radius:14px;background:var(--bg);color:var(--text);outline:none}.keyword-box:focus{border-color:var(--p);box-shadow:0 0 0 3px var(--pl)}select,button{font:inherit;font-size:13px;padding:9px 10px;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);min-height:38px}button{cursor:pointer;white-space:nowrap}.ai-btn{height:50px;padding:0 18px;background:var(--p);border-color:var(--p);color:#fff;font-weight:800}.ai-btn:disabled{opacity:.55;cursor:wait}.count-badge{display:inline-flex;align-items:center;justify-content:center;background:#fff0eb;color:#e43d16;font-weight:800;font-size:13px;padding:9px 18px;border-radius:999px;white-space:nowrap}.category-row{gap:8px}.category-row #site{width:118px;min-width:118px}.category-row #l1,.category-row #l2,.category-row #l3{width:178px;min-width:178px}.category-row #reset{padding-left:14px;padding-right:14px}@media(max-width:980px){.filter-row{overflow-x:auto;padding-bottom:2px}.category-row{overflow-x:auto}}
 .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}.kpi{padding:17px}.kl{font-size:11px;color:var(--muted);font-weight:700}.kv{font-size:27px;font-weight:800;margin-top:7px}.ks{font-size:11px;color:var(--muted);margin-top:5px}
 .dash{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-bottom:18px}.dash>.card{margin-bottom:0;min-width:0}.bars{display:flex;flex-direction:column;gap:12px}.bar{display:grid;grid-template-columns:minmax(105px,1.15fr) 2.2fr 58px;gap:8px;align-items:center}.bn{font-size:12px;font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.track{height:11px;background:#f5eef1;border-radius:999px;overflow:hidden}.fill{height:100%;background:linear-gradient(90deg,#ffb5a7,#EE4D2D)}.bv{text-align:right;font-size:12px;font-weight:750;color:#d73211}
-table{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:10px 9px;border-bottom:1px solid var(--border);text-align:center;white-space:nowrap}th{font-size:10px;color:var(--muted);background:#fffafa}.wrap{overflow:auto}.thumb{width:58px;height:58px;object-fit:contain;border-radius:10px;border:1px solid var(--border);cursor:zoom-in}.cat{max-width:260px;white-space:normal;line-height:1.45;color:var(--muted);text-align:center;margin:0 auto}.cat-head{text-align:center!important}.ins{padding:12px 14px;border:1px solid var(--border);background:#fffafa;border-radius:10px;font-size:12px;line-height:1.6;margin-bottom:10px}.empty{padding:40px;text-align:center;color:var(--muted)}
+table{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:10px 9px;border-bottom:1px solid var(--border);text-align:center;white-space:nowrap}th{font-size:10px;color:var(--muted);background:#fffafa}.wrap{overflow:auto}.keyword-card .kw{text-align:left;white-space:normal;min-width:180px}.keyword-card .rank{font-weight:800;color:#d73211}.keyword-card .trend-tag{display:inline-block;padding:3px 8px;border-radius:999px;background:#fff0eb;color:#d73211;font-size:10px;font-weight:800;margin-left:6px}.thumb{width:58px;height:58px;object-fit:contain;border-radius:10px;border:1px solid var(--border);cursor:zoom-in}.cat{max-width:260px;white-space:normal;line-height:1.45;color:var(--muted);text-align:center;margin:0 auto}.cat-head{text-align:center!important}.ins{padding:12px 14px;border:1px solid var(--border);background:#fffafa;border-radius:10px;font-size:12px;line-height:1.6;margin-bottom:10px}.empty{padding:40px;text-align:center;color:var(--muted)}
 #modal{display:none;position:fixed;inset:0;background:#140e18e6;z-index:9999;align-items:center;justify-content:center}#modal.show{display:flex}#modal img{max-width:92vw;max-height:88vh;background:#fff;border-radius:14px}
 footer{text-align:center;color:var(--muted);font-size:11px;padding:36px;border-top:1px solid var(--border)}
 @media(max-width:980px){.grid2,.dash{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}}
@@ -917,10 +917,33 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:36px;border-t
   &lt;div class="note"&gt;按 ADGMV 降序排序 · ADO / ADG 采用区间脱敏展示&lt;/div&gt;
   &lt;div class="wrap"&gt;&lt;table&gt;&lt;thead&gt;&lt;tr id="productHead"&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody id="pt"&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;
 &lt;/section&gt;
+&lt;section class="card keyword-card" id="categoryKeywordCard"&gt;
+  &lt;div class="title"&gt;热门关键词 Top 10 + Trendy 元素补充&lt;/div&gt;
+  &lt;div class="note" id="categoryKeywordNote"&gt;按 Item Click 降序排序，Top 10 以外补充高增长 / Trendy 关键词 · 跟随当前站点与类目筛选&lt;/div&gt;
+  &lt;div class="wrap"&gt;&lt;table&gt;
+    &lt;thead&gt;&lt;tr&gt;&lt;th&gt;排名&lt;/th&gt;&lt;th&gt;站点&lt;/th&gt;&lt;th&gt;关键词&lt;/th&gt;&lt;th&gt;关键词中文翻译&lt;/th&gt;&lt;th&gt;Click Growth&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+    &lt;tbody id="categoryKeywordBody"&gt;&lt;/tbody&gt;
+  &lt;/table&gt;&lt;/div&gt;
+&lt;/section&gt;
 &lt;/main&gt;&lt;div id="modal"&gt;&lt;img id="mi"&gt;&lt;/div&gt;&lt;footer&gt;Shopee EL 选品指南 · Category Overview&lt;/footer&gt;
 &lt;script&gt;
-const UCB='./data_cb.json',UCN='./data_cnls.json';const AI_URL='https://hot-sku-keyword-ai.molly-liang.workers.dev/';let cb=[],cn=[],typ='CB',metric='adg',cbError='',cnError='',aiRule=null,aiRuleQuery='';const $=x=&gt;document.getElementById(x),n=v=&gt;parseFloat(String(v??'').replace(/,/g,''))||0,p=(a,b)=&gt;b?a/b*100:0,f=x=&gt;x.toFixed(1)+'%',esc=s=&gt;String(s??'').replace(/[&amp;&lt;&gt;"']/g,c=&gt;({'&amp;':'&amp;amp;','&lt;':'&amp;lt;','&gt;':'&amp;gt;','"':'&amp;quot;',"'":'&amp;#39;'}[c]));function ns(v){let s=String(v||'').toUpperCase();return ['BR','MX','MY','PH','SG','TH','TW','VN'].find(x=&gt;s===x||s.includes(x))||s}
+const UCB='./data_cb.json',UCN='./data_cnls.json',UKW='./category_keywords.json';const AI_URL='https://hot-sku-keyword-ai.molly-liang.workers.dev/';let cb=[],cn=[],kw=[],typ='CB',metric='adg',cbError='',cnError='',kwError='',aiRule=null,aiRuleQuery='';const $=x=&gt;document.getElementById(x),n=v=&gt;parseFloat(String(v??'').replace(/,/g,''))||0,p=(a,b)=&gt;b?a/b*100:0,f=x=&gt;x.toFixed(1)+'%',esc=s=&gt;String(s??'').replace(/[&amp;&lt;&gt;"']/g,c=&gt;({'&amp;':'&amp;amp;','&lt;':'&amp;lt;','&gt;':'&amp;gt;','"':'&amp;quot;',"'":'&amp;#39;'}[c]));function ns(v){let s=String(v||'').toUpperCase();return ['BR','MX','MY','PH','SG','TH','TW','VN'].find(x=&gt;s===x||s.includes(x))||s}
 function NCB(r){return{id:String(r.item_id||''),title:String(r.item_name||''),site:ns(r.grass_region),l1:r.cb_level1_global_be_category||'',l2:r.level2_global_be_category||'',l3:r.level3_global_be_category||'',img:r.product_image||'',price:n(r['price_usd']),ado:n(r['ADO(SUM)']),adg:n(r['ADG_usd(SUM)']),mom:n(r['mom_ado_growth_contri(SUM)']),adgMom:n(r['mom_adg_growth_contri(SUM)']||r['mom_adgmv_growth_contri(SUM)']||r['adg_mom']||r['adgmv_mom']||0)}}function NCN(r){const diff=n(r['ado_diff(RAW)']),bench=n(r['benchmark_ado(RAW)']);return{id:String(r.item_id||''),title:String(r.item_name||''),site:ns(r.grass_region),l1:r.cb_level1_global_be_category||'',l2:r.level2_global_be_category||'',l3:r.level3_global_be_category||'',img:r.item_image||'',price:n(r['item_price_usd']),ado:n(r['current_ado(RAW)']),adg:n(r['current_adgmv(RAW)']),mom:bench?diff/bench*100:0,adgMom:(()=&gt;{const explicit=n(r['adg_mom']||r['adgmv_mom']||r['mom_adg_growth_contri(SUM)']||r['mom_adgmv_growth_contri(SUM)']||0);if(explicit)return explicit;const diff=n(r['adg_diff(RAW)']||r['adgmv_diff(RAW)']||0),benchAdg=n(r['benchmark_adg(RAW)']||r['benchmark_adgmv(RAW)']||0);if(benchAdg&amp;&amp;diff)return diff/benchAdg*100;const cur=n(r['current_adgmv(RAW)']),prev=n(r['benchmark_adgmv(RAW)']||r['benchmark_adg(RAW)']||0);return prev?(cur-prev)/prev*100:0})()}}
+
+function NKW(r){
+  return{
+    site:ns(r.grass_region||r.site||''),
+    l1:r.cb_level1_global_be_category||r.level1_global_be_category||r.l1||'',
+    l2:r.level2_global_be_category||r.l2||'',
+    l3:r.level3_global_be_category||r.l3||'',
+    keyword:String(r.keyword||r.keyword_text||''),
+    zh:String(r['keyword中文']||r.keyword_zh||r.zh||''),
+    clicks:n(r['current_daily_item_click(SUM)']||r.current_daily_item_click||r.clicks||r.item_click||0),
+    growth:n(r['daily_item_click_growth(SUM)']||r.daily_item_click_growth||r.growth||0),
+    keywordType:String(r.keyword_type||''),
+    elementPriority:n(r.element_priority||0)
+  }
+}
 function R(){return typ==='CB'?cb:cn}
 function currentError(){return typ==='CB'?cbError:cnError}
 function showTypeState(){
@@ -992,6 +1015,59 @@ function products(){
     const adgMomColor=x.adgMom&gt;0?'#27ae60':x.adgMom&lt;0?'#eb4d4b':'#9b8fa0';
     return `&lt;tr&gt;${base}&lt;td style="font-weight:700;color:${adgMomColor}"&gt;${adgMom}&lt;/td&gt;&lt;/tr&gt;`;
   }).join('')||`&lt;tr&gt;&lt;td colspan="${isCB?9:10}" class="empty"&gt;暂无数据&lt;/td&gt;&lt;/tr&gt;`;
+}
+
+function keywordRuleMatch(x){
+  const rawQ=($('titleKeyword').value||'').trim();
+  if(!rawQ)return true;
+  const hay=normTitle((x.keyword||'')+' '+(x.zh||''));
+  if(!aiRule||aiRuleQuery!==rawQ){
+    const q=normTitle(rawQ);
+    return !q||hay.includes(q);
+  }
+  let terms=cleanRuleTerms(aiRule.include?.[x.site]||[]);
+  terms=terms.concat(cleanRuleTerms([aiRule.english_concept,rawQ]));
+  return [...new Set(terms)].some(w=&gt;w&amp;&amp;hay.includes(w));
+}
+function keywordRows(){
+  const site=$('site').value,l1=$('l1').value,l2=$('l2').value,l3=$('l3').value;
+  return kw.filter(x=&gt;
+    keywordRuleMatch(x)&amp;&amp;
+    (!site||x.site===site)&amp;&amp;
+    (!l1||!x.l1||x.l1===l1)&amp;&amp;
+    (!l2||!x.l2||x.l2===l2)&amp;&amp;
+    (!l3||!x.l3||x.l3===l3)
+  );
+}
+function keywords(){
+  const body=$('categoryKeywordBody');
+  if(!body)return;
+  if(kwError&amp;&amp;!kw.length){
+    body.innerHTML='&lt;tr&gt;&lt;td colspan="5" class="empty"&gt;关键词数据尚未接入或加载失败&lt;/td&gt;&lt;/tr&gt;';
+    return;
+  }
+  let all=keywordRows().slice().sort((a,b)=&gt;b.clicks-a.clicks);
+  const top10=all.slice(0,10);
+  const used=new Set(top10.map(x=&gt;`${x.site}||${x.keyword}`));
+  const extra=all.slice(10)
+    .filter(x=&gt;!used.has(`${x.site}||${x.keyword}`)&amp;&amp;(x.keywordType==='element'||x.growth&gt;0))
+    .sort((a,b)=&gt;
+      (b.keywordType==='element'?1:0)-(a.keywordType==='element'?1:0)||
+      b.elementPriority-a.elementPriority||b.growth-a.growth||b.clicks-a.clicks
+    )
+    .slice(0,5);
+  const d=[...top10,...extra];
+  body.innerHTML=d.map((x,i)=&gt;{
+    const g=x.growth;
+    const gc=g&gt;0?'#27ae60':g&lt;0?'#eb4d4b':'#9b8fa0';
+    const tag=i&gt;=top10.length?'&lt;span class="trend-tag"&gt;Trendy&lt;/span&gt;':'';
+    return `&lt;tr&gt;&lt;td class="rank"&gt;${i+1}&lt;/td&gt;&lt;td&gt;${esc(x.site||'—')}&lt;/td&gt;&lt;td class="kw"&gt;${esc(x.keyword)}${tag}&lt;/td&gt;&lt;td class="kw"&gt;${esc(x.zh||'—')}&lt;/td&gt;&lt;td style="font-weight:700;color:${gc}"&gt;${momText(g)}&lt;/td&gt;&lt;/tr&gt;`;
+  }).join('')||'&lt;tr&gt;&lt;td colspan="5" class="empty"&gt;当前筛选暂无关键词数据&lt;/td&gt;&lt;/tr&gt;';
+
+  const hasL3=kw.some(x=&gt;x.l3);
+  $('categoryKeywordNote').textContent=hasL3
+    ? '按 Item Click 降序排序，Top 10 以外补充高增长 / Trendy 关键词 · 跟随当前站点与类目筛选'
+    : '按 Item Click 降序排序，Top 10 以外补充高增长 / Trendy 关键词 · 关键词数据按站点 / L1 / L2 粒度联动';
 }
 function prevFromMom(cur,mom){
   const rate=Number(mom);
@@ -1165,7 +1241,7 @@ function render(){
     ? '按本期较上期增长绝对量识别 ADO 增长较好的 L2 / L3 类目'
     : '按本期较上期增长绝对量识别 ADO / ADG 增长较好的 L2 / L3 类目';
   if(showTypeState())return;
-  bubbles();kpi();contrib();products();side();
+  bubbles();kpi();contrib();products();side();keywords();
 }function reset(){$('titleKeyword').value='';aiRule=null;aiRuleQuery='';['site','l1','l2','l3'].forEach(x=&gt;$(x).value='');refill();render()}function init(){
   document.querySelectorAll('.tab').forEach(b=&gt;b.addEventListener('click',()=&gt;{
     document.querySelectorAll('.tab').forEach(x=&gt;x.classList.remove('active'));
@@ -1229,14 +1305,17 @@ async function fetchJson(url,label){
 async function load(){
   init();
   $('update').textContent='数据加载中...';
-  const [cbResult,cnResult]=await Promise.all([
+  const [cbResult,cnResult,kwResult]=await Promise.all([
     fetchJson(UCB,'CB'),
-    fetchJson(UCN,'CNLS')
+    fetchJson(UCN,'CNLS'),
+    fetchJson(UKW,'Keywords')
   ]);
   cbError=cbResult.error;
   cnError=cnResult.error;
+  kwError=kwResult.error;
   cb=cbResult.rows.map(NCB).filter(x=&gt;x.id);
   cn=cnResult.rows.map(NCN).filter(x=&gt;x.id);
+  kw=kwResult.rows.map(NKW).filter(x=&gt;x.keyword);
   refill();
   render();
   $('update').textContent=(cb.length||cn.length)
