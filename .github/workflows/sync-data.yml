@@ -139,8 +139,10 @@ jobs:
               )
 
           KW_SITE_IDX = keyword_header_idx("grass_region")                    # AQ
+          KW_L1_IDX = keyword_header_idx("cb_level1_global_be_category")      # AR
           KW_L2_IDX = keyword_header_idx("level2_global_be_category")         # AS
           KW_TEXT_IDX = keyword_header_idx("keyword")                         # AT
+          KW_RANK_IDX = keyword_header_idx("keyword_rank(SUM)")               # AU
           KW_CLICK_IDX = keyword_header_idx("current_daily_item_click(SUM)")  # AV
           KW_GROWTH_IDX = keyword_header_idx("daily_item_click_growth(SUM)")  # AX
           KW_ZH_IDX = keyword_header_idx("keyword中文")                        # AY
@@ -148,8 +150,10 @@ jobs:
           print(
               "Keyword columns:",
               "site=", KW_SITE_IDX,
+              "L1=", KW_L1_IDX,
               "L2=", KW_L2_IDX,
               "keyword=", KW_TEXT_IDX,
+              "rank=", KW_RANK_IDX,
               "click=", KW_CLICK_IDX,
               "growth=", KW_GROWTH_IDX,
               "zh=", KW_ZH_IDX
@@ -160,6 +164,9 @@ jobs:
           cb_products = []
           cnls_products = []
           keywords = []
+
+          # All-category keyword data for Category Overview
+          category_keywords = []
 
           # Column indexes, 0-based:
           # CB A:R
@@ -227,8 +234,28 @@ jobs:
                       "site": site,
                       "keyword": keyword,
                       "clicks": clean_num(cell(row, KW_CLICK_IDX)),     # AV
-                      "growth": clean_pct(cell(row, KW_GROWTH_IDX)),  # AX
-                      "zh": cell(row, KW_ZH_IDX),                      # AY / keyword中文 ONLY
+                      "growth": clean_pct(cell(row, KW_GROWTH_IDX)),    # AX
+                      "zh": cell(row, KW_ZH_IDX),                       # AY / keyword中文 ONLY
+                  })
+
+              # ---------------- Category Overview Keywords ----------------
+              # AP:AY contains keywords for ALL categories.
+              category_keyword = cell(row, KW_TEXT_IDX)
+              category_site = cell(row, KW_SITE_IDX)
+              category_l1 = cell(row, KW_L1_IDX)
+              category_l2 = cell(row, KW_L2_IDX)
+
+              if category_keyword and category_site:
+                  category_keywords.append({
+                      "site": category_site,
+                      "l1": category_l1,
+                      "l2": category_l2,
+                      "l3": "",
+                      "keyword": category_keyword,
+                      "rank": clean_num(cell(row, KW_RANK_IDX)),
+                      "clicks": clean_num(cell(row, KW_CLICK_IDX)),
+                      "growth": clean_pct(cell(row, KW_GROWTH_IDX)),
+                      "zh": cell(row, KW_ZH_IDX),
                   })
 
           cb_products = dedupe_products(cb_products)
@@ -627,6 +654,43 @@ jobs:
               len(keywords), "keywords"
           )
 
+          # ============================================================
+          # Category Overview keyword data
+          # Source: same tab "手机壳飙升词", columns AP:AY
+          # ============================================================
+          category_kw_map = {}
+
+          for x in category_keywords:
+              key = (
+                  str(x.get("site") or "").strip().upper(),
+                  str(x.get("l1") or "").strip(),
+                  str(x.get("l2") or "").strip(),
+                  str(x.get("keyword") or "").strip().lower(),
+              )
+              prev = category_kw_map.get(key)
+              if prev is None or x["clicks"] > prev["clicks"]:
+                  category_kw_map[key] = x
+
+          category_keywords = list(category_kw_map.values())
+
+          category_keywords.sort(
+              key=lambda x: (
+                  str(x.get("site") or ""),
+                  str(x.get("l1") or ""),
+                  str(x.get("l2") or ""),
+                  -float(x.get("clicks") or 0),
+              )
+          )
+
+          with open("category_keywords.json", "w", encoding="utf-8") as f:
+              json.dump(category_keywords, f, ensure_ascii=False)
+
+          print(
+              "OK CATEGORY_KEYWORDS:",
+              len(category_keywords),
+              "keywords"
+          )
+
           EOF
 
       - name: Commit and push
@@ -634,7 +698,7 @@ jobs:
           git config user.name "actions-user"
           git config user.email "actions@github.com"
 
-          git add data_cb.json data_cnls.json phonecase_data.json
+          git add data_cb.json data_cnls.json phonecase_data.json category_keywords.json
 
           if git diff --staged --quiet; then
             echo "No data changes."
