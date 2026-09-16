@@ -99,14 +99,25 @@ jobs:
           cb_url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT2Z61Z0LxqcTmhjJe5KS_PimpDY4bM-aODeY0CuL9z3EX233KOqWMkXWJteyXQkexOMSqIO3O3rMI-/pub?gid=990111578&single=true&output=csv"
           cb_rows = fetch_dict(cb_url, "CB")
 
-          with open("data_cb.json", "w", encoding="utf-8") as f:
-              json.dump(cb_rows, f, ensure_ascii=False)
+          # Safety guard: if there is no Row 2 / no actual data row,
+          # keep the previous data_cb.json instead of overwriting it with [].
+          if cb_rows:
+              with open("data_cb.json", "w", encoding="utf-8") as f:
+                  json.dump(cb_rows, f, ensure_ascii=False)
+              print(f"WRITE CB: {len(cb_rows)} rows")
+          else:
+              print("SKIP CB UPDATE: source has header only / no Row 2 data; keep existing data_cb.json")
 
           cnls_url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT2Z61Z0LxqcTmhjJe5KS_PimpDY4bM-aODeY0CuL9z3EX233KOqWMkXWJteyXQkexOMSqIO3O3rMI-/pub?gid=1366116887&single=true&output=csv"
           cnls_rows = fetch_dict(cnls_url, "CNLS")
 
-          with open("data_cnls.json", "w", encoding="utf-8") as f:
-              json.dump(cnls_rows, f, ensure_ascii=False)
+          # Same protection for CNLS.
+          if cnls_rows:
+              with open("data_cnls.json", "w", encoding="utf-8") as f:
+                  json.dump(cnls_rows, f, ensure_ascii=False)
+              print(f"WRITE CNLS: {len(cnls_rows)} rows")
+          else:
+              print("SKIP CNLS UPDATE: source has header only / no Row 2 data; keep existing data_cnls.json")
 
           # ============================================================
           # Phone Case page
@@ -119,6 +130,13 @@ jobs:
 
           item_url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT2Z61Z0LxqcTmhjJe5KS_PimpDY4bM-aODeY0CuL9z3EX233KOqWMkXWJteyXQkexOMSqIO3O3rMI-/pub?gid=1028592925&single=true&output=csv"
           item_rows = fetch_csv(item_url, "PHONE_CASE_手机壳飙升词")
+
+          # Row-2 safety flag for this source tab.
+          # If Row 2 is empty, do not overwrite phonecase_data.json or category_keywords.json.
+          item_has_row2_data = (
+              len(item_rows) > 1
+              and any(str(v or "").strip() for v in item_rows[1])
+          )
 
           # Resolve keyword columns from the CSV header instead of relying on
           # hard-coded positions. AY / "keyword中文" is the ONLY source for zh.
@@ -636,15 +654,18 @@ jobs:
               "keywords": keywords,
           }
 
-          with open("phonecase_data.json", "w", encoding="utf-8") as f:
-              json.dump(phonecase_data, f, ensure_ascii=False)
+          if item_has_row2_data:
+              with open("phonecase_data.json", "w", encoding="utf-8") as f:
+                  json.dump(phonecase_data, f, ensure_ascii=False)
 
-          print(
-              "OK PHONE_CASE:",
-              len(cb_products), "CB items,",
-              len(cnls_products), "CNLS items,",
-              len(keywords), "keywords"
-          )
+              print(
+                  "OK PHONE_CASE:",
+                  len(cb_products), "CB items,",
+                  len(cnls_products), "CNLS items,",
+                  len(keywords), "keywords"
+              )
+          else:
+              print("SKIP PHONE_CASE UPDATE: source Row 2 is empty; keep existing phonecase_data.json")
 
           # ============================================================
           # NEW ONLY: Category Overview keyword JSON
@@ -672,10 +693,13 @@ jobs:
               )
           )
 
-          with open("category_keywords.json", "w", encoding="utf-8") as f:
-              json.dump(category_keywords, f, ensure_ascii=False)
+          if item_has_row2_data:
+              with open("category_keywords.json", "w", encoding="utf-8") as f:
+                  json.dump(category_keywords, f, ensure_ascii=False)
 
-          print("OK CATEGORY_KEYWORDS:", len(category_keywords), "keywords")
+              print("OK CATEGORY_KEYWORDS:", len(category_keywords), "keywords")
+          else:
+              print("SKIP CATEGORY_KEYWORDS UPDATE: source Row 2 is empty; keep existing category_keywords.json")
 
           EOF
 
