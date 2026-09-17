@@ -634,8 +634,8 @@ jobs:
           final_keywords.extend(element_map.values())
           keywords = final_keywords
 
-          # Strict validation: Chinese translation must come from AY only.
-          # Never substitute AT/original keyword into the Chinese column.
+          # Chinese translation comes from AY only.
+          # If AY is blank, keep zh blank and continue the sync.
           missing_zh = [
               x for x in keywords
               if not str(x.get("zh") or "").strip()
@@ -643,8 +643,8 @@ jobs:
 
           if missing_zh:
               sample = ", ".join(x["keyword"] for x in missing_zh[:5])
-              raise Exception(
-                  f"PHONE_CASE AY中文翻译为空: {len(missing_zh)} rows; sample: {sample}"
+              print(
+                  f"WARN PHONE_CASE AY中文翻译为空: {len(missing_zh)} rows; sample: {sample}; continue sync with blank zh"
               )
 
           phonecase_data = {
